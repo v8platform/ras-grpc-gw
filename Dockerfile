@@ -1,3 +1,4 @@
 FROM scratch
-COPY app-template /
-ENTRYPOINT ["/app-template"]
+EXPOSE 3002
+COPY ras-grpc-gw /
+ENTRYPOINT ["/ras-grpc-gw"]
