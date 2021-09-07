@@ -51,6 +51,7 @@ dockers:
       - "--label=com.github.actions.color=blue"
       - "--label=repository=http://github.com/v8platform/ras-grpc-gw"
       - "--label=homepage=http://github.com/v8platform/ras-grpc-gw"
+      - "--label=org.opencontainers.image.source=http://github.com/v8platform/ras-grpc-gw"
       - "--label=maintainer=Aleksey Khorev khorevaa@gmail.com"
 archives:
   - name_template: '{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'

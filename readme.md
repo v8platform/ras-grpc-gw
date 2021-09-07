@@ -38,7 +38,7 @@ RAS GRPC gateway (`ras-grpc-gw`) - прокси сервер для службы
 * Сервис сессий кластера `SessionsService`
   * GetSessions - получение списка сессий кластера
 
-## Installation
+## Как установить
 
 * Установить из [`releases`](https://github.com/v8platform/ras-grpc-gw/releases/)
 * Использовать готовый образ `docker`
