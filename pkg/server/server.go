@@ -33,7 +33,10 @@ func (s *RASServer) Serve(host string) error {
 
 	srv := NewRasClientServiceServer(s.rasAddr)
 	server := grpc.NewServer()
-	ras_service.RegisterRASServiceServer(server, srv)
+	ras_service.RegisterAuthServiceServer(server, srv)
+	ras_service.RegisterClustersServiceServer(server, srv)
+	ras_service.RegisterSessionsServiceServer(server, srv)
+	ras_service.RegisterInfobasesServiceServer(server, srv)
 
 	log.Println("Listening on", host)
 	if err := server.Serve(listener); err != nil {
