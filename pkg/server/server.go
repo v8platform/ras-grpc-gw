@@ -63,7 +63,7 @@ type rasClientServiceServer struct {
 	once       *sync.Once
 }
 
-func (s rasClientServiceServer) AuthenticateCluster(ctx context.Context, request *messagesv1.ClusterAuthenticateRequest) (*emptypb.Empty, error) {
+func (s *rasClientServiceServer) AuthenticateCluster(ctx context.Context, request *messagesv1.ClusterAuthenticateRequest) (*emptypb.Empty, error) {
 	if err := s.initOnce(); err != nil {
 		return nil, err
 	}
@@ -73,7 +73,7 @@ func (s rasClientServiceServer) AuthenticateCluster(ctx context.Context, request
 
 }
 
-func (s rasClientServiceServer) AuthenticateInfobase(ctx context.Context, request *messagesv1.AuthenticateInfobaseRequest) (*emptypb.Empty, error) {
+func (s *rasClientServiceServer) AuthenticateInfobase(ctx context.Context, request *messagesv1.AuthenticateInfobaseRequest) (*emptypb.Empty, error) {
 	if err := s.initOnce(); err != nil {
 		return nil, err
 	}
@@ -82,7 +82,7 @@ func (s rasClientServiceServer) AuthenticateInfobase(ctx context.Context, reques
 	return auth.AuthenticateInfobase(request)
 }
 
-func (s rasClientServiceServer) AuthenticateAgent(ctx context.Context, request *messagesv1.AuthenticateAgentRequest) (*emptypb.Empty, error) {
+func (s *rasClientServiceServer) AuthenticateAgent(ctx context.Context, request *messagesv1.AuthenticateAgentRequest) (*emptypb.Empty, error) {
 	if err := s.initOnce(); err != nil {
 		return nil, err
 	}
@@ -91,7 +91,7 @@ func (s rasClientServiceServer) AuthenticateAgent(ctx context.Context, request *
 	return auth.AuthenticateAgent(request)
 }
 
-func (s rasClientServiceServer) GetClusters(ctx context.Context, request *messagesv1.GetClustersRequest) (*messagesv1.GetClustersResponse, error) {
+func (s *rasClientServiceServer) GetClusters(ctx context.Context, request *messagesv1.GetClustersRequest) (*messagesv1.GetClustersResponse, error) {
 	if err := s.initOnce(); err != nil {
 		return nil, err
 	}
@@ -100,7 +100,7 @@ func (s rasClientServiceServer) GetClusters(ctx context.Context, request *messag
 	return service.GetClusters(request)
 }
 
-func (s rasClientServiceServer) GetClusterInfo(ctx context.Context, request *messagesv1.GetClusterInfoRequest) (*messagesv1.GetClusterInfoResponse, error) {
+func (s *rasClientServiceServer) GetClusterInfo(ctx context.Context, request *messagesv1.GetClusterInfoRequest) (*messagesv1.GetClusterInfoResponse, error) {
 	if err := s.initOnce(); err != nil {
 		return nil, err
 	}
@@ -109,7 +109,7 @@ func (s rasClientServiceServer) GetClusterInfo(ctx context.Context, request *mes
 	return service.GetClusterInfo(request)
 }
 
-func (s rasClientServiceServer) GetSessions(ctx context.Context, request *messagesv1.GetSessionsRequest) (*messagesv1.GetSessionsResponse, error) {
+func (s *rasClientServiceServer) GetSessions(ctx context.Context, request *messagesv1.GetSessionsRequest) (*messagesv1.GetSessionsResponse, error) {
 	if err := s.initOnce(); err != nil {
 		return nil, err
 	}
@@ -118,7 +118,7 @@ func (s rasClientServiceServer) GetSessions(ctx context.Context, request *messag
 	return service.GetSessions(request)
 }
 
-func (s rasClientServiceServer) GetShortInfobases(ctx context.Context, request *messagesv1.GetInfobasesShortRequest) (*messagesv1.GetInfobasesShortResponse, error) {
+func (s *rasClientServiceServer) GetShortInfobases(ctx context.Context, request *messagesv1.GetInfobasesShortRequest) (*messagesv1.GetInfobasesShortResponse, error) {
 	if err := s.initOnce(); err != nil {
 		return nil, err
 	}
