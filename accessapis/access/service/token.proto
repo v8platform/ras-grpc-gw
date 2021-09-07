@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package access.service;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/v8platform/ras-grpc-gw/pkg/gen/access/service;access_service";
+
+service TokenService {
+  rpc GetToken(GetTokenRequest) returns (GetTokenResponse) {};
+  rpc UpdateToken(UpdateTokenRequest) returns (GetTokenResponse) {};
+}
+
+message GetTokenRequest {
+
+  string user = 1;
+  string password = 2;
+  string pub_key = 3;
+
+}
+
+message GetTokenResponse {
+  string access_token = 1;
+  string refresh_token = 2;
+  string pub_key = 3;
+  string hash = 4;
+}
+
+message UpdateTokenRequest {
+  string access_token = 1;
+  string refresh_token = 2;
+  string hash = 3;
+}

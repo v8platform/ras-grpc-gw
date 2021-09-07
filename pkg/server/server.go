@@ -3,14 +3,20 @@ package server
 import (
 	"context"
 	"fmt"
+	"log"
+	"net"
+	"time"
+
+	_ "github.com/lithammer/shortuuid/v3"
+	"github.com/spf13/cast"
 	clientv1 "github.com/v8platform/protos/gen/ras/client/v1"
 	messagesv1 "github.com/v8platform/protos/gen/ras/messages/v1"
 	ras_service "github.com/v8platform/protos/gen/ras/service/api/v1"
 	"github.com/v8platform/ras-grpc-gw/pkg/client"
+	access_service "github.com/v8platform/ras-grpc-gw/pkg/gen/access/service"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/metadata"
 	"google.golang.org/protobuf/types/known/emptypb"
-	"log"
-	"net"
 )
 
 func NewRASServer(rasAddr string) *RASServer {
@@ -21,6 +27,21 @@ func NewRASServer(rasAddr string) *RASServer {
 
 type RASServer struct {
 	rasAddr string
+
+	idxClients   map[string]*ClientInfo
+	idxEndpoints map[string]*EndpointInfo
+}
+
+type EndpointInfo struct {
+	uuid       string
+	client     *ClientInfo
+	EndpointId string
+}
+
+type ClientInfo struct {
+	uuid        string
+	conn        *client.ClientConn
+	IdleTimeout time.Duration
 }
 
 func (s *RASServer) Serve(host string) error {
@@ -36,6 +57,11 @@ func (s *RASServer) Serve(host string) error {
 	ras_service.RegisterClustersServiceServer(server, srv)
 	ras_service.RegisterSessionsServiceServer(server, srv)
 	ras_service.RegisterInfobasesServiceServer(server, srv)
+
+	accessSrv := NewAccessServer()
+
+	access_service.RegisterClientServiceServer(server, accessSrv)
+	access_service.RegisterTokenServiceServer(server, accessSrv)
 
 	log.Println("Listening on", host)
 	if err := server.Serve(listener); err != nil {
@@ -67,15 +93,44 @@ func (s *rasClientServiceServer) AuthenticateCluster(ctx context.Context, reques
 
 }
 
+func (s *rasClientServiceServer) withEndpoint(ctx context.Context, fn func(clientv1.EndpointServiceImpl) error) (err error) {
+	var endpoint clientv1.EndpointServiceImpl
+	endpoint, err = s.client.GetEndpoint(ctx)
+
+	if err != nil {
+		return err
+	}
+
+	defer func() {
+		if err == nil {
+			header := metadata.New(map[string]string{
+				"endpoint_id": cast.ToString(endpoint),
+				//"host": cast.ToString(s.client.),
+			})
+
+			_ = grpc.SendHeader(ctx, header)
+		}
+	}()
+
+	return fn(endpoint)
+}
+
 func (s *rasClientServiceServer) AuthenticateInfobase(ctx context.Context, request *messagesv1.AuthenticateInfobaseRequest) (*emptypb.Empty, error) {
 
-	endpoint, err := s.client.GetEndpoint(ctx)
-	if err != nil {
-		return nil, err
-	}
-	auth := clientv1.NewAuthService(endpoint)
+	var resp *emptypb.Empty
+	var err error
 
-	return auth.AuthenticateInfobase(ctx, request)
+	err = s.withEndpoint(ctx, func(endpoint clientv1.EndpointServiceImpl) error {
+		auth := clientv1.NewAuthService(endpoint)
+		resp, err = auth.AuthenticateInfobase(ctx, request)
+		if err != nil {
+			return err
+		}
+		return nil
+
+	})
+
+	return resp, err
 }
 
 func (s *rasClientServiceServer) AuthenticateAgent(ctx context.Context, request *messagesv1.AuthenticateAgentRequest) (*emptypb.Empty, error) {

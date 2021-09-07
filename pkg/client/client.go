@@ -5,7 +5,6 @@ import (
 	"github.com/spf13/cast"
 	clientv1 "github.com/v8platform/protos/gen/ras/client/v1"
 	protocolv1 "github.com/v8platform/protos/gen/ras/protocol/v1"
-	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
@@ -168,12 +167,6 @@ func (c *ClientConn) turnEndpoint(ctx context.Context) (*protocolv1.Endpoint, er
 
 func (c *ClientConn) EndpointMessage(ctx context.Context, req *protocolv1.EndpointMessage) (*protocolv1.EndpointMessage, error) {
 	defer func() {
-		header := metadata.New(map[string]string{
-			"endpoint_id":     cast.ToString(req.GetEndpointId()),
-			"endpoint_format": cast.ToString(req.GetFormat()),
-		})
-
-		_ = grpc.SendHeader(ctx, header)
 
 	}()
 

@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package access.service;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/v8platform/ras-grpc-gw/pkg/gen/access/service;access_service";
+
+service ClientService {
+
+  rpc Register(RegisterRequest) returns (RegisterResponse) {};
+  rpc GetClients(GetClientsRequest) returns (GetClientsResponse) {};
+  rpc ResetClients(ResetClientsRequest) returns (google.protobuf.Empty) {};
+
+}
+
+message ResetClientsRequest {
+  string hash = 4; // Подпись запроса клиента
+}
+
+message GetClientsRequest {
+  string hash = 4; // Подпись запроса клиента
+}
+
+message GetClientsResponse {
+  repeated ClientInfo clients = 1;
+  string hash = 4; // Подпись запроса клиента
+}
+
+message ClientInfo {
+  string host = 1; // Хост службы RAS
+  int32  idle_timeout = 2; // Таймаут простоя  работы с клиентов
+  string uuid = 3; // Желаемый uuid. для смежных запросов
+  bool active = 4;
+  google.protobuf.Timestamp last_used = 5;
+  google.protobuf.Timestamp idle_at = 6;
+}
+
+
+message RegisterRequest {
+
+  string host = 1; // Хост службы RAS
+  int32  idle_timeout = 2; // Таймаут простоя  работы с клиентов
+  optional string uuid = 3; // Желаемый uuid. для смежных запросов
+  string hash = 4; // Подпись запроса клиента
+
+}
+
+message RegisterResponse {
+
+  string uuid = 1;
+  string hash = 3;
+
+}
