@@ -2,7 +2,7 @@
 
 [![Release](https://img.shields.io/github/release/v8platform/ras-grpc-gw.svg?style=for-the-badge)](https://github.com/v8platform/ras-grpc-gw/releases/latest)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=for-the-badge)](/LICENSE.md)
-[![Build status](https://img.shields.io/github/workflow/status/v8platform/ras-grpc-gw/build?style=for-the-badge)](https://github.com/v8platform/ras-grpc-gw/actions?workflow=goreleaser)
+[![Build status](https://img.shields.io/github/workflow/status/v8platform/ras-grpc-gw/goreleaser?style=for-the-badge)](https://github.com/v8platform/ras-grpc-gw/actions?workflow=goreleaser)
 [![Codecov branch](https://img.shields.io/codecov/c/github/v8platform/ras-grpc-gw/master.svg?style=for-the-badge)](https://codecov.io/gh/v8platform/ras-grpc-gw)
 [![Go Doc](https://img.shields.io/badge/godoc-reference-blue.svg?style=for-the-badge)](http://godoc.org/github.com/v8platform/ras-grpc-gw)
 [![SayThanks.io](https://img.shields.io/badge/SayThanks.io-%E2%98%BC-1EAEDB.svg?style=for-the-badge)](https://saythanks.io/to/khorevaa)
