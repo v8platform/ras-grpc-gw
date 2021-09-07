@@ -4,13 +4,10 @@ go 1.17
 
 require (
 	github.com/urfave/cli/v2 v2.3.0
-	github.com/v8platform/protos v0.1.4
+	github.com/v8platform/protos v0.2.0
 	google.golang.org/grpc v1.40.0
 	google.golang.org/protobuf v1.27.1
 )
-
-//replace github.com/v8platform/protos v0.1.2 => ../protos
-//replace github.com/v8platform/encoder v0.0.3 => ../../khorevaa/encoder
 
 require (
 	github.com/cpuguy83/go-md2man/v2 v2.0.0 // indirect

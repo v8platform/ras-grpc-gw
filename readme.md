@@ -1,7 +1,7 @@
 # ras-grpc-gw
 
 [![Release](https://img.shields.io/github/release/v8platform/ras-grpc-gw.svg?style=for-the-badge)](https://github.com/v8platform/ras-grpc-gw/releases/latest)
-[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=for-the-badge)](/LICENSE.md)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=for-the-badge)](LICENSE)
 [![Build status](https://img.shields.io/github/workflow/status/v8platform/ras-grpc-gw/goreleaser?style=for-the-badge)](https://github.com/v8platform/ras-grpc-gw/actions?workflow=goreleaser)
 [![Codecov branch](https://img.shields.io/codecov/c/github/v8platform/ras-grpc-gw/master.svg?style=for-the-badge)](https://codecov.io/gh/v8platform/ras-grpc-gw)
 [![Go Doc](https://img.shields.io/badge/godoc-reference-blue.svg?style=for-the-badge)](http://godoc.org/github.com/v8platform/ras-grpc-gw)
@@ -20,6 +20,11 @@
 RAS GRPC gateway (`ras-grpc-gw`) - прокси сервер для службы RAS 1С Предприятие
 
 Предполагаемое использование, разворачивание рядом со службой RAS в виде docker-контейнера или отдельной службы  
+
+Особенности:
+
+* Подключение к RAS только при первом запросе
+* Если соединение было закрыто то делается `одна` попытка переподключения, при этом все точки сбрасываются
 
 ### Реализованная функциональность
 
@@ -46,6 +51,17 @@ RAS GRPC gateway (`ras-grpc-gw`) - прокси сервер для службы
   * `docker pull ghcr.io/v8platform/ras-grpc-gw:latest`
 
 ## Как использовать
+
+### Работа с `endpoint` 
+
+Для работы с точками обмена используются заголовки (метаданные) сообщений
+
+Если в заголовке (или метаданные) не передать ключе `endpoint_id`  тогда операция выполниться в новой точке,
+И в ответном сообщении будет указан `endpoint_id` - новой открытой точки, для дальнейшей работы с этом отрытой точкой обмена
+
+Для `grpcurl` указание происходить через флаг `-H`. Например, `-H endpoint_id:1`
+
+Для других клиентов надо передавать заголовок (метаданные)
 
 ### Запуск локально 
 
@@ -93,7 +109,7 @@ go install github.com/fullstorydev/grpcurl/cmd/grpcurl
 
 `CLI`
 ```shell
-grpcurl -protoset ./protos/protoset.bin -plaintext -d '{}' localhost:3002 ras.service.api.v1.ClustersService/GetClusters
+grpcurl -protoset ./protos/protoset.bin -plaintext -H endpoint_id:1 -d '{}' localhost:3002 ras.service.api.v1.ClustersService/GetClusters
 ```
 or
 
@@ -104,17 +120,17 @@ docker run -it -v $PWD/protos/protoset.bin:/protos/protoset.bin fullstorydev/grp
 
 *Установка авторизации на кластере*
 ```shell
-grpcurl -protoset ./protos/protoset.bin -plaintext -d '{\"cluster_id\": \"e9261ed1-c9d0-40e5-8222-c7996493d507\"}' localhost:3002 ras.service.api.v1.AuthService/AuthenticateCluster
+grpcurl -protoset ./protos/protoset.bin -plaintext -H endpoint_id:1 -d '{\"cluster_id\": \"e9261ed1-c9d0-40e5-8222-c7996493d507\"}' localhost:3002 ras.service.api.v1.AuthService/AuthenticateCluster
 ```
 
 *Получение списка сессий кластера*
 ```shell
-grpcurl -protoset ./protos/protoset.bin -plaintext -d '{\"cluster_id\": \"e9261ed1-c9d0-40e5-8222-c7996493d507\"}' localhost:3002 ras.service.api.v1.SessionsService/GetSessions
+grpcurl -protoset ./protos/protoset.bin -plaintext -H endpoint_id:1 -d '{\"cluster_id\": \"e9261ed1-c9d0-40e5-8222-c7996493d507\"}' localhost:3002 ras.service.api.v1.SessionsService/GetSessions
 ```
 
 *Получение списка информационных баз*
 ```shell
-grpcurl -protoset ./protos/protoset.bin -plaintext -d '{\"cluster_id\": \"e9261ed1-c9d0-40e5-8222-c7996493d507\"}' localhost:3002 ras.service.api.v1.InfobasesService/GetShortInfobases
+grpcurl -protoset ./protos/protoset.bin -plaintext -H endpoint_id:1 -d '{\"cluster_id\": \"e9261ed1-c9d0-40e5-8222-c7996493d507\"}' localhost:3002 ras.service.api.v1.InfobasesService/GetShortInfobases
 ```
 
 ## License

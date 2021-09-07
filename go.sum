@@ -97,8 +97,8 @@ github.com/v8platform/encoder v0.0.3 h1:iqNmisoePgWUKNij7FmH6u2nY0StrjGjuqAINeeD
 github.com/v8platform/encoder v0.0.3/go.mod h1:/Ki7kVtFEtydZaIOZ7lbV+L20r4ikPRDrUE+2qZlFPA=
 github.com/v8platform/protoc-gen-go-ras v0.0.0-20210902165457-013367855358 h1:0F2yUabLX4vpkmIYXcDb+qoQnlqcJaEL25H/8/betKw=
 github.com/v8platform/protoc-gen-go-ras v0.0.0-20210902165457-013367855358/go.mod h1:1CEQnN/e7zOjnlO8o+ZkwFvyrGUYb4JCDns3ovp923w=
-github.com/v8platform/protos v0.1.4 h1:n2BRwwmqWQFYr+qRW4LtMqvfOWqrQIegjoOadbr1EM4=
-github.com/v8platform/protos v0.1.4/go.mod h1:8JbrMbSBBP7xsA2bMOSljgejVHgVClPNZ1oPQTP8Cdk=
+github.com/v8platform/protos v0.2.0 h1:dwcwXBnIKNsZulxmzLkVubd5WZuaL++k0MxXPFF4guU=
+github.com/v8platform/protos v0.2.0/go.mod h1:8JbrMbSBBP7xsA2bMOSljgejVHgVClPNZ1oPQTP8Cdk=
 github.com/yuin/goldmark v1.3.5/go.mod h1:mwnBkeHKe2W/ZEtQ+71ViKU8L12m81fl3OWwC1Zlc8k=
 go.buf.build/v8platform/go-gen-ras/v8platform/encodingapis v1.2.2/go.mod h1:M7qxAD3sf3aKWMnTTqSFKJYFahMjnf0EdhGpQeoXuUY=
 go.buf.build/v8platform/go-gen-ras/v8platform/rasapis v1.2.1/go.mod h1:y0b6WuLLqVK8EI2bS8CeGUypLqpWkZ8D1J97yPQpSWE=
