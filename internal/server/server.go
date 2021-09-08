@@ -3,21 +3,27 @@ package server
 import (
 	"context"
 	"fmt"
+	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"log"
 	"net"
 	"time"
 
+	"github.com/grpc-ecosystem/go-grpc-prometheus"
 	_ "github.com/lithammer/shortuuid/v3"
 	"github.com/spf13/cast"
 	clientv1 "github.com/v8platform/protos/gen/ras/client/v1"
 	messagesv1 "github.com/v8platform/protos/gen/ras/messages/v1"
 	ras_service "github.com/v8platform/protos/gen/ras/service/api/v1"
-	"github.com/v8platform/ras-grpc-gw/pkg/client"
 	access_service "github.com/v8platform/ras-grpc-gw/pkg/gen/access/service"
+	"github.com/v8platform/ras-grpc-gw/pkg/ras_client"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
+
+import "github.com/grpc-ecosystem/go-grpc-middleware"
 
 func NewRASServer(rasAddr string) *RASServer {
 	return &RASServer{
@@ -26,10 +32,6 @@ func NewRASServer(rasAddr string) *RASServer {
 }
 
 type RASServer struct {
-	rasAddr string
-
-	idxClients   map[string]*ClientInfo
-	idxEndpoints map[string]*EndpointInfo
 }
 
 type EndpointInfo struct {
@@ -40,7 +42,7 @@ type EndpointInfo struct {
 
 type ClientInfo struct {
 	uuid        string
-	conn        *client.ClientConn
+	conn        *ras_client.ClientConn
 	IdleTimeout time.Duration
 }
 
@@ -51,8 +53,14 @@ func (s *RASServer) Serve(host string) error {
 		return fmt.Errorf("failed to listen on %s: %w", host, err)
 	}
 
-	srv := NewRasClientServiceServer(s.rasAddr)
-	server := grpc.NewServer()
+	srv := NewRasClientServiceServer()
+	server := grpc.NewServer(
+		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
+			grpc_recovery.UnaryServerInterceptor(),
+			grpc_prometheus.UnaryServerInterceptor,
+			// grpc_auth.UnaryServerInterceptor(myAuthFunction),
+		)),
+	)
 	ras_service.RegisterAuthServiceServer(server, srv)
 	ras_service.RegisterClustersServiceServer(server, srv)
 	ras_service.RegisterSessionsServiceServer(server, srv)
@@ -71,15 +79,82 @@ func (s *RASServer) Serve(host string) error {
 	return nil
 }
 
-func NewRasClientServiceServer(rasAddr string) ras_service.RASServiceServer {
-	return &rasClientServiceServer{
-		client: client.NewClientConn(rasAddr),
-	}
+func NewRasClientServiceServer() ras_service.RASServiceServer {
+	return &rasClientServiceServer{}
 }
 
 type rasClientServiceServer struct {
 	ras_service.UnimplementedRASServiceServer
-	client *client.ClientConn
+
+	idxClients   map[string]*ClientInfo
+	idxEndpoints map[string]*EndpointInfo
+}
+
+func (s *rasClientServiceServer) endpointFromContext(ctx context.Context) (*EndpointInfo, error) {
+
+	md, ok := metadata.FromIncomingContext(ctx)
+
+	if !ok {
+		return nil, status.Errorf(codes.DataLoss, "Server: failed to get metadata")
+	}
+
+	if t, ok := md["endpoint_id"]; ok {
+
+		for _, e := range t {
+
+			if endpoint, ok := s.idxEndpoints[e]; ok {
+				return endpoint, nil
+			}
+		}
+	}
+
+	return nil, nil
+}
+
+func (s *rasClientServiceServer) clientFromContext(ctx context.Context) (*ClientInfo, error) {
+
+	md, ok := metadata.FromIncomingContext(ctx)
+
+	if !ok {
+		return nil, status.Errorf(codes.DataLoss, "Server: failed to get metadata")
+	}
+
+	if t, ok := md["client_id"]; ok {
+
+		for _, e := range t {
+
+			if client, ok := s.idxClients[e]; ok {
+				return client, nil
+			}
+		}
+	}
+
+	return nil, nil
+}
+
+func (s *rasClientServiceServer) getEndpoint(ctx context.Context) clientv1.EndpointServiceImpl {
+
+	md, ok := metadata.FromIncomingContext(ctx)
+
+	if !ok {
+		return nil, status.Errorf(codes.DataLoss, "Client: failed to get metadata")
+	}
+
+	if t, ok := md["endpoint_id"]; ok {
+
+		for _, e := range t {
+			if endpoint, ok := c.getEndpoint(e); ok {
+				return clientv1.NewEndpointService(c, endpoint), nil
+
+			}
+		}
+	}
+
+	endpoint, err := c.turnEndpoint(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 }
 
 func (s *rasClientServiceServer) AuthenticateCluster(ctx context.Context, request *messagesv1.ClusterAuthenticateRequest) (*emptypb.Empty, error) {
@@ -105,7 +180,7 @@ func (s *rasClientServiceServer) withEndpoint(ctx context.Context, fn func(clien
 		if err == nil {
 			header := metadata.New(map[string]string{
 				"endpoint_id": cast.ToString(endpoint),
-				//"host": cast.ToString(s.client.),
+				//"host": cast.ToString(s.ras_client.),
 			})
 
 			_ = grpc.SendHeader(ctx, header)

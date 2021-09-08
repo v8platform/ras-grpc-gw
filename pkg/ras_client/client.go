@@ -1,4 +1,4 @@
-package client
+package ras_client
 
 import (
 	"context"

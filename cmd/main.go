@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/urfave/cli/v2"
-	ras "github.com/v8platform/ras-grpc-gw/pkg/server"
+	ras "github.com/v8platform/ras-grpc-gw/internal/server"
 	"log"
 	"os"
 )
