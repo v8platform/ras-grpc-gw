@@ -6,9 +6,9 @@ import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/v8platform/ras-grpc-gw/pkg/gen/access/service;access_service";
 
-service TokenService {
-  rpc Get(GetRequest) returns (GetTokenResponse) {};
-  rpc Refresh(RefreshRequest) returns (GetTokenResponse) {};
+service AuthService {
+  rpc SingIn(GetRequest) returns (Tokens) {};
+  rpc Refresh(RefreshRequest) returns (Tokens) {};
 }
 
 message GetRequest {
@@ -18,12 +18,11 @@ message GetRequest {
 
 }
 
-message GetTokenResponse {
+message Tokens {
   string access_token = 1;
   string refresh_token = 2;
 }
 
 message RefreshRequest {
-  string access_token = 1;
-  string refresh_token = 2;
+  string refresh_token = 1;
 }

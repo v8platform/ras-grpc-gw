@@ -7,48 +7,48 @@ import (
 	"github.com/v8platform/ras-grpc-gw/pkg/gen/access/service"
 )
 
-type TokenServerService interface {
-	service.TokenServiceServer
+type AuthServerService interface {
+	service.AuthServiceServer
 }
 
-type tokenServerService struct {
-	service.UnimplementedTokenServiceServer
+type authServerService struct {
+	service.UnimplementedAuthServiceServer
 	services *service2.Services
 }
 
-func (a tokenServerService) Get(ctx context.Context, request *service.GetRequest) (*service.GetTokenResponse, error) {
+func (a authServerService) SingIn(ctx context.Context, request *service.GetRequest) (*service.Tokens, error) {
 
 	user, err := a.services.Users.GetByCredentials(ctx, request.GetUser(), request.GetPassword())
 	if err != nil {
 		return nil, err
 	}
 
-	tokens, err := a.services.Tokens.Get(ctx, user)
+	tokens, err := a.services.Tokens.Get(ctx, user.UUID)
 	if err != nil {
 		return nil, err
 	}
 
-	return &service.GetTokenResponse{
+	return &service.Tokens{
 		AccessToken:  string(tokens.Access),
 		RefreshToken: string(tokens.Refresh),
 	}, err
 }
 
-func (a tokenServerService) Refresh(ctx context.Context, request *service.RefreshRequest) (*service.GetTokenResponse, error) {
+func (a authServerService) Refresh(ctx context.Context, request *service.RefreshRequest) (*service.Tokens, error) {
 
 	tokens, err := a.services.Tokens.Refresh(ctx, domain.RefreshToken(request.RefreshToken))
 	if err != nil {
 		return nil, err
 	}
 
-	return &service.GetTokenResponse{
+	return &service.Tokens{
 		AccessToken:  string(tokens.Access),
 		RefreshToken: string(tokens.Refresh),
 	}, err
 }
 
-func NewTokenServerService(services *service2.Services) TokenServerService {
-	return &tokenServerService{
+func NewAuthServerService(services *service2.Services) AuthServerService {
+	return &authServerService{
 		services: services,
 	}
 }

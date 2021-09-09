@@ -20,6 +20,8 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ClientServiceClient interface {
 	Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error)
+	Get(ctx context.Context, in *GetClientRequest, opts ...grpc.CallOption) (*Tokens, error)
+	Refresh(ctx context.Context, in *RefreshRequest, opts ...grpc.CallOption) (*Tokens, error)
 	GetClients(ctx context.Context, in *GetClientsRequest, opts ...grpc.CallOption) (*GetClientsResponse, error)
 	ResetClients(ctx context.Context, in *ResetClientsRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
@@ -35,6 +37,24 @@ func NewClientServiceClient(cc grpc.ClientConnInterface) ClientServiceClient {
 func (c *clientServiceClient) Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error) {
 	out := new(RegisterResponse)
 	err := c.cc.Invoke(ctx, "/access.service.ClientService/Register", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *clientServiceClient) Get(ctx context.Context, in *GetClientRequest, opts ...grpc.CallOption) (*Tokens, error) {
+	out := new(Tokens)
+	err := c.cc.Invoke(ctx, "/access.service.ClientService/Get", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *clientServiceClient) Refresh(ctx context.Context, in *RefreshRequest, opts ...grpc.CallOption) (*Tokens, error) {
+	out := new(Tokens)
+	err := c.cc.Invoke(ctx, "/access.service.ClientService/Refresh", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -64,6 +84,8 @@ func (c *clientServiceClient) ResetClients(ctx context.Context, in *ResetClients
 // for forward compatibility
 type ClientServiceServer interface {
 	Register(context.Context, *RegisterRequest) (*RegisterResponse, error)
+	Get(context.Context, *GetClientRequest) (*Tokens, error)
+	Refresh(context.Context, *RefreshRequest) (*Tokens, error)
 	GetClients(context.Context, *GetClientsRequest) (*GetClientsResponse, error)
 	ResetClients(context.Context, *ResetClientsRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedClientServiceServer()
@@ -75,6 +97,12 @@ type UnimplementedClientServiceServer struct {
 
 func (UnimplementedClientServiceServer) Register(context.Context, *RegisterRequest) (*RegisterResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Register not implemented")
+}
+func (UnimplementedClientServiceServer) Get(context.Context, *GetClientRequest) (*Tokens, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
+}
+func (UnimplementedClientServiceServer) Refresh(context.Context, *RefreshRequest) (*Tokens, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Refresh not implemented")
 }
 func (UnimplementedClientServiceServer) GetClients(context.Context, *GetClientsRequest) (*GetClientsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetClients not implemented")
@@ -109,6 +137,42 @@ func _ClientService_Register_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ClientServiceServer).Register(ctx, req.(*RegisterRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ClientService_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetClientRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ClientServiceServer).Get(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/access.service.ClientService/Get",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ClientServiceServer).Get(ctx, req.(*GetClientRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ClientService_Refresh_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RefreshRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ClientServiceServer).Refresh(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/access.service.ClientService/Refresh",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ClientServiceServer).Refresh(ctx, req.(*RefreshRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -159,6 +223,14 @@ var ClientService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Register",
 			Handler:    _ClientService_Register_Handler,
+		},
+		{
+			MethodName: "Get",
+			Handler:    _ClientService_Get_Handler,
+		},
+		{
+			MethodName: "Refresh",
+			Handler:    _ClientService_Refresh_Handler,
 		},
 		{
 			MethodName: "GetClients",

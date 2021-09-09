@@ -4,28 +4,32 @@ package access.service;
 
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
+import "access/service/auth.proto";
 
 option go_package = "github.com/v8platform/ras-grpc-gw/pkg/gen/access/service;access_service";
 
 service ClientService {
 
   rpc Register(RegisterRequest) returns (RegisterResponse) {};
+  rpc Get(GetClientRequest) returns (Tokens) {};
+  rpc Refresh(RefreshRequest) returns (Tokens) {};
   rpc GetClients(GetClientsRequest) returns (GetClientsResponse) {};
   rpc ResetClients(ResetClientsRequest) returns (google.protobuf.Empty) {};
 
 }
 
+message GetClientRequest {
+  string uuid = 1;
+}
+
 message ResetClientsRequest {
-  string hash = 4; // Подпись запроса клиента
 }
 
 message GetClientsRequest {
-  string hash = 4; // Подпись запроса клиента
 }
 
 message GetClientsResponse {
   repeated ClientInfo clients = 1;
-  string hash = 4; // Подпись запроса клиента
 }
 
 message ClientInfo {
@@ -43,13 +47,9 @@ message RegisterRequest {
   string host = 1; // Хост службы RAS
   int32  idle_timeout = 2; // Таймаут простоя  работы с клиентов
   optional string uuid = 3; // Желаемый uuid. для смежных запросов
-  string hash = 4; // Подпись запроса клиента
 
 }
 
 message RegisterResponse {
-
   string uuid = 1;
-  string hash = 3;
-
 }

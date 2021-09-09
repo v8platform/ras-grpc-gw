@@ -11,7 +11,10 @@ func NewHandlers(services *service.Services) []server.RegisterServerHandler {
 
 	return []server.RegisterServerHandler{
 		func(server *grpc.Server) {
-			access_service.RegisterTokenServiceServer(server, NewTokenServerService(services))
+			access_service.RegisterAuthServiceServer(server, NewAuthServerService(services))
+		},
+		func(server *grpc.Server) {
+			access_service.RegisterClientServiceServer(server, NewClientServerService(services))
 		},
 	}
 
