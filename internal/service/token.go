@@ -10,7 +10,7 @@ import (
 // TokensService реализует бизнес-логику работы
 type TokensService interface {
 	Get(ctx context.Context, user *domain.User) (domain.Tokens, error)
-	Refresh(ctx context.Context, user *domain.User, refresh domain.RefreshToken) (domain.Tokens, error)
+	Refresh(ctx context.Context, refresh domain.RefreshToken) (domain.Tokens, error)
 }
 
 type tokensService struct {
@@ -20,37 +20,36 @@ type tokensService struct {
 
 func (t tokensService) Get(ctx context.Context, user *domain.User) (domain.Tokens, error) {
 
-	return t.createTokens(user)
+	return t.createTokens(user.UUID)
 
 }
 
-func (t tokensService) Refresh(ctx context.Context, user *domain.User, refresh domain.RefreshToken) (domain.Tokens, error) {
-	err := t.tokens.Validate(string(refresh), user.UUID, "refresh")
+func (t tokensService) Refresh(ctx context.Context, refresh domain.RefreshToken) (domain.Tokens, error) {
+	userUUID, err := t.tokens.Validate(string(refresh), "refresh")
 	if err != nil {
 		return domain.Tokens{}, err
 	}
 
-	return t.createTokens(user)
+	return t.createTokens(userUUID)
 }
 
-func (t tokensService) createTokens(user *domain.User) (domain.Tokens, error) {
+func (t tokensService) createTokens(userUUID string) (domain.Tokens, error) {
 
-	access, err := t.tokens.Generate(user.UUID, "access", 10 * time.Minute)
+	access, err := t.tokens.Generate(userUUID, "access", 10*time.Minute)
 	if err != nil {
 		return domain.Tokens{}, err
 	}
 
-	refresh, err := t.tokens.Generate(user.UUID, "refresh", 1 * time.Hour)
+	refresh, err := t.tokens.Generate(userUUID, "refresh", 1*time.Hour)
 	if err != nil {
 		return domain.Tokens{}, err
 	}
 
 	return domain.Tokens{
-		Access: domain.AccessToken(access),
+		Access:  domain.AccessToken(access),
 		Refresh: domain.RefreshToken(refresh),
 	}, nil
 }
-
 
 func NewTokenService(tokenManager auth.TokenManager, manager *Services) TokensService {
 	return &tokensService{

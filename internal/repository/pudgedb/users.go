@@ -2,12 +2,17 @@ package pudgedb
 
 import (
 	"context"
+	"github.com/recoilme/pudge"
 	"github.com/v8platform/ras-grpc-gw/internal/database/pudgedb"
 	"github.com/v8platform/ras-grpc-gw/internal/domain"
 )
 
 type UsersRepository struct {
 	db *pudgedb.Db
+}
+
+func (u UsersRepository) path() string {
+	return u.db.GetPath("users")
 }
 
 func (u UsersRepository) GetByID(ctx context.Context, id int32) (*domain.User, error) {
@@ -19,7 +24,8 @@ func (u UsersRepository) GetByCredentials(ctx context.Context, user string, pass
 }
 
 func (u UsersRepository) Fetch(ctx context.Context) (res []domain.User, err error) {
-	panic("implement me")
+
+	pudge.Get(u.path())
 }
 
 func (u UsersRepository) Update(ctx context.Context, cal *domain.User) error {

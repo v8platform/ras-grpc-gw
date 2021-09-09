@@ -3,6 +3,7 @@ package auth
 import (
 	"bytes"
 	"crypto/rsa"
+	"crypto/sha256"
 	"fmt"
 
 	"github.com/lestrrat-go/jwx/jwa"
@@ -13,12 +14,13 @@ import (
 
 type TokenManager interface {
 	Generate(issuer, subject string, ttl time.Duration) (string, error)
-	Validate(payload string, issuer, subject string) error
+	Validate(payload string, subject string) (string, error)
 }
 
 func NewTokenManager(secret string) (TokenManager, error) {
+	digest := sha256.Sum256([]byte(secret))
 
-	privKey, err := rsa.GenerateKey(bytes.NewBufferString(secret), 2048)
+	privKey, err := rsa.GenerateKey(bytes.NewBuffer(digest[:]), 64)
 	if err != nil {
 		return nil, err
 	}
@@ -32,18 +34,18 @@ type tokenManager struct {
 	key *rsa.PrivateKey
 }
 
-func (m *tokenManager) Validate(payload string, issuer, subject string) error {
-	_, err := jwt.Parse(
+func (m *tokenManager) Validate(payload string, subject string) (string, error) {
+	token, err := jwt.Parse(
 		[]byte(payload),
 		jwt.WithValidate(true),
 		jwt.WithVerify(jwa.RS256, m.key.PublicKey),
 		jwt.WithSubject(subject),
-		jwt.WithIssuer(issuer),
+		// jwt.WithIssuer(issuer),
 	)
 	if err != nil {
-		return err
+		return "", err
 	}
-	return nil
+	return token.Issuer(), nil
 }
 
 // Generate new JWT Token

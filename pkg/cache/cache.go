@@ -7,3 +7,13 @@ type Cache interface {
 	Clear(key string)
 	HealthCheck() (bool, error)
 }
+
+type memoryCache struct {
+	Cache
+}
+
+func NewMemoryCache() Cache {
+
+	return &memoryCache{}
+
+}
