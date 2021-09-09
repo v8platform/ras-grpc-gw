@@ -10,11 +10,15 @@ type UsersRepository struct {
 	db *pudgedb.Db
 }
 
-func (u UsersRepository) Fetch(ctx context.Context) (res []domain.User, err error) {
+func (u UsersRepository) GetByID(ctx context.Context, id int32) (*domain.User, error) {
 	panic("implement me")
 }
 
-func (u UsersRepository) GetByID(ctx context.Context, id int32) (domain.User, error) {
+func (u UsersRepository) GetByCredentials(ctx context.Context, user string, passwordHash string) (*domain.User, error) {
+	panic("implement me")
+}
+
+func (u UsersRepository) Fetch(ctx context.Context) (res []domain.User, err error) {
 	panic("implement me")
 }
 

@@ -9,7 +9,8 @@ import (
 
 type Users interface {
 	Fetch(ctx context.Context) (res []domain.User, err error)
-	GetByID(ctx context.Context, id int32) (domain.User, error)
+	GetByID(ctx context.Context, id int32) (*domain.User, error)
+	GetByCredentials(ctx context.Context, user string, passwordHash string) (*domain.User, error)
 	Update(ctx context.Context, cal *domain.User) error
 	Store(ctx context.Context, cal *domain.User) error
 	Delete(ctx context.Context, id string) error

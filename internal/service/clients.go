@@ -9,22 +9,18 @@ import (
 
 // ClientsService реализует бизнес-логику работы
 type ClientsService interface {
-	Register(ctx context.Context, client *domain.Client) error
+	Register(ctx context.Context, client *domain.Client) (string, error)
 	GetByShortUUID(ctx context.Context, uuid string) (*domain.Client, error)
 	Remove(ctx context.Context, client *domain.Client) error
-	GetUserClients(ctx context.Context, userId int32) ([]*domain.Client, error)
 }
 
 type clientService struct {
+	services *Services
 	r     repository.Clients
 	cache cache.Cache
 }
 
-func (c clientService) GetUserClients(ctx context.Context, userId int32) ([]*domain.Client, error) {
-	panic("implement me")
-}
-
-func (c clientService) Register(ctx context.Context, client *domain.Client) error {
+func (c clientService) Register(ctx context.Context, client *domain.Client) (string, error) {
 	panic("implement me")
 }
 
@@ -36,9 +32,10 @@ func (c clientService) Remove(ctx context.Context, client *domain.Client) error 
 	panic("implement me")
 }
 
-func NewClientService(clients repository.Clients, cache cache.Cache) ClientsService {
+func NewClientService(clients repository.Clients, cache cache.Cache, manager *Services) ClientsService {
 	return &clientService{
 		r:     clients,
 		cache: cache,
+		services: manager,
 	}
 }

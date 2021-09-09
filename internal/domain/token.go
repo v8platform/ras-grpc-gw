@@ -1,9 +1,10 @@
 package domain
 
-import "time"
+type AccessToken string
 
-type AccessToken struct {
-	UserId   int32
-	ClientId int32
-	Expiries time.Time
+type RefreshToken string
+
+type Tokens struct {
+	Access  AccessToken
+	Refresh RefreshToken
 }

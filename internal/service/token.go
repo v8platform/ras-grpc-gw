@@ -4,39 +4,57 @@ import (
 	"context"
 	"github.com/v8platform/ras-grpc-gw/internal/domain"
 	"github.com/v8platform/ras-grpc-gw/pkg/auth"
-	"github.com/v8platform/ras-grpc-gw/pkg/cache"
+	"time"
 )
-
-type ValidateStatus int
 
 // TokensService реализует бизнес-логику работы
 type TokensService interface {
-	Get(ctx context.Context, user *domain.User) (*domain.Token, error)
-	Refresh(ctx context.Context, refresh *domain.Token) (*domain.Token, error)
-	Validate(ctx context.Context, token *domain.Token) (ValidateStatus, error)
+	Get(ctx context.Context, user *domain.User) (domain.Tokens, error)
+	Refresh(ctx context.Context, user *domain.User, refresh domain.RefreshToken) (domain.Tokens, error)
 }
 
 type tokensService struct {
-	repo    interface{}
-	manager auth.TokenManager
-	cache   cache.Cache
+	services *Services
+	tokens   auth.TokenManager
 }
 
-func (t tokensService) Get(ctx context.Context, user *domain.User) (*domain.Token, error) {
-	panic("implement me")
+func (t tokensService) Get(ctx context.Context, user *domain.User) (domain.Tokens, error) {
+
+	return t.createTokens(user)
+
 }
 
-func (t tokensService) Refresh(ctx context.Context, refresh *domain.Token) (*domain.Token, error) {
-	panic("implement me")
+func (t tokensService) Refresh(ctx context.Context, user *domain.User, refresh domain.RefreshToken) (domain.Tokens, error) {
+	err := t.tokens.Validate(string(refresh), user.UUID, "refresh")
+	if err != nil {
+		return domain.Tokens{}, err
+	}
+
+	return t.createTokens(user)
 }
 
-func (t tokensService) Validate(ctx context.Context, token *domain.Token) (ValidateStatus, error) {
-	panic("implement me")
+func (t tokensService) createTokens(user *domain.User) (domain.Tokens, error) {
+
+	access, err := t.tokens.Generate(user.UUID, "access", 10 * time.Minute)
+	if err != nil {
+		return domain.Tokens{}, err
+	}
+
+	refresh, err := t.tokens.Generate(user.UUID, "refresh", 1 * time.Hour)
+	if err != nil {
+		return domain.Tokens{}, err
+	}
+
+	return domain.Tokens{
+		Access: domain.AccessToken(access),
+		Refresh: domain.RefreshToken(refresh),
+	}, nil
 }
 
-func NewAuthService(repo interface{}, cache cache.Cache) TokensService {
+
+func NewTokenService(tokenManager auth.TokenManager, manager *Services) TokensService {
 	return &tokensService{
-		repo:  repo,
-		cache: cache,
+		tokens:   tokenManager,
+		services: manager,
 	}
 }

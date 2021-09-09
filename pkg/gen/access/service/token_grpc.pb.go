@@ -14,12 +14,12 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// TokenServiceClient is the ras_client API for TokenService service.
+// TokenServiceClient is the client API for TokenService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TokenServiceClient interface {
-	GetToken(ctx context.Context, in *GetTokenRequest, opts ...grpc.CallOption) (*GetTokenResponse, error)
-	UpdateToken(ctx context.Context, in *UpdateTokenRequest, opts ...grpc.CallOption) (*GetTokenResponse, error)
+	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetTokenResponse, error)
+	Refresh(ctx context.Context, in *RefreshRequest, opts ...grpc.CallOption) (*GetTokenResponse, error)
 }
 
 type tokenServiceClient struct {
@@ -30,18 +30,18 @@ func NewTokenServiceClient(cc grpc.ClientConnInterface) TokenServiceClient {
 	return &tokenServiceClient{cc}
 }
 
-func (c *tokenServiceClient) GetToken(ctx context.Context, in *GetTokenRequest, opts ...grpc.CallOption) (*GetTokenResponse, error) {
+func (c *tokenServiceClient) Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetTokenResponse, error) {
 	out := new(GetTokenResponse)
-	err := c.cc.Invoke(ctx, "/access.service.TokenService/GetToken", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/access.service.TokenService/Get", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *tokenServiceClient) UpdateToken(ctx context.Context, in *UpdateTokenRequest, opts ...grpc.CallOption) (*GetTokenResponse, error) {
+func (c *tokenServiceClient) Refresh(ctx context.Context, in *RefreshRequest, opts ...grpc.CallOption) (*GetTokenResponse, error) {
 	out := new(GetTokenResponse)
-	err := c.cc.Invoke(ctx, "/access.service.TokenService/UpdateToken", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/access.service.TokenService/Refresh", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -52,8 +52,8 @@ func (c *tokenServiceClient) UpdateToken(ctx context.Context, in *UpdateTokenReq
 // All implementations must embed UnimplementedTokenServiceServer
 // for forward compatibility
 type TokenServiceServer interface {
-	GetToken(context.Context, *GetTokenRequest) (*GetTokenResponse, error)
-	UpdateToken(context.Context, *UpdateTokenRequest) (*GetTokenResponse, error)
+	Get(context.Context, *GetRequest) (*GetTokenResponse, error)
+	Refresh(context.Context, *RefreshRequest) (*GetTokenResponse, error)
 	mustEmbedUnimplementedTokenServiceServer()
 }
 
@@ -61,11 +61,11 @@ type TokenServiceServer interface {
 type UnimplementedTokenServiceServer struct {
 }
 
-func (UnimplementedTokenServiceServer) GetToken(context.Context, *GetTokenRequest) (*GetTokenResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetToken not implemented")
+func (UnimplementedTokenServiceServer) Get(context.Context, *GetRequest) (*GetTokenResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
 }
-func (UnimplementedTokenServiceServer) UpdateToken(context.Context, *UpdateTokenRequest) (*GetTokenResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateToken not implemented")
+func (UnimplementedTokenServiceServer) Refresh(context.Context, *RefreshRequest) (*GetTokenResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Refresh not implemented")
 }
 func (UnimplementedTokenServiceServer) mustEmbedUnimplementedTokenServiceServer() {}
 
@@ -80,38 +80,38 @@ func RegisterTokenServiceServer(s grpc.ServiceRegistrar, srv TokenServiceServer)
 	s.RegisterService(&TokenService_ServiceDesc, srv)
 }
 
-func _TokenService_GetToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetTokenRequest)
+func _TokenService_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TokenServiceServer).GetToken(ctx, in)
+		return srv.(TokenServiceServer).Get(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/access.service.TokenService/GetToken",
+		FullMethod: "/access.service.TokenService/Get",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TokenServiceServer).GetToken(ctx, req.(*GetTokenRequest))
+		return srv.(TokenServiceServer).Get(ctx, req.(*GetRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TokenService_UpdateToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateTokenRequest)
+func _TokenService_Refresh_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RefreshRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TokenServiceServer).UpdateToken(ctx, in)
+		return srv.(TokenServiceServer).Refresh(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/access.service.TokenService/UpdateToken",
+		FullMethod: "/access.service.TokenService/Refresh",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TokenServiceServer).UpdateToken(ctx, req.(*UpdateTokenRequest))
+		return srv.(TokenServiceServer).Refresh(ctx, req.(*RefreshRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -124,12 +124,12 @@ var TokenService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*TokenServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetToken",
-			Handler:    _TokenService_GetToken_Handler,
+			MethodName: "Get",
+			Handler:    _TokenService_Get_Handler,
 		},
 		{
-			MethodName: "UpdateToken",
-			Handler:    _TokenService_UpdateToken_Handler,
+			MethodName: "Refresh",
+			Handler:    _TokenService_Refresh_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
