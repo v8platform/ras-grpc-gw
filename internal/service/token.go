@@ -37,12 +37,12 @@ func (t tokensService) Refresh(ctx context.Context, refresh domain.RefreshToken)
 
 func (t tokensService) createTokens(issuer string) (domain.Tokens, error) {
 
-	access, err := t.tokens.Generate(issuer, "access", 10*time.Minute)
+	access, err := t.tokens.Generate(issuer, "access", 24*time.Hour)
 	if err != nil {
 		return domain.Tokens{}, err
 	}
 
-	refresh, err := t.tokens.Generate(issuer, "refresh", 1*time.Hour)
+	refresh, err := t.tokens.Generate(issuer, "refresh", 24*time.Hour)
 	if err != nil {
 		return domain.Tokens{}, err
 	}

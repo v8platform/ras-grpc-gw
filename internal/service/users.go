@@ -10,21 +10,31 @@ import (
 
 var _ UsersService = (*usersService)(nil)
 
-
 // UsersService реализует бизнес-логику работы
 type UsersService interface {
 	GetByCredentials(ctx context.Context, user string, password string) (*domain.User, error)
 	GetUserClients(ctx context.Context, userId int32) ([]*domain.Client, error)
+	GetByUUID(ctx context.Context, uuid string) (*domain.User, error)
 }
 
 type usersService struct {
 	services *Services
-	r  repository.Users
-	cache cache.Cache
-	hasher hash.PasswordHasher
+	r        repository.Users
+	cache    cache.Cache
+	hasher   hash.PasswordHasher
+}
+
+func (u usersService) GetByUUID(ctx context.Context, uuid string) (*domain.User, error) {
+
+	user, err := u.r.GetByUUID(ctx, uuid)
+	if err != nil {
+		return nil, err
+	}
+	return user, nil
 }
 
 func (u usersService) GetByCredentials(ctx context.Context, username string, password string) (*domain.User, error) {
+
 	passwordHash, err := u.hasher.Hash(password)
 	if err != nil {
 		return nil, err
@@ -32,7 +42,9 @@ func (u usersService) GetByCredentials(ctx context.Context, username string, pas
 
 	user, err := u.r.GetByCredentials(ctx, username, passwordHash)
 	if err != nil {
+		return nil, err
 	}
+
 	return user, nil
 }
 
@@ -42,9 +54,9 @@ func (u usersService) GetUserClients(ctx context.Context, userId int32) ([]*doma
 
 func NewUsersService(repository repository.Users, cache cache.Cache, hasher hash.PasswordHasher, manager *Services) *usersService {
 	return &usersService{
-		r:  repository,
-		cache: cache,
+		r:        repository,
+		cache:    cache,
 		services: manager,
-		hasher: hasher,
+		hasher:   hasher,
 	}
 }

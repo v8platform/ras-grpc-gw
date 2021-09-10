@@ -53,7 +53,7 @@ func main() {
 				return err
 			}
 
-			db := pudgedb.New(".")
+			db := pudgedb.New("./pudgedb")
 
 			services, err := service.NewServices(service.Options{
 				Repositories: repository.NewPudgeRepositories(&db),
@@ -67,8 +67,14 @@ func main() {
 			}
 
 			handlers := grpc_v1.NewHandlers(services)
+			interceptors := grpc_v1.NewInterceptors(services)
+			rasHandlers := grpc_v1.NewRasHandlers(services)
 
-			svr := server.NewServer(services, handlers...)
+			svr := server.NewServer(
+				server.WithHandlers(handlers...),
+				server.WithHandlers(rasHandlers...),
+				server.WithChainInterceptor(interceptors...),
+			)
 
 			if err := svr.Serve(c.String("bind")); err != nil {
 				return err

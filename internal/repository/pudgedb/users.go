@@ -6,10 +6,22 @@ import (
 	"github.com/recoilme/pudge"
 	"github.com/v8platform/ras-grpc-gw/internal/database/pudgedb"
 	"github.com/v8platform/ras-grpc-gw/internal/domain"
+	"log"
 )
 
 type UsersRepository struct {
 	db *pudgedb.Db
+}
+
+func (u UsersRepository) GetByUUID(ctx context.Context, uuid string) (*domain.User, error) {
+
+	var user domain.User
+	err := pudge.Get(u.pathUsers(), uuid, &user)
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
 }
 
 func (u UsersRepository) pathUsers() string {
@@ -26,8 +38,12 @@ func (u UsersRepository) GetByID(ctx context.Context, id int32) (*domain.User, e
 
 func (u UsersRepository) GetByCredentials(ctx context.Context, username string, passwordHash string) (*domain.User, error) {
 
-	digest := sha256.Sum256([]byte(username + passwordHash))
+	digest := digest(username, passwordHash)
 	var key string
+
+	// log.Println(username, passwordHash)
+	log.Println(digest)
+	// log.Println(u.byCredentials())
 
 	err := pudge.Get(u.byCredentials(), digest, &key)
 	if err != nil {
@@ -45,7 +61,7 @@ func (u UsersRepository) GetByCredentials(ctx context.Context, username string, 
 
 func (u UsersRepository) Fetch(ctx context.Context) (res []domain.User, err error) {
 
-	keys, _ := pudge.Keys(u.pathUsers(), 0, -1, 0, true)
+	keys, _ := pudge.Keys(u.pathUsers(), 0, 0, 0, true)
 	for _, key := range keys {
 		var p domain.User
 		err := pudge.Get(u.pathUsers(), key, &p)
@@ -68,20 +84,36 @@ func (u UsersRepository) Update(ctx context.Context, cal *domain.User) error {
 	return nil
 }
 
-func (u UsersRepository) Store(ctx context.Context, cal *domain.User) error {
+func (u UsersRepository) Store(ctx context.Context, user *domain.User) error {
 
-	err := pudge.Set(u.pathUsers(), cal.UUID, *cal)
-	if err != nil {
-		return err
-	}
-	digest := sha256.Sum256([]byte(cal.Username + cal.PasswordHash))
-
-	err = pudge.Set(u.byCredentials(), digest, cal.UUID)
+	err := pudge.Set(u.pathUsers(), user.UUID, *user)
 	if err != nil {
 		return err
 	}
 
+	digest := digest(user.Username, user.PasswordHash)
+
+	err = pudge.Set(u.byCredentials(), digest, user.UUID)
+	if err != nil {
+		return err
+	}
+
+	// log.Println("store", digest, user.UUID)
+	// log.Println(u.byCredentials())
+
+	// _, _ = u.Fetch(ctx)
 	return nil
+}
+
+func digest(src ...string) []byte {
+
+	var b []byte
+	for _, s := range src {
+		b = append(b, []byte(s)...)
+	}
+
+	digest := sha256.Sum256(b)
+	return digest[:]
 }
 
 func (u UsersRepository) Delete(ctx context.Context, id string) error {

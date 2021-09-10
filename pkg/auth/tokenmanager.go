@@ -1,14 +1,12 @@
 package auth
 
 import (
-	"bytes"
-	"crypto/rsa"
+	"crypto"
+	"crypto/ed25519"
 	"crypto/sha256"
 	"fmt"
-
 	"github.com/lestrrat-go/jwx/jwa"
 	"github.com/lestrrat-go/jwx/jwt"
-
 	"time"
 )
 
@@ -20,25 +18,24 @@ type TokenManager interface {
 func NewTokenManager(secret string) (TokenManager, error) {
 	digest := sha256.Sum256([]byte(secret))
 
-	privKey, err := rsa.GenerateKey(bytes.NewBuffer(digest[:]), 64)
-	if err != nil {
-		return nil, err
-	}
-
+	privKey := ed25519.NewKeyFromSeed(digest[:])
+	pubKey := privKey.Public()
 	return &tokenManager{
 		key: privKey,
+		pub: pubKey,
 	}, nil
 }
 
 type tokenManager struct {
-	key *rsa.PrivateKey
+	key crypto.PrivateKey
+	pub crypto.PublicKey
 }
 
 func (m *tokenManager) Validate(payload string, subject string) (string, error) {
 	token, err := jwt.Parse(
 		[]byte(payload),
 		jwt.WithValidate(true),
-		jwt.WithVerify(jwa.RS256, m.key.PublicKey),
+		jwt.WithVerify(jwa.EdDSA, m.pub),
 		jwt.WithSubject(subject),
 		// jwt.WithIssuer(issuer),
 	)
@@ -57,7 +54,7 @@ func (m *tokenManager) Generate(issuer, subject string, ttl time.Duration) (stri
 	t.Set(jwt.ExpirationKey, time.Now().Add(ttl))
 	t.Set(jwt.IssuedAtKey, time.Now())
 
-	payload, err := jwt.Sign(t, jwa.RS256, m.key)
+	payload, err := jwt.Sign(t, jwa.EdDSA, m.key)
 	if err != nil {
 		fmt.Printf("failed to generate signed payload: %s\n", err)
 		return "", err

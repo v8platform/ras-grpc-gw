@@ -1,0 +1,7 @@
+
+grpcurl -v -H  authorization:"bearer eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzEzNjMxMTksImlhdCI6MTYzMTI3NjcxOSwiaXNzIjoia3hzMkZqRWlUOGNzVVUyRWZVdzZiYiIsInN1YiI6ImFjY2VzcyJ9.XTMj_-lOxv71lf3FK6RSZ-ZiLgRqTSnySPehaC3KajfOuJWYSLhK2ij7LxVBuhSO7nH1U5ZQtGDmhenUtLVwDA" -protoset ./protos/server.bin -plaintext -d "{ \"host\": \"admin\", \"uuid\": \"1\"}"  localhost:3002 access.service.ClientService/Register
+
+grpcurl -v -H  authorization:"bearer eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzEzNjMxMTksImlhdCI6MTYzMTI3NjcxOSwiaXNzIjoia3hzMkZqRWlUOGNzVVUyRWZVdzZiYiIsInN1YiI6ImFjY2VzcyJ9.XTMj_-lOxv71lf3FK6RSZ-ZiLgRqTSnySPehaC3KajfOuJWYSLhK2ij7LxVBuhSO7nH1U5ZQtGDmhenUtLVwDA" -protoset ./protos/server.bin -plaintext -d "{ \"uuid\": \"1\"}"  localhost:3002 access.service.ClientService/Get
+
+
+grpcurl -v -H authorization:"bearer eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzEzNjMxMTksImlhdCI6MTYzMTI3NjcxOSwiaXNzIjoia3hzMkZqRWlUOGNzVVUyRWZVdzZiYiIsInN1YiI6ImFjY2VzcyJ9.XTMj_-lOxv71lf3FK6RSZ-ZiLgRqTSnySPehaC3KajfOuJWYSLhK2ij7LxVBuhSO7nH1U5ZQtGDmhenUtLVwDA" -H x-client:"eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzEzNjM0MjcsImlhdCI6MTYzMTI3NzAyNywiaXNzIjoiMSIsInN1YiI6ImFjY2VzcyJ9.UN5wJi1el_Sh3llSoIk_uFdCVVKfGXxag5evPGtKnBOJOk7pAgEhekEFXxvepfxYIPELdFpshQHzQ_rVnwgABg" -protoset ./protos/server.bin -plaintext -d "{ \"refresh_token\": \"1\"}"  localhost:3002 access.service.ClientService/Refresh

@@ -41,7 +41,16 @@ func (c clientServerService) Register(ctx context.Context, request *service.Regi
 }
 
 func (c clientServerService) Get(ctx context.Context, request *service.GetClientRequest) (*service.Tokens, error) {
-	panic("implement me")
+
+	tokens, err := c.services.Tokens.Get(ctx, request.GetUuid())
+	if err != nil {
+		return nil, err
+	}
+
+	return &service.Tokens{
+		AccessToken:  string(tokens.Access),
+		RefreshToken: string(tokens.Refresh),
+	}, nil
 }
 
 func (c clientServerService) Refresh(ctx context.Context, request *service.RefreshRequest) (*service.Tokens, error) {

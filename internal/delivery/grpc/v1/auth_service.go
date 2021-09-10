@@ -5,6 +5,8 @@ import (
 	"github.com/v8platform/ras-grpc-gw/internal/domain"
 	service2 "github.com/v8platform/ras-grpc-gw/internal/service"
 	"github.com/v8platform/ras-grpc-gw/pkg/gen/access/service"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type AuthServerService interface {
@@ -16,11 +18,17 @@ type authServerService struct {
 	services *service2.Services
 }
 
+func (a authServerService) AuthFuncOverride(ctx context.Context, fullMethodName string) (context.Context, error) {
+
+	return ctx, nil
+
+}
+
 func (a authServerService) SingIn(ctx context.Context, request *service.GetRequest) (*service.Tokens, error) {
 
 	user, err := a.services.Users.GetByCredentials(ctx, request.GetUser(), request.GetPassword())
 	if err != nil {
-		return nil, err
+		return nil, status.Errorf(codes.PermissionDenied, "invalid user or password")
 	}
 
 	tokens, err := a.services.Tokens.Get(ctx, user.UUID)
@@ -51,28 +59,4 @@ func NewAuthServerService(services *service2.Services) AuthServerService {
 	return &authServerService{
 		services: services,
 	}
-}
-
-func userClaimFromToken(struct{}) string {
-	return "foobar"
-}
-
-// exampleAuthFunc is used by a middleware to authenticate requests
-func exampleAuthFunc(ctx context.Context) (context.Context, error) {
-	// token, err := grpc_auth.AuthFromMD(ctx, "bearer")
-	// if err != nil {
-	// 	return nil, err
-	// }
-	//
-	// tokenInfo, err := parseToken(token)
-	// if err != nil {
-	// 	return nil, status.Errorf(codes.Unauthenticated, "invalid auth token: %v", err)
-	// }
-	//
-	// // WARNING: in production define your own type to avoid context collisions
-	// newCtx := context.WithValue(ctx, "tokenInfo", tokenInfo)
-	//
-	// return newCtx, nil
-
-	return nil, nil
 }

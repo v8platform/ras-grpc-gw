@@ -2,44 +2,44 @@ package server
 
 import (
 	"fmt"
+	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
-	"github.com/v8platform/ras-grpc-gw/internal/service"
-	"log"
-	"net"
-	"time"
-
 	"github.com/grpc-ecosystem/go-grpc-prometheus"
 	_ "github.com/lithammer/shortuuid/v3"
-	"github.com/v8platform/ras-grpc-gw/pkg/ras_client"
+	"github.com/v8platform/ras-grpc-gw/internal/service"
 	"google.golang.org/grpc"
+	"log"
+	"net"
 )
-
-import "github.com/grpc-ecosystem/go-grpc-middleware"
 
 type RegisterServerHandler func(server *grpc.Server)
 
-func NewServer(services *service.Services, handlers ...RegisterServerHandler) *Server {
-	return &Server{
-		services: services,
-		handlers: handlers,
+func NewServer(opts ...Option) *Server {
+
+	server := &Server{}
+
+	for _, opt := range opts {
+
+		switch opt.Ident() {
+		case identInterceptor{}:
+			server.unaryInterceptors = append(server.unaryInterceptors, opt.Value().(grpc.UnaryServerInterceptor))
+		case identOption{}:
+			server.options = append(server.options, opt.Value().(grpc.ServerOption))
+		case identHandler{}:
+			server.handlers = append(server.handlers, opt.Value().([]RegisterServerHandler)...)
+		default:
+			fmt.Printf("get unknown option %v", opt.Ident())
+		}
 	}
+
+	return server
 }
 
 type Server struct {
-	services *service.Services
-	handlers []RegisterServerHandler
-}
-
-type EndpointInfo struct {
-	uuid       string
-	client     *ClientInfo
-	EndpointId string
-}
-
-type ClientInfo struct {
-	uuid        string
-	conn        *ras_client.ClientConn
-	IdleTimeout time.Duration
+	services          *service.Services
+	handlers          []RegisterServerHandler
+	unaryInterceptors []grpc.UnaryServerInterceptor
+	options           []grpc.ServerOption
 }
 
 func (s *Server) Serve(host string) error {
@@ -49,27 +49,22 @@ func (s *Server) Serve(host string) error {
 		return fmt.Errorf("failed to listen on %s: %w", host, err)
 	}
 
-	// srv := NewRasClientServiceServer()
-	server := grpc.NewServer(
-		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
-			grpc_recovery.UnaryServerInterceptor(),
-			grpc_prometheus.UnaryServerInterceptor,
-			// grpc_auth.UnaryServerInterceptor(myAuthFunction),
-		)),
-	)
+	interceptors := []grpc.UnaryServerInterceptor{
+		grpc_recovery.UnaryServerInterceptor(),
+		grpc_prometheus.UnaryServerInterceptor,
+	}
+
+	for _, interceptor := range s.unaryInterceptors {
+		interceptors = append(interceptors, interceptor)
+	}
+
+	s.options = append(s.options, grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(interceptors...)))
+
+	server := grpc.NewServer(s.options...)
 
 	for _, handler := range s.handlers {
 		handler(server)
 	}
-	// ras_service.RegisterAuthServiceServer(server, srv)
-	// ras_service.RegisterClustersServiceServer(server, srv)
-	// ras_service.RegisterSessionsServiceServer(server, srv)
-	// ras_service.RegisterInfobasesServiceServer(server, srv)
-	//
-	// accessSrv := NewAccessServer()
-	//
-	// access_service.RegisterClientServiceServer(server, accessSrv)
-	// access_service.RegisterTokenServiceServer(server, accessSrv)
 
 	log.Println("Listening on", host)
 	if err := server.Serve(listener); err != nil {
