@@ -2,11 +2,11 @@ package main
 
 import (
 	"github.com/btcsuite/btcutil/base58"
-	"github.com/satori/go.uuid"
+	"github.com/google/uuid"
 )
 
 func Encode(u uuid.UUID) string {
-	return base58.Encode(u.Bytes())
+	return base58.Encode(u[:])
 }
 
 func Decode(s string) (uuid.UUID, error) {
