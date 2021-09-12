@@ -1,12 +1,11 @@
 package v1
 
 import (
+	ras_service "github.com/v8platform/protos/gen/ras/service/api/v1"
 	"github.com/v8platform/ras-grpc-gw/internal/server"
 	"github.com/v8platform/ras-grpc-gw/internal/service"
 	access_service "github.com/v8platform/ras-grpc-gw/pkg/gen/access/service"
 	"google.golang.org/grpc"
-	ras_service "github.com/v8platform/protos/gen/ras/service/api/v1"
-
 )
 
 func NewHandlers(services *service.Services) []server.RegisterServerHandler {
@@ -22,18 +21,16 @@ func NewHandlers(services *service.Services) []server.RegisterServerHandler {
 
 }
 
-
 func NewRasHandlers(services *service.Services) []server.RegisterServerHandler {
 
-	rasClinets := NewRasClientsStorage()
-
+	clients := NewRasClientsStorage()
 
 	return []server.RegisterServerHandler{
 		func(server *grpc.Server) {
-			ras_service.RegisterAuthServiceServer(server, NewRasAuthServerService(services, rasClinets))
+			ras_service.RegisterAuthServiceServer(server, NewRasAuthServer(services, clients))
 		},
 		func(server *grpc.Server) {
-			ras_service.RegisterClustersServiceServer(server, NewRasClustersServerService(services, rasClinets))
+			ras_service.RegisterClustersServiceServer(server, NewRasClustersServer(services, clients))
 		},
 	}
 

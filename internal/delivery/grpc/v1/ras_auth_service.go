@@ -16,7 +16,7 @@ type rasAuthServiceServer struct {
 	clients  ClientsStorage
 }
 
-func NewRasAuthServerService(services *service.Services, clients ClientsStorage) ras_service.AuthServiceServer {
+func NewRasAuthServer(services *service.Services, clients ClientsStorage) ras_service.AuthServiceServer {
 	return &rasAuthServiceServer{
 		services: services,
 		clients:  clients,

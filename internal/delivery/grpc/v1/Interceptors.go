@@ -81,8 +81,14 @@ func getEndpointFunc(services *service.Services) grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 
 		endpoint := metautils.ExtractIncoming(ctx).Get("x-endpoint")
-		newCtx := context.WithValue(ctx, "x-endpoint", endpoint)
-		h, err := handler(newCtx, req)
+
+		if len(endpoint) > 0 {
+
+			ctx = appCtx.EndpointToContext(ctx, endpoint)
+
+		}
+
+		h, err := handler(ctx, req)
 		return h, err
 
 	}

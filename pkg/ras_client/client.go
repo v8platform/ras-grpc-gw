@@ -5,9 +5,6 @@ import (
 	"github.com/spf13/cast"
 	clientv1 "github.com/v8platform/protos/gen/ras/client/v1"
 	protocolv1 "github.com/v8platform/protos/gen/ras/protocol/v1"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/metadata"
-	"google.golang.org/grpc/status"
 	"io"
 	"log"
 	"net"
@@ -89,22 +86,10 @@ var defaultClientOptions = Options{
 	},
 }
 
-func (c *ClientConn) GetEndpoint(ctx context.Context) (clientv1.EndpointServiceImpl, error) {
+func (c *ClientConn) GetEndpoint(ctx context.Context, endpointID string) (clientv1.EndpointServiceImpl, error) {
 
-	md, ok := metadata.FromIncomingContext(ctx)
-
-	if !ok {
-		return nil, status.Errorf(codes.DataLoss, "Client: failed to get metadata")
-	}
-
-	if t, ok := md["endpoint_id"]; ok {
-
-		for _, e := range t {
-			if endpoint, ok := c.getEndpoint(e); ok {
-				return clientv1.NewEndpointService(c, endpoint), nil
-
-			}
-		}
+	if endpoint, ok := c.getEndpoint(endpointID); ok {
+		return clientv1.NewEndpointService(c, endpoint), nil
 	}
 
 	endpoint, err := c.turnEndpoint(ctx)
