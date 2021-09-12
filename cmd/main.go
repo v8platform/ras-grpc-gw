@@ -56,7 +56,7 @@ func main() {
 			db := pudgedb.New("./pudgedb")
 
 			services, err := service.NewServices(service.Options{
-				Repositories: repository.NewPudgeRepositories(&db),
+				Repositories: repository.NewPudgeRepositories(db),
 				Cache:        cache.NewMemoryCache(),
 				Hasher:       hash.NewSHA1Hasher("salt"),
 				TokenManager: manager,
