@@ -10,9 +10,10 @@ import (
 
 // ClientsService реализует бизнес-логику работы
 type ClientsService interface {
-	Register(ctx context.Context, client *domain.Client) (string, error)
-	GetByUUID(ctx context.Context, uuid string) (*domain.Client, error)
+	Create(ctx context.Context, host string, name string) (domain.Client, error)
+	GetByID(ctx context.Context, uuid string) (domain.Client, error)
 	Remove(ctx context.Context, uuid string) error
+	UpdateAuth(ctx context.Context, uuid string, user, password string) error
 }
 
 type clientService struct {
@@ -21,28 +22,49 @@ type clientService struct {
 	cache    cache.Cache
 }
 
-func (c clientService) Register(ctx context.Context, client *domain.Client) (string, error) {
+func (c clientService) UpdateAuth(ctx context.Context, uuid string, user, password string) error {
 
-	if len(client.UUID) == 0 {
-		client.UUID = shortuuid.New()
+	client, err := c.r.GetByID(ctx, uuid)
+	if err != nil {
+		return err
+	}
+
+	client.AgentUser = user
+	client.AgentPassword = password
+
+	err = c.r.Update(ctx, client)
+
+	if err != nil {
+		return err
+	}
+	return nil
+
+}
+
+func (c clientService) Create(ctx context.Context, host string, name string) (domain.Client, error) {
+
+	client := domain.Client{
+		Host: host,
+		Name: name,
+		UUID: shortuuid.New(),
 	}
 
 	err := c.r.Store(ctx, client)
 
 	if err != nil {
-		return "", err
+		return client, err
 	}
 
-	return client.UUID, nil
+	return client, nil
 
 }
 
-func (c clientService) GetByUUID(ctx context.Context, uuid string) (*domain.Client, error) {
-	client, err := c.r.GetByUUID(ctx, uuid)
+func (c clientService) GetByID(ctx context.Context, uuid string) (domain.Client, error) {
+	client, err := c.r.GetByID(ctx, uuid)
 	if err != nil {
-		return nil, err
+		return domain.Client{}, err
 	}
-	return &client, nil
+	return client, nil
 }
 
 func (c clientService) Remove(ctx context.Context, uuid string) error {

@@ -2,81 +2,145 @@ package pudgedb
 
 import (
 	"context"
-	"crypto/sha256"
-	"github.com/recoilme/pudge"
 	"github.com/v8platform/ras-grpc-gw/internal/database/pudgedb"
 	"github.com/v8platform/ras-grpc-gw/internal/domain"
-	"log"
+	"strings"
 )
 
 type UsersRepository struct {
 	db *pudgedb.Db
 }
 
-func (u UsersRepository) GetByUUID(ctx context.Context, uuid string) (*domain.User, error) {
-
-	var user domain.User
-	err := pudge.Get(u.pathUsers(), uuid, &user)
+func (r *UsersRepository) GetByName(_ context.Context, username string) (domain.User, error) {
+	table, err := r.table()
 	if err != nil {
-		return nil, err
+		return domain.User{}, err
 	}
 
-	return &user, nil
-}
-
-func (u UsersRepository) pathUsers() string {
-	return u.db.GetPath("users")
-}
-
-func (u UsersRepository) byCredentials() string {
-	return u.db.GetPath("byCredentials")
-}
-
-func (u UsersRepository) GetByID(ctx context.Context, id int32) (*domain.User, error) {
-	panic("implement me")
-}
-
-func (u UsersRepository) GetByCredentials(ctx context.Context, username string, passwordHash string) (*domain.User, error) {
-
-	digest := digest(username, passwordHash)
-	var key string
-
-	// log.Println(username, passwordHash)
-	log.Println(digest)
-	// log.Println(u.byCredentials())
-
-	err := pudge.Get(u.byCredentials(), digest, &key)
+	keys, err := table.Keys(nil, 0, 0, false)
 	if err != nil {
-		return nil, err
+		return domain.User{}, err
 	}
 
-	var user domain.User
-	err = pudge.Get(u.pathUsers(), key, &user)
-	if err != nil {
-		return nil, err
-	}
-
-	return &user, nil
-}
-
-func (u UsersRepository) Fetch(ctx context.Context) (res []domain.User, err error) {
-
-	keys, _ := pudge.Keys(u.pathUsers(), 0, 0, 0, true)
 	for _, key := range keys {
-		var p domain.User
-		err := pudge.Get(u.pathUsers(), key, &p)
+		var user domain.User
+		err := table.Get(key, &user)
 		if err != nil {
-			return nil, err
+			continue
 		}
-		res = append(res, p)
+
+		if strings.ToLower(user.Username) == strings.ToLower(username) {
+			return user, nil
+		}
+
+	}
+
+	return domain.User{}, domain.ErrUserNotFound
+}
+
+func (r *UsersRepository) AttachClient(_ context.Context, userId string, clientId string) (domain.User, error) {
+
+	table, err := r.table()
+	if err != nil {
+		return domain.User{}, err
+	}
+	var user domain.User
+
+	if err := table.Get(userId, &user); err == nil {
+		return user, nil
+	}
+
+	user.Clients = append(user.Clients, clientId)
+
+	err = table.Set(user.UUID, user)
+	if err != nil {
+		return user, err
+	}
+
+	return user, nil
+}
+
+func (r *UsersRepository) table() (*pudgedb.Table, error) {
+
+	return r.db.Table("users")
+
+}
+
+func (r *UsersRepository) GetByID(_ context.Context, id string) (domain.User, error) {
+	table, err := r.table()
+	if err != nil {
+		return domain.User{}, err
+	}
+	var user domain.User
+
+	if err := table.Get(id, &user); err == nil {
+		return user, nil
+	}
+
+	return domain.User{}, domain.ErrUserNotFound
+}
+
+func (r *UsersRepository) GetByCredentials(_ context.Context, username string, passwordHash string) (domain.User, error) {
+
+	table, err := r.table()
+	if err != nil {
+		return domain.User{}, err
+	}
+
+	keys, err := table.Keys(nil, 0, 0, false)
+	if err != nil {
+		return domain.User{}, err
+	}
+
+	for _, key := range keys {
+		var user domain.User
+		err := table.Get(key, &user)
+		if err != nil {
+			continue
+		}
+
+		if strings.ToLower(user.Username) == strings.ToLower(username) &&
+			strings.EqualFold(user.PasswordHash, passwordHash) {
+			return user, nil
+		}
+
+	}
+
+	return domain.User{}, domain.ErrUserNotFound
+}
+
+func (r *UsersRepository) Fetch(_ context.Context) (res []domain.User, err error) {
+
+	table, err := r.table()
+	if err != nil {
+		return nil, err
+	}
+
+	keys, err := table.Keys(nil, 0, 0, false)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, key := range keys {
+		var user domain.User
+		err := table.Get(key, &user)
+		if err != nil {
+			continue
+		}
+		res = append(res, user)
 	}
 
 	return
 }
 
-func (u UsersRepository) Update(ctx context.Context, cal *domain.User) error {
+func (r *UsersRepository) Update(_ context.Context, user domain.User) error {
 
-	err := pudge.Set(u.pathUsers(), cal.UUID, *cal)
+	table, err := r.table()
+	if err != nil {
+		return err
+	}
+
+	err = table.Set(user.UUID, user)
 	if err != nil {
 		return err
 	}
@@ -84,46 +148,32 @@ func (u UsersRepository) Update(ctx context.Context, cal *domain.User) error {
 	return nil
 }
 
-func (u UsersRepository) Store(ctx context.Context, user *domain.User) error {
-
-	err := pudge.Set(u.pathUsers(), user.UUID, *user)
+func (r *UsersRepository) Store(_ context.Context, user domain.User) error {
+	table, err := r.table()
 	if err != nil {
 		return err
 	}
 
-	digest := digest(user.Username, user.PasswordHash)
-
-	err = pudge.Set(u.byCredentials(), digest, user.UUID)
+	err = table.Set(user.UUID, user)
 	if err != nil {
 		return err
 	}
-
-	// log.Println("store", digest, user.UUID)
-	// log.Println(u.byCredentials())
-
-	// _, _ = u.Fetch(ctx)
 	return nil
 }
 
-func digest(src ...string) []byte {
+func (r *UsersRepository) Delete(_ context.Context, id string) error {
 
-	var b []byte
-	for _, s := range src {
-		b = append(b, []byte(s)...)
-	}
-
-	digest := sha256.Sum256(b)
-	return digest[:]
-}
-
-func (u UsersRepository) Delete(ctx context.Context, id string) error {
-
-	err := pudge.Delete(u.pathUsers(), id)
+	table, err := r.table()
 	if err != nil {
 		return err
 	}
 
+	err = table.Delete(id)
+	if err != nil {
+		return err
+	}
 	return nil
+
 }
 
 func NewUsersRepository(db *pudgedb.Db) *UsersRepository {

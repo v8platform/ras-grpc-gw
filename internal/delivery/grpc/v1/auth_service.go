@@ -7,6 +7,7 @@ import (
 	"github.com/v8platform/ras-grpc-gw/pkg/gen/access/service"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 type AuthServerService interface {
@@ -16,6 +17,14 @@ type AuthServerService interface {
 type authServerService struct {
 	service.UnimplementedAuthServiceServer
 	services *service2.Services
+}
+
+func (a authServerService) Register(ctx context.Context, request *service.GetRequest) (*emptypb.Empty, error) {
+	_, err := a.services.Users.Register(ctx, request.GetUser(), request.GetPassword())
+	if err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, err.Error())
+	}
+	return &emptypb.Empty{}, err
 }
 
 func (a authServerService) AuthFuncOverride(ctx context.Context, fullMethodName string) (context.Context, error) {

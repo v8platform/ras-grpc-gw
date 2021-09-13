@@ -1,0 +1,9 @@
+POST http://localhost:11000/api/v1/login
+Accept: application/json
+Content-Type: application/json
+
+{
+  "user": "admin",
+  "password": "pwd"
+
+}

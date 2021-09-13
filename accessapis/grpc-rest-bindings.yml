@@ -1,0 +1,69 @@
+---
+type: google.api.Service
+config_version: 3
+
+name: access.service
+title: ACCESS RAS API v1
+
+apis:
+  - name: access.service.AuthService
+
+authentication:
+  providers:
+    - id: auth
+      jwks_uri: https://www.googleapis.com/oauth2/v1/certs
+      issuer: https://securetoken.google.com
+  rules:
+    # Allow unregistered calls for all methods.
+    - selector: "*"
+      allow_unregistered_calls: true
+      requirements:
+        provider_id: auth
+
+documentation:
+  overview: |
+    A simple Bookstore gRPC API.
+    (== suppress_warning documentation-presence ==)
+
+http:
+  rules:
+    # Access control
+    - selector: access.service.AuthService.SingIn
+      post: '/api/v1/login'
+      body: '*'
+    # Clusters
+#    - selector: ras.service.api.v1.ClustersService.Clusters
+#      get: '/api/v1/clusters'
+#    - selector: ras.service.api.v1.ClustersService.GetCluster
+#      get: '/api/v1/clusters/{cluster.id}'
+#    - selector: ras.service.api.v1.ClustersService.AddCluster
+#      post: '/api/v1/clusters'
+#      body: '*'
+#    - selector: ras.service.api.v1.ClustersService.DeleteCluster
+#      delete: '/api/v1/clusters/{cluster.id}'
+
+    #    # Cluster admin
+    #    - selector: ras.service.api.v1.ClusterAdminService.Admins
+    #      get: '/clusters/{cluster.id}/admins'
+    #      additional_bindings:
+    #        - get: "/admins"
+    #    - selector: ras.service.api.v1.ClusterAdminService.AddAdmin
+    #      post: '/clusters/{cluster.id}/admins'
+    #      body: 'admin_info'
+    #      additional_bindings:
+    #        - post: "/admins"
+    #          body: 'admin_info'
+    #    - selector: ras.service.api.v1.ClusterAdminService.DeleteAdmin
+    #      delete: '/clusters/{cluster.id}/admins/{admin_name}'
+    #      additional_bindings:
+    #        - delete: "/admins/{admin_name}"
+
+    # Infobases
+#    - selector: ras.service.api.v1.InfobasesService.Infobases
+#      get: '/infobases'
+#      additional_bindings:
+#        - get: '/clusters/{cluster.id}/infobases'
+#    - selector: ras.service.api.v1.InfobasesService.LookupInfobase
+#      get: "/infobases/lookup"
+#      additional_bindings:
+#        - get: '/clusters/{cluster.id}/infobases/lookup'

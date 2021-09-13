@@ -2,10 +2,17 @@ package pudgedb
 
 import (
 	"github.com/recoilme/pudge"
-	_ "github.com/recoilme/pudge"
 	"path/filepath"
 	"sync"
 )
+
+type Table struct {
+	*pudge.Db
+}
+
+func (t *Table) FindOne() {
+
+}
 
 type Db struct {
 	dir          string
@@ -14,13 +21,13 @@ type Db struct {
 	syncInterval int
 	storeMode    int
 
-	tables map[string]*pudge.Db
+	tables map[string]*Table
 	mu     sync.Mutex
 }
 
 func (d *Db) Close() error {
 
-	d.tables = make(map[string]*pudge.Db)
+	d.tables = make(map[string]*Table)
 
 	return pudge.CloseAll()
 }
@@ -29,7 +36,7 @@ func (d *Db) GetPath(path string) string {
 	return filepath.Join(d.dir, path)
 }
 
-func (d *Db) Table(name string) (*pudge.Db, error) {
+func (d *Db) Table(name string) (*Table, error) {
 
 	if table, ok := d.tables[name]; ok {
 		return table, nil
@@ -48,9 +55,11 @@ func (d *Db) Table(name string) (*pudge.Db, error) {
 	d.mu.Lock()
 	defer d.mu.Unlock()
 
-	d.tables[name] = open
+	table := &Table{open}
 
-	return open, nil
+	d.tables[name] = table
+
+	return table, nil
 
 }
 
@@ -61,6 +70,6 @@ func New(dir string) *Db {
 		dirMode:      0777,
 		syncInterval: 60,
 		storeMode:    0,
-		tables:       make(map[string]*pudge.Db),
+		tables:       make(map[string]*Table),
 	}
 }

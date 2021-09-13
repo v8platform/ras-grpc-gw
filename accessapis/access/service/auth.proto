@@ -3,11 +3,14 @@ syntax = "proto3";
 package access.service;
 
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
 
 option go_package = "github.com/v8platform/ras-grpc-gw/pkg/gen/access/service;access_service";
 
 service AuthService {
+  // Login service
   rpc SingIn(GetRequest) returns (Tokens) {};
+  rpc Register(GetRequest) returns (google.protobuf.Empty) {};
   rpc Refresh(RefreshRequest) returns (Tokens) {};
 }
 

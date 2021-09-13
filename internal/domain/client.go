@@ -1,18 +1,15 @@
 package domain
 
-import "github.com/lithammer/shortuuid/v3"
+import "time"
 
 type Client struct {
-	UserID        string
 	UUID          string
+	Name          string
 	Host          string
+	IdleTimeout   time.Duration
 	AgentUser     string
 	AgentPassword string
 	Endpoints     []string
-}
-
-func m() {
-	shortuuid.New()
 }
 
 type Endpoint struct {

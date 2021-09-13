@@ -9,28 +9,28 @@ type identUser struct{}
 type identClient struct{}
 type identEndpoint struct{}
 
-func UserToContext(ctx context.Context, user *domain.User) context.Context {
+func UserToContext(ctx context.Context, user domain.User) context.Context {
 
 	return context.WithValue(ctx, identUser{}, user)
 
 }
 
-func UserFromContext(ctx context.Context) (*domain.User, bool) {
+func UserFromContext(ctx context.Context) (domain.User, bool) {
 
-	u, ok := ctx.Value(identUser{}).(*domain.User)
+	u, ok := ctx.Value(identUser{}).(domain.User)
 	return u, ok
 
 }
 
-func ClientToContext(ctx context.Context, value *domain.Client) context.Context {
+func ClientToContext(ctx context.Context, value domain.Client) context.Context {
 
 	return context.WithValue(ctx, identClient{}, value)
 
 }
 
-func ClientFromContext(ctx context.Context) (*domain.Client, bool) {
+func ClientFromContext(ctx context.Context) (domain.Client, bool) {
 
-	u, ok := ctx.Value(identClient{}).(*domain.Client)
+	u, ok := ctx.Value(identClient{}).(domain.Client)
 	return u, ok
 
 }

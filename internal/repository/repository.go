@@ -9,20 +9,22 @@ import (
 
 type Users interface {
 	Fetch(ctx context.Context) (res []domain.User, err error)
-	GetByID(ctx context.Context, id int32) (*domain.User, error)
-	GetByCredentials(ctx context.Context, user string, passwordHash string) (*domain.User, error)
-	Update(ctx context.Context, cal *domain.User) error
-	Store(ctx context.Context, cal *domain.User) error
+	GetByID(ctx context.Context, id string) (domain.User, error)
+	GetByName(ctx context.Context, username string) (domain.User, error)
+	GetByCredentials(ctx context.Context, username string, passwordHash string) (domain.User, error)
+	Update(ctx context.Context, user domain.User) error
+	Store(ctx context.Context, user domain.User) error
 	Delete(ctx context.Context, id string) error
-	GetByUUID(ctx context.Context, uuid string) (*domain.User, error)
+	AttachClient(ctx context.Context, userId string, clientId string) (domain.User, error)
 }
 
 // Clients represent the repository
 type Clients interface {
 	Fetch(ctx context.Context) (res []domain.Client, err error)
-	GetByUUID(ctx context.Context, id string) (domain.Client, error)
-	Update(ctx context.Context, ar *domain.Client) error
-	Store(ctx context.Context, a *domain.Client) error
+	GetByUser(_ context.Context, user domain.User) ([]domain.Client, error)
+	GetByID(ctx context.Context, id string) (domain.Client, error)
+	Update(ctx context.Context, client domain.Client) error
+	Store(ctx context.Context, client domain.Client) error
 	Delete(ctx context.Context, id string) error
 }
 

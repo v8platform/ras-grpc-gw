@@ -66,6 +66,10 @@ func (s *Server) Serve(host string) error {
 		handler(server)
 	}
 
+	go func() {
+		log.Fatal(Run("dns:///" + host))
+	}()
+
 	log.Println("Listening on", host)
 	if err := server.Serve(listener); err != nil {
 		return fmt.Errorf("failed to serve gRPC server: %w", err)

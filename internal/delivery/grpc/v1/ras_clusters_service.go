@@ -8,20 +8,6 @@ import (
 	"github.com/v8platform/ras-grpc-gw/internal/service"
 )
 
-//
-// import (
-// 	"context"
-// 	"github.com/spf13/cast"
-// 	clientv1 "github.com/v8platform/protos/gen/ras/client/v1"
-// 	messagesv1 "github.com/v8platform/protos/gen/ras/messages/v1"
-// 	ras_service "github.com/v8platform/protos/gen/ras/service/api/v1"
-// 	"github.com/v8platform/ras-grpc-gw/internal/service"
-// 	"google.golang.org/grpc"
-// 	"google.golang.org/grpc/codes"
-// 	"google.golang.org/grpc/metadata"
-// 	"google.golang.org/grpc/status"
-// )
-
 type rasClustersServiceServer struct {
 	ras_service.UnimplementedClustersServiceServer
 	services *service.Services

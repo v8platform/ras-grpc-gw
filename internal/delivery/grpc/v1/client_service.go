@@ -2,9 +2,11 @@ package v1
 
 import (
 	"context"
-	"github.com/v8platform/ras-grpc-gw/internal/domain"
+	context2 "github.com/v8platform/ras-grpc-gw/internal/context"
 	service2 "github.com/v8platform/ras-grpc-gw/internal/service"
 	"github.com/v8platform/ras-grpc-gw/pkg/gen/access/service"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
@@ -19,24 +21,18 @@ type clientServerService struct {
 
 func (c clientServerService) Register(ctx context.Context, request *service.RegisterRequest) (*service.RegisterResponse, error) {
 
-	// TODO Получить user_id из контекста
-	userId := ""
-
-	client := &domain.Client{
-		UserID:        userId,
-		UUID:          request.GetUuid(),
-		Host:          request.GetHost(),
-		AgentUser:     "",
-		AgentPassword: "",
+	user, ok := context2.UserFromContext(ctx)
+	if !ok {
+		return nil, status.Error(codes.PermissionDenied, "unknow user")
 	}
 
-	uuid, err := c.services.Clients.Register(ctx, client)
+	client, err := c.services.Users.RegisterClient(ctx, user.UUID, request.GetHost(), request.GetUuid())
 	if err != nil {
-		return nil, err
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	return &service.RegisterResponse{
-		Uuid: uuid,
+		Uuid: client.UUID,
 	}, nil
 }
 

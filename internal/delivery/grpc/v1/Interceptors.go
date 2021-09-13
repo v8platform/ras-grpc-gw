@@ -61,7 +61,7 @@ func getClientFunc(services *service.Services) grpc.UnaryServerInterceptor {
 
 		if len(client) > 0 {
 
-			client, err := services.Clients.GetByUUID(ctx, client)
+			client, err := services.Clients.GetByID(ctx, client)
 			if err != nil {
 				return nil, err
 			}

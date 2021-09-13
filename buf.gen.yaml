@@ -7,7 +7,6 @@ managed:
     except:
       - buf.build/googleapis/googleapis
 
-
 plugins:
   - name: go
     out: ./pkg/gen
@@ -15,3 +14,21 @@ plugins:
   - name: go-grpc
     opt: paths=source_relative
     out: ./pkg/gen
+  - name: grpc-gateway
+    out: ./pkg/gen
+    opt:
+      - paths=source_relative
+      - generate_unbound_methods=true
+      - grpc_api_configuration=./accessapis/grpc-rest-bindings.yml
+  - name: openapiv2
+    out: ./swagger/swagger/docs
+    opt:
+      - grpc_api_configuration=./accessapis/grpc-rest-bindings.yml
+      - allow_merge=true
+      - merge_file_name=docs.json
+      - fqn_for_openapi_name=true
+#      - proto3_optional_nullable=true
+      - disable_default_errors=true
+#  - name: js
+#    out: ./pkg/gen/js
+#    opt: paths=source_relative
