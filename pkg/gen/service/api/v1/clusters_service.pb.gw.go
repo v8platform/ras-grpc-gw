@@ -15,7 +15,7 @@ import (
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/utilities"
-	"github.com/v8platform/ras-grpc-gq/pkg/gen/ras/messages/v1"
+	"github.com/v8platform/protos/gen/ras/messages/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/grpclog"

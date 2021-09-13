@@ -7,7 +7,8 @@ managed:
     except:
       - buf.build/googleapis/googleapis
       - buf.build/grpc-ecosystem/grpc-gateway
-
+      - buf.build/v8platform/serializeapis
+      - buf.build/v8platform/rasapis
 plugins:
   - name: go
     out: ./pkg/gen
