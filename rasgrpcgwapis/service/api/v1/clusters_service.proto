@@ -1,13 +1,34 @@
 package service.api.v1;
 import "google/protobuf/empty.proto";
 import "ras/messages/v1/clusters_messages.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
 
 option go_package = "github.com/v8platform/ras-grpc-gw/pkg/gen/service/api/v1;service_v1";
 
 service ClustersService {
 
-  rpc GetClusters(ras.messages.v1.GetClustersRequest) returns (ras.messages.v1.GetClustersResponse) {};
-  rpc GetClusterInfo(ras.messages.v1.GetClusterInfoRequest) returns (ras.messages.v1.GetClusterInfoResponse) {};
+  rpc GetClusters(ras.messages.v1.GetClustersRequest) returns (ras.messages.v1.GetClustersResponse) {
+    option (google.api.http) = {
+      get: "/clusters"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      description: "Получение списка кластеров клиентая";
+      summary: "Выполняет получение списка кластеров клиентая";
+      tags: "Clusters";
+    };
+  };
+  rpc GetClusterInfo(ras.messages.v1.GetClusterInfoRequest) returns (ras.messages.v1.GetClusterInfoResponse) {
+    option (google.api.http) = {
+      get: "/clusters/{cluster_id}"
+      response_body: "cluster_info"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      description: "Получение информации о кластере";
+      summary: "Выполняет получение информации о кластере";
+      tags: "Clusters";
+    };
+  };
   rpc RegCluster(ras.messages.v1.RegClusterRequest) returns (ras.messages.v1.RegClusterResponse) {};
   rpc UnregCluster(ras.messages.v1.UnregClusterRequest) returns (google.protobuf.Empty) {};
 }

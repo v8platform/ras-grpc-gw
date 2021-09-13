@@ -36,6 +36,7 @@
       "name": "UsersService"
     }
   ],
+  "basePath": "api/v1",
   "schemes": [
     "https",
     "http"
@@ -47,6 +48,220 @@
     "application/json"
   ],
   "paths": {
+    "/clusters": {
+      "get": {
+        "summary": "Выполняет получение списка кластеров клиентая",
+        "description": "Получение списка кластеров клиентая",
+        "operationId": "ClustersService_GetClusters",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ras.messages.v1.GetClustersResponse"
+            }
+          }
+        },
+        "tags": [
+          "Clusters"
+        ]
+      }
+    },
+    "/clusters/infobases": {
+      "get": {
+        "summary": "Выполняет получение списка информационных баз",
+        "description": "Получение списка информационных баз",
+        "operationId": "InfobasesService_GetShortInfobases",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ras.messages.v1.GetInfobasesShortResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "clusterId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Infobases"
+        ]
+      }
+    },
+    "/clusters/infobases/sessions": {
+      "get": {
+        "summary": "Выполняет получение списка сессий информационных баз",
+        "description": "Получение списка сессий информационных баз",
+        "operationId": "InfobasesService_GetInfobaseSessions",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ras.messages.v1.GetInfobaseSessionsResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "clusterId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "infobaseId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Infobases",
+          "Sessions"
+        ]
+      }
+    },
+    "/clusters/sessions": {
+      "get": {
+        "summary": "Выполняет получение списка кластеров клиентая",
+        "description": "Получение списка кластеров клиентая",
+        "operationId": "SessionsService_GetSessions",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ras.messages.v1.GetSessionsResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "clusterId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Sessions"
+        ]
+      }
+    },
+    "/clusters/{clusterId}": {
+      "get": {
+        "summary": "Выполняет получение информации о кластере",
+        "description": "Получение информации о кластере",
+        "operationId": "ClustersService_GetClusterInfo",
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/v8platform.serialize.v1.ClusterInfo"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "clusterId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Clusters"
+        ]
+      }
+    },
+    "/clusters/{clusterId}/infobases": {
+      "get": {
+        "summary": "Выполняет получение списка информационных баз",
+        "description": "Получение списка информационных баз",
+        "operationId": "InfobasesService_GetShortInfobases2",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ras.messages.v1.GetInfobasesShortResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "clusterId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Infobases"
+        ]
+      }
+    },
+    "/clusters/{clusterId}/infobases/{infobaseId}/sessions": {
+      "get": {
+        "summary": "Выполняет получение списка сессий информационных баз",
+        "description": "Получение списка сессий информационных баз",
+        "operationId": "InfobasesService_GetInfobaseSessions2",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ras.messages.v1.GetInfobaseSessionsResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "clusterId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "infobaseId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Infobases",
+          "Sessions"
+        ]
+      }
+    },
+    "/clusters/{clusterId}/sessions": {
+      "get": {
+        "summary": "Выполняет получение списка кластеров клиентая",
+        "description": "Получение списка кластеров клиентая",
+        "operationId": "SessionsService_GetSessions2",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ras.messages.v1.GetSessionsResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "clusterId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Sessions"
+        ]
+      }
+    },
     "/v1/login": {
       "post": {
         "summary": "Выполняет вход в систему и возвращает токены доступа",
@@ -73,7 +288,11 @@
         "tags": [
           "Access"
         ],
-        "security": []
+        "security": [
+          {
+            "UserAuth": []
+          }
+        ]
       }
     },
     "/v1/refresh": {
@@ -101,6 +320,11 @@
         ],
         "tags": [
           "Access"
+        ],
+        "security": [
+          {
+            "UserAuth": []
+          }
         ]
       }
     },
@@ -642,6 +866,12 @@
       "in": "header",
       "x-default": "12312312"
     },
+    "ClientAuth": {
+      "type": "apiKey",
+      "name": "x-client",
+      "in": "header",
+      "x-default": "12312312"
+    },
     "UserAuth": {
       "type": "apiKey",
       "name": "authorization",
@@ -651,6 +881,7 @@
   },
   "security": [
     {
+      "ClientAuth": [],
       "UserAuth": []
     }
   ],

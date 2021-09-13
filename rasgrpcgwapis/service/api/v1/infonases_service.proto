@@ -3,15 +3,42 @@ syntax = "proto3";
 package service.api.v1;
 import "google/protobuf/empty.proto";
 import "ras/messages/v1/infobases_messages.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
 
 option go_package = "github.com/v8platform/ras-grpc-gw/pkg/gen/service/api/v1;service_v1";
 
 service InfobasesService {
 
   // GetInfobasesShortRequest
-  rpc GetShortInfobases(ras.messages.v1.GetInfobasesShortRequest) returns (ras.messages.v1.GetInfobasesShortResponse) {};
+  rpc GetShortInfobases(ras.messages.v1.GetInfobasesShortRequest) returns (ras.messages.v1.GetInfobasesShortResponse) {
+    option (google.api.http) = {
+      get: "/clusters/infobases"
+      additional_bindings: {
+        get: "/clusters/{cluster_id}/infobases"
+      }
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      description: "Получение списка информационных баз";
+      summary: "Выполняет получение списка информационных баз";
+      tags: "Infobases";
+    };
+  };
   // GetInfobaseSessionsRequest
-  rpc GetInfobaseSessions(ras.messages.v1.GetInfobaseSessionsRequest) returns (ras.messages.v1.GetInfobaseSessionsResponse) {};
+  rpc GetInfobaseSessions(ras.messages.v1.GetInfobaseSessionsRequest) returns (ras.messages.v1.GetInfobaseSessionsResponse) {
+    option (google.api.http) = {
+      get: "/clusters/infobases/sessions"
+      additional_bindings: {
+        get: "/clusters/{cluster_id}/infobases/{infobase_id}/sessions"
+      }
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      description: "Получение списка сессий информационных баз";
+      summary: "Выполняет получение списка сессий информационных баз";
+      tags: "Infobases";
+      tags: "Sessions";
+    };
+  };
 
 }
 

@@ -21,6 +21,7 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
       url: "https://github.com/v8paltform/ras-grpc-gw/blob/master/LICENSE";
     };
   };
+  base_path: "api/v1";
   schemes: HTTPS;
   schemes: HTTP;
 //  schemes: WS;
@@ -56,10 +57,28 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
         }
       };
     };
+    security: {
+      key: "ClientAuth";
+      value: {
+        type: TYPE_API_KEY;
+        in: IN_HEADER;
+        name: "x-client";
+        extensions: {
+          key: "x-default";
+          value {
+            string_value: "12312312";
+          }
+        }
+      };
+    };
   };
   security: {
     security_requirement: {
       key: "UserAuth";
+      value: {};
+    };
+    security_requirement: {
+      key: "ClientAuth";
       value: {};
     };
   };

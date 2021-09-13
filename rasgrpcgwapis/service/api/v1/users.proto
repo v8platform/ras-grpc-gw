@@ -20,7 +20,11 @@ service UsersService {
       description: "Вход в систему для пользователя";
       summary: "Выполняет вход в систему и возвращает токены доступа";
       tags: "Access";
-      security: {};
+      security: {
+        security_requirement:{
+          key: "UserAuth"
+        };
+      };
     };
   };
   rpc CreateUser(CreateUserRequest) returns (google.protobuf.Empty) {
@@ -47,6 +51,11 @@ service UsersService {
       description: "Обновление токена доступа для пользователя";
       summary: "Выполняет обновление токена доступа";
       tags: "Access";
+      security: {
+        security_requirement:{
+          key: "UserAuth"
+        };
+      };
     };
   };
 }
