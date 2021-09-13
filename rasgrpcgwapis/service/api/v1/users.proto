@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+package service.api.v1;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "github.com/v8platform/ras-grpc-gw/pkg/gen/service/api/v1;service_v1";
+
+service UsersService {
+  // Login service
+  rpc Login(LoginRequest) returns (Tokens) {
+    option (google.api.http) = {
+      post: "/v1/login";
+      body: "*";
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      description: "Вход в систему для пользователя";
+      summary: "Выполняет вход в систему и возвращает токены доступа";
+      tags: "Access";
+      security: {};
+    };
+  };
+  rpc CreateUser(CreateUserRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/users";
+      body: "*";
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      description: "Создает и регистрирует нового пользователя";
+      summary: "Выполняет регистрацию нового пользователя в системе";
+      tags: "Users";
+      security: {
+        security_requirement:
+        { key: "AdminAuth"}
+      };
+    };
+  };
+  rpc Refresh(RefreshRequest) returns (Tokens) {
+    option (google.api.http) = {
+      post: "/v1/refresh"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      description: "Обновление токена доступа для пользователя";
+      summary: "Выполняет обновление токена доступа";
+      tags: "Access";
+    };
+  };
+}
+
+message LoginRequest {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_schema) = {
+    json_schema: {
+      title: "LoginRequest";
+      description: "";
+      required: ["user", "password"];
+    };
+    example: "{\"user\": \"admin\", \"password\": \"123\"}";
+  };
+  string user = 1;
+  string password = 2;
+
+}
+message CreateUserRequest {
+
+  string user = 1;
+  string password = 2;
+
+}
+
+message Tokens {
+  string access_token = 1;
+  string refresh_token = 2;
+}
+
+message RefreshRequest {
+  string refresh_token = 1;
+}

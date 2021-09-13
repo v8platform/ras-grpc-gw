@@ -1,0 +1,14 @@
+version: v1
+name: buf.build/v8platform/rasgrpcgwapis
+deps:
+  - buf.build/googleapis/googleapis
+  - buf.build/v8platform/serializeapis
+  - buf.build/v8platform/rasapis
+  - buf.build/grpc-ecosystem/grpc-gateway
+
+lint:
+  use:
+    - DEFAULT
+breaking:
+  use:
+    - FILE

@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package service.api.v1;
+import "google/protobuf/empty.proto";
+import "ras/messages/v1/infobases_messages.proto";
+
+option go_package = "github.com/v8platform/ras-grpc-gw/pkg/gen/service/api/v1;service_v1";
+
+service InfobasesService {
+
+  // GetInfobasesShortRequest
+  rpc GetShortInfobases(ras.messages.v1.GetInfobasesShortRequest) returns (ras.messages.v1.GetInfobasesShortResponse) {};
+  // GetInfobaseSessionsRequest
+  rpc GetInfobaseSessions(ras.messages.v1.GetInfobaseSessionsRequest) returns (ras.messages.v1.GetInfobaseSessionsResponse) {};
+
+}
+

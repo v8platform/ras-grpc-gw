@@ -1,0 +1,11 @@
+package service.api.v1;
+
+import "google/protobuf/empty.proto";
+import "ras/messages/v1/auth_messages.proto";
+option go_package = "github.com/v8platform/ras-grpc-gw/pkg/gen/service/api/v1;service_v1";
+
+service AuthService {
+  rpc AuthenticateCluster(ras.messages.v1.ClusterAuthenticateRequest) returns (google.protobuf.Empty) {};
+  rpc AuthenticateInfobase(ras.messages.v1.AuthenticateInfobaseRequest) returns (google.protobuf.Empty) {};
+  rpc AuthenticateAgent(ras.messages.v1.AuthenticateAgentRequest) returns (google.protobuf.Empty) {};
+}

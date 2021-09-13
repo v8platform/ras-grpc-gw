@@ -6,6 +6,7 @@ managed:
     default: github.com/v8platform/ras-grpc-gq/pkg/gen
     except:
       - buf.build/googleapis/googleapis
+      - buf.build/grpc-ecosystem/grpc-gateway
 
 plugins:
   - name: go
@@ -18,12 +19,9 @@ plugins:
     out: ./pkg/gen
     opt:
       - paths=source_relative
-      - generate_unbound_methods=true
-      - grpc_api_configuration=./accessapis/grpc-rest-bindings.yml
   - name: openapiv2
     out: ./swagger/swagger/docs
     opt:
-      - grpc_api_configuration=./accessapis/grpc-rest-bindings.yml
       - allow_merge=true
       - merge_file_name=docs.json
       - fqn_for_openapi_name=true

@@ -1,8 +1,17 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "access/service/auth.proto",
-    "version": "version not set"
+    "title": "RAS API",
+    "version": "1.0",
+    "contact": {
+      "name": "RAS gRPC-Gateway project",
+      "url": "https://github.com/v8platform/ras-grpc-gw",
+      "email": "khorevaa@gmail.com"
+    },
+    "license": {
+      "name": "MIT License",
+      "url": "https://github.com/v8paltform/ras-grpc-gw/blob/master/LICENSE"
+    }
   },
   "tags": [
     {
@@ -10,7 +19,26 @@
     },
     {
       "name": "ClientService"
+    },
+    {
+      "name": "ClustersService"
+    },
+    {
+      "name": "InfobasesService"
+    },
+    {
+      "name": "Service"
+    },
+    {
+      "name": "SessionsService"
+    },
+    {
+      "name": "UsersService"
     }
+  ],
+  "schemes": [
+    "https",
+    "http"
   ],
   "consumes": [
     "application/json"
@@ -19,15 +47,16 @@
     "application/json"
   ],
   "paths": {
-    "/api/v1/login": {
+    "/v1/login": {
       "post": {
-        "summary": "Login service",
-        "operationId": "AuthService_SingIn",
+        "summary": "Выполняет вход в систему и возвращает токены доступа",
+        "description": "Вход в систему для пользователя",
+        "operationId": "UsersService_Login",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/access.service.Tokens"
+              "$ref": "#/definitions/service.api.v1.Tokens"
             }
           }
         },
@@ -37,18 +66,140 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/access.service.GetRequest"
+              "$ref": "#/definitions/service.api.v1.LoginRequest"
             }
           }
         ],
         "tags": [
-          "AuthService"
+          "Access"
+        ],
+        "security": []
+      }
+    },
+    "/v1/refresh": {
+      "post": {
+        "summary": "Выполняет обновление токена доступа",
+        "description": "Обновление токена доступа для пользователя",
+        "operationId": "UsersService_Refresh",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/service.api.v1.Tokens"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/service.api.v1.RefreshRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Access"
+        ]
+      }
+    },
+    "/v1/users": {
+      "post": {
+        "summary": "Выполняет регистрацию нового пользователя в системе",
+        "description": "Создает и регистрирует нового пользователя",
+        "operationId": "UsersService_CreateUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/service.api.v1.CreateUserRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "AdminAuth": []
+          }
         ]
       }
     }
   },
   "definitions": {
-    "access.service.ClientInfo": {
+    "ras.messages.v1.GetClusterInfoResponse": {
+      "type": "object",
+      "properties": {
+        "clusterInfo": {
+          "$ref": "#/definitions/v8platform.serialize.v1.ClusterInfo"
+        }
+      }
+    },
+    "ras.messages.v1.GetClustersResponse": {
+      "type": "object",
+      "properties": {
+        "clusters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v8platform.serialize.v1.ClusterInfo"
+          }
+        }
+      }
+    },
+    "ras.messages.v1.GetInfobaseSessionsResponse": {
+      "type": "object",
+      "properties": {
+        "infobases": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v8platform.serialize.v1.SessionInfo"
+          }
+        }
+      }
+    },
+    "ras.messages.v1.GetInfobasesShortResponse": {
+      "type": "object",
+      "properties": {
+        "sessions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v8platform.serialize.v1.InfobaseSummaryInfo"
+          }
+        }
+      }
+    },
+    "ras.messages.v1.GetSessionsResponse": {
+      "type": "object",
+      "properties": {
+        "sessions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v8platform.serialize.v1.SessionInfo"
+          }
+        }
+      }
+    },
+    "ras.messages.v1.RegClusterResponse": {
+      "type": "object",
+      "properties": {
+        "clusterId": {
+          "type": "string"
+        }
+      }
+    },
+    "service.api.v1.ClientInfo": {
       "type": "object",
       "properties": {
         "host": {
@@ -74,18 +225,7 @@
         }
       }
     },
-    "access.service.GetClientsResponse": {
-      "type": "object",
-      "properties": {
-        "clients": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/access.service.ClientInfo"
-          }
-        }
-      }
-    },
-    "access.service.GetRequest": {
+    "service.api.v1.CreateUserRequest": {
       "type": "object",
       "properties": {
         "user": {
@@ -96,7 +236,46 @@
         }
       }
     },
-    "access.service.RegisterResponse": {
+    "service.api.v1.GetClientsResponse": {
+      "type": "object",
+      "properties": {
+        "clients": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/service.api.v1.ClientInfo"
+          }
+        }
+      }
+    },
+    "service.api.v1.LoginRequest": {
+      "type": "object",
+      "example": {
+        "user": "admin",
+        "password": "123"
+      },
+      "properties": {
+        "user": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "title": "LoginRequest",
+      "required": [
+        "user",
+        "password"
+      ]
+    },
+    "service.api.v1.RefreshRequest": {
+      "type": "object",
+      "properties": {
+        "refreshToken": {
+          "type": "string"
+        }
+      }
+    },
+    "service.api.v1.RegisterResponse": {
       "type": "object",
       "properties": {
         "uuid": {
@@ -104,7 +283,7 @@
         }
       }
     },
-    "access.service.Tokens": {
+    "service.api.v1.Tokens": {
       "type": "object",
       "properties": {
         "accessToken": {
@@ -114,6 +293,366 @@
           "type": "string"
         }
       }
+    },
+    "v8platform.serialize.v1.ClusterInfo": {
+      "type": "object",
+      "properties": {
+        "uuid": {
+          "type": "string"
+        },
+        "expirationTimeout": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "host": {
+          "type": "string"
+        },
+        "lifetimeLimit": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "Port": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "maxMemorySize": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "maxMemoryTimeLimit": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "name": {
+          "type": "string"
+        },
+        "securityLevel": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "sessionFaultToleranceLevel": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "loadBalancingMode": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "errorsCountThreshold": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "killProblemProcesses": {
+          "type": "boolean"
+        },
+        "killByMemoryWithDump": {
+          "type": "boolean",
+          "title": "version \u003e= 9"
+        }
+      }
+    },
+    "v8platform.serialize.v1.InfobaseSummaryInfo": {
+      "type": "object",
+      "properties": {
+        "uuid": {
+          "type": "string",
+          "title": "all versions"
+        },
+        "descr": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "v8platform.serialize.v1.LicenseInfo": {
+      "type": "object",
+      "properties": {
+        "clusterId": {
+          "type": "string",
+          "title": "ignore\r\nneed fill"
+        },
+        "processId": {
+          "type": "string"
+        },
+        "sessionId": {
+          "type": "string"
+        },
+        "userName": {
+          "type": "string"
+        },
+        "host": {
+          "type": "string"
+        },
+        "appId": {
+          "type": "string"
+        },
+        "fullName": {
+          "type": "string",
+          "title": "all version"
+        },
+        "fullPresentation": {
+          "type": "string"
+        },
+        "issuedByServer": {
+          "type": "boolean"
+        },
+        "licenseType": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "maxUsersAll": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "maxUsersCur": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "net": {
+          "type": "boolean"
+        },
+        "rmngrAddress": {
+          "type": "string"
+        },
+        "rmngrPid": {
+          "type": "string"
+        },
+        "rmngrPort": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "series": {
+          "type": "string"
+        },
+        "shortPresentation": {
+          "type": "string"
+        }
+      }
+    },
+    "v8platform.serialize.v1.SessionInfo": {
+      "type": "object",
+      "properties": {
+        "uuid": {
+          "type": "string"
+        },
+        "appId": {
+          "type": "string"
+        },
+        "blockedByDbms": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "blockedByLs": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "bytesAll": {
+          "type": "string",
+          "format": "int64"
+        },
+        "bytesLast5min": {
+          "type": "string",
+          "format": "int64"
+        },
+        "callsAll": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "callsLast5min": {
+          "type": "string",
+          "format": "int64"
+        },
+        "connectionId": {
+          "type": "string"
+        },
+        "dbmsBytesAll": {
+          "type": "string",
+          "format": "int64"
+        },
+        "dbmsBytesLast5min": {
+          "type": "string",
+          "format": "int64"
+        },
+        "dbProcInfo": {
+          "type": "string"
+        },
+        "dbProcTook": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "dbProcTookAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "durationAll": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "durationAllDbms": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "durationCurrent": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "durationCurrentDbms": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "durationLast5Min": {
+          "type": "string",
+          "format": "int64"
+        },
+        "durationLast5MinDbms": {
+          "type": "string",
+          "format": "int64"
+        },
+        "host": {
+          "type": "string"
+        },
+        "infobaseId": {
+          "type": "string"
+        },
+        "lastActiveAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "hibernate": {
+          "type": "boolean"
+        },
+        "passiveSessionHibernateTime": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "hibernateSessionTerminateTime": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "licenses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/v8platform.serialize.v1.LicenseInfo"
+          }
+        },
+        "locale": {
+          "type": "string"
+        },
+        "processId": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "startedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "userName": {
+          "type": "string"
+        },
+        "memoryCurrent": {
+          "type": "string",
+          "format": "int64",
+          "title": "version \u003e= 4"
+        },
+        "memoryLast5min": {
+          "type": "string",
+          "format": "int64"
+        },
+        "memoryTotal": {
+          "type": "string",
+          "format": "int64"
+        },
+        "readCurrent": {
+          "type": "string",
+          "format": "int64"
+        },
+        "readLast5min": {
+          "type": "string",
+          "format": "int64"
+        },
+        "readTotal": {
+          "type": "string",
+          "format": "int64"
+        },
+        "writeCurrent": {
+          "type": "string",
+          "format": "int64"
+        },
+        "writeLast5min": {
+          "type": "string",
+          "format": "int64"
+        },
+        "writeTotal": {
+          "type": "string",
+          "format": "int64"
+        },
+        "durationCurrentService": {
+          "type": "integer",
+          "format": "int32",
+          "title": "version \u003e= 5"
+        },
+        "durationLast5minService": {
+          "type": "string",
+          "format": "int64"
+        },
+        "durationAllService": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "currentServiceName": {
+          "type": "string"
+        },
+        "cpuTimeCurrent": {
+          "type": "string",
+          "format": "int64",
+          "title": "version \u003e= 6"
+        },
+        "cpuTimeLast5min": {
+          "type": "string",
+          "format": "int64"
+        },
+        "cpuTimeTotal": {
+          "type": "string",
+          "format": "int64"
+        },
+        "dataSeparation": {
+          "type": "string",
+          "title": "version \u003e= 7"
+        },
+        "clientIpAddress": {
+          "type": "string",
+          "title": "version \u003e= 10"
+        },
+        "clusterId": {
+          "type": "string",
+          "title": "ignore"
+        }
+      }
     }
-  }
+  },
+  "securityDefinitions": {
+    "AdminAuth": {
+      "type": "apiKey",
+      "name": "authorization",
+      "in": "header",
+      "x-default": "12312312"
+    },
+    "UserAuth": {
+      "type": "apiKey",
+      "name": "authorization",
+      "in": "header",
+      "x-default": "12312312"
+    }
+  },
+  "security": [
+    {
+      "UserAuth": []
+    }
+  ],
+  "x-something-something": "yadda"
 }
