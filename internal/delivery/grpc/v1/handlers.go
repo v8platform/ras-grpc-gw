@@ -1,37 +1,37 @@
 package v1
 
 import (
-	ras_service "github.com/v8platform/protos/gen/ras/service/api/v1"
-	"github.com/v8platform/ras-grpc-gw/internal/server"
+	"context"
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/v8platform/ras-grpc-gw/internal/service"
-	access_service "github.com/v8platform/ras-grpc-gw/pkg/gen/access/service"
+	apiv1 "github.com/v8platform/ras-grpc-gw/pkg/gen/service/api/v1"
 	"google.golang.org/grpc"
 )
 
-func NewHandlers(services *service.Services) []server.RegisterServerHandler {
+func RegisterServerServices(services *service.Services) (func(server *grpc.Server), func(ctx context.Context, mux *runtime.ServeMux) error) {
+	users := NewUsersServiceServer(services)
 
-	return []server.RegisterServerHandler{
-		func(server *grpc.Server) {
-			access_service.RegisterAuthServiceServer(server, NewAuthServerService(services))
+	clientsStorage := NewRasClientsStorage()
+
+	// auth := NewAuthServiceServer(services, clientsStorage)
+	clusters := NewClustersServiceServer(services, clientsStorage)
+	return func(server *grpc.Server) {
+			apiv1.RegisterUsersServiceServer(server, users)
+			apiv1.RegisterClustersServiceServer(server, clusters)
 		},
-		func(server *grpc.Server) {
-			access_service.RegisterClientServiceServer(server, NewClientServerService(services))
-		},
-	}
+		func(ctx context.Context, mux *runtime.ServeMux) error {
+			if err := apiv1.RegisterUsersServiceHandlerServer(ctx, mux, users); err != nil {
+				return err
+			}
 
-}
+			if err := apiv1.RegisterClustersServiceHandlerServer(ctx, mux, clusters); err != nil {
+				return err
+			}
 
-func NewRasHandlers(services *service.Services) []server.RegisterServerHandler {
+			// if err := apiv1.RegisterAuthServiceHandlerServer(ctx, mux, auth); err != nil {
+			// 	return err
+			// }
 
-	clients := NewRasClientsStorage()
-
-	return []server.RegisterServerHandler{
-		func(server *grpc.Server) {
-			ras_service.RegisterAuthServiceServer(server, NewRasAuthServer(services, clients))
-		},
-		func(server *grpc.Server) {
-			ras_service.RegisterClustersServiceServer(server, NewRasClustersServer(services, clients))
-		},
-	}
-
+			return nil
+		}
 }

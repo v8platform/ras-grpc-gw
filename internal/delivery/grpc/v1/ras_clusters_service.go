@@ -4,17 +4,17 @@ import (
 	"context"
 	clientv1 "github.com/v8platform/protos/gen/ras/client/v1"
 	messagesv1 "github.com/v8platform/protos/gen/ras/messages/v1"
-	ras_service "github.com/v8platform/protos/gen/ras/service/api/v1"
 	"github.com/v8platform/ras-grpc-gw/internal/service"
+	apiv1 "github.com/v8platform/ras-grpc-gw/pkg/gen/service/api/v1"
 )
 
 type rasClustersServiceServer struct {
-	ras_service.UnimplementedClustersServiceServer
+	apiv1.UnimplementedClustersServiceServer
 	services *service.Services
 	clients  ClientsStorage
 }
 
-func NewRasClustersServer(services *service.Services, clients ClientsStorage) ras_service.ClustersServiceServer {
+func NewClustersServiceServer(services *service.Services, clients ClientsStorage) apiv1.ClustersServiceServer {
 	return &rasClustersServiceServer{
 		services: services,
 		clients:  clients,

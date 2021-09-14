@@ -13,18 +13,14 @@ service UsersService {
   // Login service
   rpc Login(LoginRequest) returns (Tokens) {
     option (google.api.http) = {
-      post: "/v1/login";
+      post: "/api/v1/login";
       body: "*";
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
       description: "Вход в систему для пользователя";
       summary: "Выполняет вход в систему и возвращает токены доступа";
       tags: "Access";
-      security: {
-        security_requirement:{
-          key: "UserAuth"
-        };
-      };
+      security: {};
     };
   };
   rpc CreateUser(CreateUserRequest) returns (google.protobuf.Empty) {

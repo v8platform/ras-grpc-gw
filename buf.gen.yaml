@@ -21,7 +21,7 @@ plugins:
     opt:
       - paths=source_relative
   - name: openapiv2
-    out: ./swagger/swagger/docs
+    out: ./swagger
     opt:
       - allow_merge=true
       - merge_file_name=docs.json

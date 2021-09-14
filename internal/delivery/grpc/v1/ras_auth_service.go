@@ -5,18 +5,18 @@ import (
 
 	clientv1 "github.com/v8platform/protos/gen/ras/client/v1"
 	messagesv1 "github.com/v8platform/protos/gen/ras/messages/v1"
-	ras_service "github.com/v8platform/protos/gen/ras/service/api/v1"
 	"github.com/v8platform/ras-grpc-gw/internal/service"
+	apiv1 "github.com/v8platform/ras-grpc-gw/pkg/gen/service/api/v1"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 type rasAuthServiceServer struct {
-	ras_service.UnimplementedAuthServiceServer
+	apiv1.UnimplementedAuthServiceServer
 	services *service.Services
 	clients  ClientsStorage
 }
 
-func NewRasAuthServer(services *service.Services, clients ClientsStorage) ras_service.AuthServiceServer {
+func NewAuthServiceServer(services *service.Services, clients ClientsStorage) apiv1.AuthServiceServer {
 	return &rasAuthServiceServer{
 		services: services,
 		clients:  clients,

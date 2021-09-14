@@ -4,5 +4,5 @@ import (
 	"embed"
 )
 
-//go:embed swagger/*
+//go:embed docs.swagger.json
 var SwaggerDocs embed.FS

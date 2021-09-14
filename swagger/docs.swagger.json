@@ -36,10 +36,10 @@
       "name": "UsersService"
     }
   ],
-  "basePath": "api/v1",
+  "host": "localhost:3001",
   "schemes": [
-    "https",
-    "http"
+    "http",
+    "https"
   ],
   "consumes": [
     "application/json"
@@ -48,6 +48,35 @@
     "application/json"
   ],
   "paths": {
+    "/api/v1/login": {
+      "post": {
+        "summary": "Выполняет вход в систему и возвращает токены доступа",
+        "description": "Вход в систему для пользователя",
+        "operationId": "UsersService_Login",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/service.api.v1.Tokens"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/service.api.v1.LoginRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Access"
+        ],
+        "security": []
+      }
+    },
     "/clusters": {
       "get": {
         "summary": "Выполняет получение списка кластеров клиентая",
@@ -259,39 +288,6 @@
         ],
         "tags": [
           "Sessions"
-        ]
-      }
-    },
-    "/v1/login": {
-      "post": {
-        "summary": "Выполняет вход в систему и возвращает токены доступа",
-        "description": "Вход в систему для пользователя",
-        "operationId": "UsersService_Login",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/service.api.v1.Tokens"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/service.api.v1.LoginRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Access"
-        ],
-        "security": [
-          {
-            "UserAuth": []
-          }
         ]
       }
     },

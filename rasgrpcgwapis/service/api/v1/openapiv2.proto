@@ -21,9 +21,10 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
       url: "https://github.com/v8paltform/ras-grpc-gw/blob/master/LICENSE";
     };
   };
-  base_path: "api/v1";
-  schemes: HTTPS;
+  host: "localhost:3001";
+//  base_path: "/api";
   schemes: HTTP;
+  schemes: HTTPS;
 //  schemes: WS;
   consumes: "application/json";
   produces: "application/json";

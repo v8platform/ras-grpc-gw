@@ -36,10 +36,15 @@ func main() {
 		Copyright:   "(c) 2021 Khorevaa",
 		Description: "GRPC gateway for RAS 1S.Enterprise",
 		Flags: []cli.Flag{
-			&cli.StringFlag{
-				Name:  "bind",
-				Value: ":3002",
-				Usage: "host:port to bind grpc server",
+			&cli.UintFlag{
+				Name:  "grpc-port",
+				Value: 3000,
+				Usage: "port to bind grpc server",
+			},
+			&cli.UintFlag{
+				Name:  "http-port",
+				Value: 3001,
+				Usage: "port to bind http server",
 			},
 		},
 		Action: func(c *cli.Context) error {
@@ -66,17 +71,32 @@ func main() {
 				return err
 			}
 
-			handlers := grpc_v1.NewHandlers(services)
-			interceptors := grpc_v1.NewInterceptors(services)
-			rasHandlers := grpc_v1.NewRasHandlers(services)
+			gRPCServiceRegisterFunc, reverseProxyRegisterFunc := grpc_v1.RegisterServerServices(services)
 
-			svr := server.NewServer(
-				server.WithHandlers(handlers...),
-				server.WithHandlers(rasHandlers...),
-				server.WithChainInterceptor(interceptors...),
+			interceptors := grpc_v1.NewInterceptors(services)
+
+			svr := server.NewService(
+				server.UnaryInterceptor(interceptors...),
+				server.GRPCServiceRegister(gRPCServiceRegisterFunc),
+				server.ReverseProxyRegister(reverseProxyRegisterFunc),
+				server.Swagger(&server.SwaggerOpts{
+					Up:      true,
+					Path:    "/docs/*",
+					SpecURL: "/docs.swagger.json",
+				}),
+				// server.UnaryInterceptor(rasHandlers...),
 			)
 
-			if err := svr.Serve(c.String("bind")); err != nil {
+			// reverseProxyFunc := func(
+			// 	ctx context.Context,
+			// 	mux *runtime.ServeMux,
+			// 	grpcHostAndPort string,
+			// 	opts []grpc.DialOption,
+			// ) error {
+			// 	return proto.RegisterGreeterHandlerFromEndpoint(ctx, mux, grpcHostAndPort, opts)
+			// }
+
+			if err := svr.Start(c.Uint("http-port"), c.Uint("grpc-port")); err != nil {
 				return err
 			}
 
