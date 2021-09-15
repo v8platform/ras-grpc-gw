@@ -63,7 +63,7 @@ message LoginRequest {
       description: "";
       required: ["user", "password"];
     };
-    example: "{\"user\": \"admin\", \"password\": \"123\"}";
+    example: "{\"user\": \"admin\", \"password\": \"pwd\"}";
   };
   string user = 1;
   string password = 2;

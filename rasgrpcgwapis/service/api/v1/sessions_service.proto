@@ -13,7 +13,7 @@ service SessionsService {
     option (google.api.http) = {
       get: "/clusters/sessions"
       additional_bindings: {
-        get: "/clusters/{cluster_id}/sessions"
+        get: "/sessions"
       }
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {

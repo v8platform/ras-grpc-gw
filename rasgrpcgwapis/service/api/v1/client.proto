@@ -78,7 +78,7 @@ service ApplicationsService {
         body: "*"
       }
       additional_bindings {
-        put: "/api/v1/apps/byName/{name}"
+        put: "/api/v1/apps/by_name/{name}"
         body: "*"
       }
     };
@@ -103,7 +103,7 @@ service ApplicationsService {
         get: "/api/v1/apps/{uuid}"
       }
       additional_bindings {
-        get: "/api/v1/apps/byName/{name}"
+        get: "/api/v1/apps/by_name/{name}"
       }
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
@@ -141,6 +141,14 @@ service ApplicationsService {
 }
 
 message GetApplicationRequest{
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_schema) = {
+    json_schema: {
+      title: "GetApplicationRequest";
+      description: "";
+      required: ["uuid"];
+    };
+  };
+
   oneof id {
     string name = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
           description: "Наименование сервера приложений 1С указанное при регистрации"}

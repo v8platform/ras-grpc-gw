@@ -149,6 +149,60 @@
       }
     },
     "/api/v1/apps/byName/{name}": {
+      "delete": {
+        "summary": "Удаление сервера приложений 1С Предприятие",
+        "description": "Выполняет удаление сервера приложений 1С Предприятие",
+        "operationId": "ApplicationsService_DeleteApplication2",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/DeleteApplicationResponse"
+            }
+          },
+          "403": {
+            "description": "User does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "uuid",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Applications"
+        ],
+        "security": [
+          {
+            "UserAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/apps/by_name/{name}": {
       "get": {
         "summary": "Получение данных сервера приложений 1С Предприятие",
         "description": "Выполняет получение данных сервера приложений 1С Предприятие",
@@ -189,58 +243,6 @@
           {
             "name": "uuid",
             "description": "Уникальный идентификатор присвоенный при регистрации",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "tags": [
-          "Applications"
-        ],
-        "security": [
-          {
-            "UserAuth": []
-          }
-        ]
-      },
-      "delete": {
-        "summary": "Удаление сервера приложений 1С Предприятие",
-        "description": "Выполняет удаление сервера приложений 1С Предприятие",
-        "operationId": "ApplicationsService_DeleteApplication2",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/DeleteApplicationResponse"
-            }
-          },
-          "403": {
-            "description": "User does not have permission to access the resource.",
-            "schema": {}
-          },
-          "404": {
-            "description": "Resource does not exist.",
-            "schema": {
-              "type": "string",
-              "format": "string"
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "name",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "uuid",
             "in": "query",
             "required": false,
             "type": "string"
@@ -1035,7 +1037,7 @@
         ]
       }
     },
-    "/clusters/{cluster_id}/sessions": {
+    "/sessions": {
       "get": {
         "summary": "Выполняет получение списка кластеров клиентая",
         "description": "Получение списка кластеров клиентая",
@@ -1068,8 +1070,8 @@
         "parameters": [
           {
             "name": "cluster_id",
-            "in": "path",
-            "required": true,
+            "in": "query",
+            "required": false,
             "type": "string"
           }
         ],
@@ -1225,7 +1227,11 @@
           "type": "string",
           "description": "Уникальный идентификатор присвоенный при регистрации"
         }
-      }
+      },
+      "title": "GetApplicationRequest",
+      "required": [
+        "uuid"
+      ]
     },
     "GetApplicationResponse": {
       "type": "object",
@@ -1382,7 +1388,7 @@
       "type": "object",
       "example": {
         "user": "admin",
-        "password": "123"
+        "password": "pwd"
       },
       "properties": {
         "user": {

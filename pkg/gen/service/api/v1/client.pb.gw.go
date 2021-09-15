@@ -731,7 +731,7 @@ func RegisterApplicationsServiceHandlerServer(ctx context.Context, mux *runtime.
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.ApplicationsService/UpdateApplication", runtime.WithHTTPPathPattern("/api/v1/apps/byName/{name}"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.ApplicationsService/UpdateApplication", runtime.WithHTTPPathPattern("/api/v1/apps/by_name/{name}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -800,7 +800,7 @@ func RegisterApplicationsServiceHandlerServer(ctx context.Context, mux *runtime.
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.ApplicationsService/GetApplication", runtime.WithHTTPPathPattern("/api/v1/apps/byName/{name}"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.ApplicationsService/GetApplication", runtime.WithHTTPPathPattern("/api/v1/apps/by_name/{name}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -988,7 +988,7 @@ func RegisterApplicationsServiceHandlerClient(ctx context.Context, mux *runtime.
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.ApplicationsService/UpdateApplication", runtime.WithHTTPPathPattern("/api/v1/apps/byName/{name}"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.ApplicationsService/UpdateApplication", runtime.WithHTTPPathPattern("/api/v1/apps/by_name/{name}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1048,7 +1048,7 @@ func RegisterApplicationsServiceHandlerClient(ctx context.Context, mux *runtime.
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.ApplicationsService/GetApplication", runtime.WithHTTPPathPattern("/api/v1/apps/byName/{name}"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.ApplicationsService/GetApplication", runtime.WithHTTPPathPattern("/api/v1/apps/by_name/{name}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1134,13 +1134,13 @@ var (
 
 	pattern_ApplicationsService_UpdateApplication_1 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v1", "apps", "uuid"}, ""))
 
-	pattern_ApplicationsService_UpdateApplication_2 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"api", "v1", "apps", "byName", "name"}, ""))
+	pattern_ApplicationsService_UpdateApplication_2 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"api", "v1", "apps", "by_name", "name"}, ""))
 
 	pattern_ApplicationsService_GetApplication_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "apps"}, "get"))
 
 	pattern_ApplicationsService_GetApplication_1 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v1", "apps", "uuid"}, ""))
 
-	pattern_ApplicationsService_GetApplication_2 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"api", "v1", "apps", "byName", "name"}, ""))
+	pattern_ApplicationsService_GetApplication_2 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"api", "v1", "apps", "by_name", "name"}, ""))
 
 	pattern_ApplicationsService_DeleteApplication_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v1", "apps", "uuid"}, ""))
 
