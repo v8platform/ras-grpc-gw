@@ -9,6 +9,7 @@ import (
 	"github.com/v8platform/ras-grpc-gw/internal/service"
 	"github.com/v8platform/ras-grpc-gw/pkg/auth"
 	"github.com/v8platform/ras-grpc-gw/pkg/cache"
+	"github.com/v8platform/ras-grpc-gw/pkg/docs/rapidoc"
 	"github.com/v8platform/ras-grpc-gw/pkg/hash"
 	"log"
 	"os"
@@ -83,18 +84,13 @@ func main() {
 					Up:      true,
 					Path:    "/docs/*",
 					SpecURL: "/docs.swagger.json",
+					Handler: rapidoc.New(
+						rapidoc.URL("/docs.swagger.json"),
+						rapidoc.Style(rapidoc.RenderStyle_View),
+						rapidoc.Layout(rapidoc.Layout_Row),
+					),
 				}),
-				// server.UnaryInterceptor(rasHandlers...),
 			)
-
-			// reverseProxyFunc := func(
-			// 	ctx context.Context,
-			// 	mux *runtime.ServeMux,
-			// 	grpcHostAndPort string,
-			// 	opts []grpc.DialOption,
-			// ) error {
-			// 	return proto.RegisterGreeterHandlerFromEndpoint(ctx, mux, grpcHostAndPort, opts)
-			// }
 
 			if err := svr.Start(c.Uint("http-port"), c.Uint("grpc-port")); err != nil {
 				return err

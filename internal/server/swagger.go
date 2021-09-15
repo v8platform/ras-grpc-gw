@@ -1,7 +1,6 @@
 package server
 
 import (
-	"github.com/swaggo/http-swagger"
 	"github.com/v8platform/ras-grpc-gw/swagger"
 	"io/fs"
 	"net/http"
@@ -22,13 +21,11 @@ type SwaggerOpts struct {
 	Up      bool
 	Path    string
 	SpecURL string
+	Handler http.Handler
 }
 
-func (o *SwaggerOpts) ServeHTTP(w http.ResponseWriter, r *http.Request, params map[string]string) {
+func (o *SwaggerOpts) ServeHTTP(w http.ResponseWriter, r *http.Request, _ map[string]string) {
 
-	docs := httpSwagger.Handler(httpSwagger.URL(o.SpecURL))
-
-	// r.RequestURI = strings.ReplaceAll(r.RequestURI, "/docs", "/docs")
-	docs.ServeHTTP(w, r)
+	o.Handler.ServeHTTP(w, r)
 
 }
