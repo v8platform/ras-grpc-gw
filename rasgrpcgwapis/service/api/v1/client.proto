@@ -28,7 +28,7 @@ service ApplicationsService {
         };
       };
       responses: {
-        key: "203"
+        key: "201"
         value: {
           schema {
             json_schema: {
@@ -44,9 +44,6 @@ service ApplicationsService {
             }
           }
         }
-      }
-      responses: {
-        key: "200"
       }
     };
 
