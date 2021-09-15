@@ -10,12 +10,42 @@ service ClustersService {
 
   rpc GetClusters(ras.messages.v1.GetClustersRequest) returns (ras.messages.v1.GetClustersResponse) {
     option (google.api.http) = {
-      get: "/clusters"
+      get: "/api/v1/clusters"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-      description: "Получение списка кластеров клиентая";
-      summary: "Выполняет получение списка кластеров клиентая";
+      summary: "Получение списка локальных кластеров";
+      description: "Выполняет получение списка локальных кластеров сервера 1С Предприятия";
       tags: "Clusters";
+      extensions: {
+        key: "x-headers";
+        value {
+          list_value: {
+            values {
+              struct_value: {
+                fields: {
+                  key: "name"
+                  value: {string_value: "x-application" }
+                }
+                fields: {
+                  key: "in"
+                  value: {string_value: "header" }
+                }
+                fields: {
+                  key: "scheme"
+                  value: {struct_value: {
+                    fields { key: "type", value {string_value: "string" }}
+                    fields: {
+                      key: "pattern"
+                      value: {string_value: "^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$" }
+                    }
+                  }}
+                }
+              };
+            }
+          }
+
+        }
+      }
     };
   };
   rpc GetClusterInfo(ras.messages.v1.GetClusterInfoRequest) returns (ras.messages.v1.GetClusterInfoResponse) {

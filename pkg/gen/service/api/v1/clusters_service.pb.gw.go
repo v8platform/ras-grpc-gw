@@ -114,7 +114,7 @@ func RegisterClustersServiceHandlerServer(ctx context.Context, mux *runtime.Serv
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.ClustersService/GetClusters", runtime.WithHTTPPathPattern("/clusters"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.ClustersService/GetClusters", runtime.WithHTTPPathPattern("/api/v1/clusters"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -199,7 +199,7 @@ func RegisterClustersServiceHandlerClient(ctx context.Context, mux *runtime.Serv
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.ClustersService/GetClusters", runtime.WithHTTPPathPattern("/clusters"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.ClustersService/GetClusters", runtime.WithHTTPPathPattern("/api/v1/clusters"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -248,7 +248,7 @@ func (m response_ClustersService_GetClusterInfo_0) XXX_ResponseBody() interface{
 }
 
 var (
-	pattern_ClustersService_GetClusters_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"clusters"}, ""))
+	pattern_ClustersService_GetClusters_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "clusters"}, ""))
 
 	pattern_ClustersService_GetClusterInfo_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 1, 0, 4, 1, 5, 1}, []string{"clusters", "cluster_id"}, ""))
 )

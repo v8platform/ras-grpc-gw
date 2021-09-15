@@ -82,7 +82,7 @@ func main() {
 				server.ReverseProxyRegister(reverseProxyRegisterFunc),
 				server.Swagger(&server.SwaggerOpts{
 					Up:      true,
-					Path:    "/docs/*",
+					Path:    "/docs/**",
 					SpecURL: "/docs.swagger.json",
 					Handler: rapidoc.New(
 						rapidoc.URL("/docs.swagger.json"),
