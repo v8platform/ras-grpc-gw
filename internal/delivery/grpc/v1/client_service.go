@@ -11,11 +11,11 @@ import (
 )
 
 type ClientServerService interface {
-	apiv1.ClientServiceServer
+	apiv1.ApplicationsServiceServer
 }
 
 type clientServerService struct {
-	apiv1.UnimplementedClientServiceServer
+	apiv1.UnimplementedApplicationsServiceServer
 	services *service.Services
 }
 

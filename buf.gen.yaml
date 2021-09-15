@@ -25,9 +25,10 @@ plugins:
     opt:
       - allow_merge=true
       - merge_file_name=docs.json
-      - fqn_for_openapi_name=true
-#      - proto3_optional_nullable=true
+      - openapi_naming_strategy=simple
+      - allow_repeated_fields_in_body=true
       - disable_default_errors=true
+      - json_names_for_fields=false
 #  - name: js
 #    out: ./pkg/gen/js
 #    opt: paths=source_relative

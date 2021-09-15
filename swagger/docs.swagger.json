@@ -18,7 +18,7 @@
       "name": "AuthService"
     },
     {
-      "name": "ClientService"
+      "name": "ApplicationsService"
     },
     {
       "name": "ClustersService"
@@ -48,16 +48,83 @@
     "application/json"
   ],
   "paths": {
-    "/api/v1/login": {
-      "post": {
-        "summary": "Выполняет вход в систему и возвращает токены доступа",
-        "description": "Вход в систему для пользователя",
-        "operationId": "UsersService_Login",
+    "/api/v1/apps": {
+      "get": {
+        "summary": "Получение списка серверов приложений 1С Предприятие",
+        "description": "Выполняет регистрацию нового сервера приложений 1С Предприятие и присваивает ему новый uuid для запросов",
+        "operationId": "ApplicationsService_GetApplications",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/service.api.v1.Tokens"
+              "$ref": "#/definitions/GetClientsResponse"
+            }
+          },
+          "403": {
+            "description": "User does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "tags": [
+          "Applications"
+        ],
+        "security": [
+          {
+            "UserAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "Регистрация нового сервера приложений 1С Предприятие",
+        "description": "Выполняет регистрацию нового сервера приложений 1С Предприятие и присваивает ему новый uuid для запросов",
+        "operationId": "ApplicationsService_Register",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/RegisterResponse"
+            }
+          },
+          "203": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/RegisterResponse"
+            },
+            "headers": {
+              "X-Application": {
+                "description": "Уникальный идентификатор зарегистрированного сервера приложений 1С",
+                "type": "string"
+              }
+            }
+          },
+          "403": {
+            "description": "User does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
@@ -67,7 +134,491 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/service.api.v1.LoginRequest"
+              "$ref": "#/definitions/RegisterRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Applications"
+        ],
+        "security": [
+          {
+            "UserAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/apps/byName/{name}": {
+      "get": {
+        "summary": "Получение данных сервера приложений 1С Предприятие",
+        "description": "Выполняет получение данных сервера приложений 1С Предприятие",
+        "operationId": "ApplicationsService_GetApplication3",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetApplicationResponse"
+            }
+          },
+          "403": {
+            "description": "User does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "name",
+            "description": "Наименование сервера приложений 1С указанное при регистрации",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "uuid",
+            "description": "Уникальный идентификатор присвоенный при регистрации",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Applications"
+        ],
+        "security": [
+          {
+            "UserAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Удаление сервера приложений 1С Предприятие",
+        "description": "Выполняет удаление сервера приложений 1С Предприятие",
+        "operationId": "ApplicationsService_DeleteApplication2",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/DeleteApplicationResponse"
+            }
+          },
+          "403": {
+            "description": "User does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "uuid",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Applications"
+        ],
+        "security": [
+          {
+            "UserAuth": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "Изменение данных сервера приложений 1С Предприятие",
+        "description": "Выполняет изменение данных сервера приложений 1С Предприятие",
+        "operationId": "ApplicationsService_UpdateApplication3",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/UpdateApplicationResponse"
+            }
+          },
+          "403": {
+            "description": "User does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "uuid": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "Applications"
+        ],
+        "security": [
+          {
+            "UserAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/apps/{uuid}": {
+      "get": {
+        "summary": "Получение данных сервера приложений 1С Предприятие",
+        "description": "Выполняет получение данных сервера приложений 1С Предприятие",
+        "operationId": "ApplicationsService_GetApplication2",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetApplicationResponse"
+            }
+          },
+          "403": {
+            "description": "User does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "uuid",
+            "description": "Уникальный идентификатор присвоенный при регистрации",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "description": "Наименование сервера приложений 1С указанное при регистрации",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Applications"
+        ],
+        "security": [
+          {
+            "UserAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Удаление сервера приложений 1С Предприятие",
+        "description": "Выполняет удаление сервера приложений 1С Предприятие",
+        "operationId": "ApplicationsService_DeleteApplication",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/DeleteApplicationResponse"
+            }
+          },
+          "403": {
+            "description": "User does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Applications"
+        ],
+        "security": [
+          {
+            "UserAuth": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "Изменение данных сервера приложений 1С Предприятие",
+        "description": "Выполняет изменение данных сервера приложений 1С Предприятие",
+        "operationId": "ApplicationsService_UpdateApplication2",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/UpdateApplicationResponse"
+            }
+          },
+          "403": {
+            "description": "User does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "Applications"
+        ],
+        "security": [
+          {
+            "UserAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/apps:get": {
+      "post": {
+        "summary": "Получение данных сервера приложений 1С Предприятие",
+        "description": "Выполняет получение данных сервера приложений 1С Предприятие",
+        "operationId": "ApplicationsService_GetApplication",
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ClientInfo"
+            }
+          },
+          "403": {
+            "description": "User does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetApplicationRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Applications"
+        ],
+        "security": [
+          {
+            "UserAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/apps:update": {
+      "put": {
+        "summary": "Изменение данных сервера приложений 1С Предприятие",
+        "description": "Выполняет изменение данных сервера приложений 1С Предприятие",
+        "operationId": "ApplicationsService_UpdateApplication",
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ClientInfo"
+            }
+          },
+          "403": {
+            "description": "User does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateApplicationRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Applications"
+        ],
+        "security": [
+          {
+            "UserAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/login": {
+      "post": {
+        "summary": "Выполняет вход в систему и возвращает токены доступа",
+        "description": "Вход в систему для пользователя",
+        "operationId": "UsersService_Login",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/Tokens"
+            }
+          },
+          "403": {
+            "description": "User does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LoginRequest"
             }
           }
         ],
@@ -75,6 +626,106 @@
           "Access"
         ],
         "security": []
+      }
+    },
+    "/api/v1/refresh": {
+      "post": {
+        "summary": "Выполняет обновление токена доступа",
+        "description": "Обновление токена доступа для пользователя",
+        "operationId": "UsersService_Refresh",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/Tokens"
+            }
+          },
+          "403": {
+            "description": "User does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RefreshRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Access"
+        ],
+        "security": [
+          {
+            "UserAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/users": {
+      "post": {
+        "summary": "Выполняет регистрацию нового пользователя в системе",
+        "description": "Создает и регистрирует нового пользователя",
+        "operationId": "UsersService_CreateUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "403": {
+            "description": "User does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateUserRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "AdminAuth": []
+          }
+        ]
       }
     },
     "/clusters": {
@@ -86,7 +737,24 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/ras.messages.v1.GetClustersResponse"
+              "$ref": "#/definitions/GetClustersResponse"
+            }
+          },
+          "403": {
+            "description": "User does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
@@ -104,13 +772,30 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/ras.messages.v1.GetInfobasesShortResponse"
+              "$ref": "#/definitions/GetInfobasesShortResponse"
+            }
+          },
+          "403": {
+            "description": "User does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
         "parameters": [
           {
-            "name": "clusterId",
+            "name": "cluster_id",
             "in": "query",
             "required": false,
             "type": "string"
@@ -130,19 +815,36 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/ras.messages.v1.GetInfobaseSessionsResponse"
+              "$ref": "#/definitions/GetInfobaseSessionsResponse"
+            }
+          },
+          "403": {
+            "description": "User does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
         "parameters": [
           {
-            "name": "clusterId",
+            "name": "cluster_id",
             "in": "query",
             "required": false,
             "type": "string"
           },
           {
-            "name": "infobaseId",
+            "name": "infobase_id",
             "in": "query",
             "required": false,
             "type": "string"
@@ -163,13 +865,30 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/ras.messages.v1.GetSessionsResponse"
+              "$ref": "#/definitions/GetSessionsResponse"
+            }
+          },
+          "403": {
+            "description": "User does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
         "parameters": [
           {
-            "name": "clusterId",
+            "name": "cluster_id",
             "in": "query",
             "required": false,
             "type": "string"
@@ -180,7 +899,7 @@
         ]
       }
     },
-    "/clusters/{clusterId}": {
+    "/clusters/{cluster_id}": {
       "get": {
         "summary": "Выполняет получение информации о кластере",
         "description": "Получение информации о кластере",
@@ -189,13 +908,30 @@
           "200": {
             "description": "",
             "schema": {
-              "$ref": "#/definitions/v8platform.serialize.v1.ClusterInfo"
+              "$ref": "#/definitions/ClusterInfo"
+            }
+          },
+          "403": {
+            "description": "User does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
         "parameters": [
           {
-            "name": "clusterId",
+            "name": "cluster_id",
             "in": "path",
             "required": true,
             "type": "string"
@@ -206,7 +942,7 @@
         ]
       }
     },
-    "/clusters/{clusterId}/infobases": {
+    "/clusters/{cluster_id}/infobases": {
       "get": {
         "summary": "Выполняет получение списка информационных баз",
         "description": "Получение списка информационных баз",
@@ -215,13 +951,30 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/ras.messages.v1.GetInfobasesShortResponse"
+              "$ref": "#/definitions/GetInfobasesShortResponse"
+            }
+          },
+          "403": {
+            "description": "User does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
         "parameters": [
           {
-            "name": "clusterId",
+            "name": "cluster_id",
             "in": "path",
             "required": true,
             "type": "string"
@@ -232,7 +985,7 @@
         ]
       }
     },
-    "/clusters/{clusterId}/infobases/{infobaseId}/sessions": {
+    "/clusters/{cluster_id}/infobases/{infobase_id}/sessions": {
       "get": {
         "summary": "Выполняет получение списка сессий информационных баз",
         "description": "Получение списка сессий информационных баз",
@@ -241,19 +994,36 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/ras.messages.v1.GetInfobaseSessionsResponse"
+              "$ref": "#/definitions/GetInfobaseSessionsResponse"
+            }
+          },
+          "403": {
+            "description": "User does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
         "parameters": [
           {
-            "name": "clusterId",
+            "name": "cluster_id",
             "in": "path",
             "required": true,
             "type": "string"
           },
           {
-            "name": "infobaseId",
+            "name": "infobase_id",
             "in": "path",
             "required": true,
             "type": "string"
@@ -265,7 +1035,7 @@
         ]
       }
     },
-    "/clusters/{clusterId}/sessions": {
+    "/clusters/{cluster_id}/sessions": {
       "get": {
         "summary": "Выполняет получение списка кластеров клиентая",
         "description": "Получение списка кластеров клиентая",
@@ -274,13 +1044,30 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/ras.messages.v1.GetSessionsResponse"
+              "$ref": "#/definitions/GetSessionsResponse"
+            }
+          },
+          "403": {
+            "description": "User does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
             }
           }
         },
         "parameters": [
           {
-            "name": "clusterId",
+            "name": "cluster_id",
             "in": "path",
             "required": true,
             "type": "string"
@@ -290,162 +1077,96 @@
           "Sessions"
         ]
       }
-    },
-    "/v1/refresh": {
-      "post": {
-        "summary": "Выполняет обновление токена доступа",
-        "description": "Обновление токена доступа для пользователя",
-        "operationId": "UsersService_Refresh",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/service.api.v1.Tokens"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/service.api.v1.RefreshRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Access"
-        ],
-        "security": [
-          {
-            "UserAuth": []
-          }
-        ]
-      }
-    },
-    "/v1/users": {
-      "post": {
-        "summary": "Выполняет регистрацию нового пользователя в системе",
-        "description": "Создает и регистрирует нового пользователя",
-        "operationId": "UsersService_CreateUser",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "properties": {}
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/service.api.v1.CreateUserRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Users"
-        ],
-        "security": [
-          {
-            "AdminAuth": []
-          }
-        ]
-      }
     }
   },
   "definitions": {
-    "ras.messages.v1.GetClusterInfoResponse": {
-      "type": "object",
-      "properties": {
-        "clusterInfo": {
-          "$ref": "#/definitions/v8platform.serialize.v1.ClusterInfo"
-        }
-      }
-    },
-    "ras.messages.v1.GetClustersResponse": {
-      "type": "object",
-      "properties": {
-        "clusters": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v8platform.serialize.v1.ClusterInfo"
-          }
-        }
-      }
-    },
-    "ras.messages.v1.GetInfobaseSessionsResponse": {
-      "type": "object",
-      "properties": {
-        "infobases": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v8platform.serialize.v1.SessionInfo"
-          }
-        }
-      }
-    },
-    "ras.messages.v1.GetInfobasesShortResponse": {
-      "type": "object",
-      "properties": {
-        "sessions": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v8platform.serialize.v1.InfobaseSummaryInfo"
-          }
-        }
-      }
-    },
-    "ras.messages.v1.GetSessionsResponse": {
-      "type": "object",
-      "properties": {
-        "sessions": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/v8platform.serialize.v1.SessionInfo"
-          }
-        }
-      }
-    },
-    "ras.messages.v1.RegClusterResponse": {
-      "type": "object",
-      "properties": {
-        "clusterId": {
-          "type": "string"
-        }
-      }
-    },
-    "service.api.v1.ClientInfo": {
+    "ClientInfo": {
       "type": "object",
       "properties": {
         "host": {
           "type": "string"
         },
-        "idleTimeout": {
+        "idle_timeout": {
           "type": "integer",
           "format": "int32"
         },
         "uuid": {
           "type": "string"
         },
-        "active": {
+        "connected": {
           "type": "boolean"
         },
-        "lastUsed": {
+        "last_used": {
           "type": "string",
           "format": "date-time"
         },
-        "idleAt": {
+        "idle_at": {
           "type": "string",
           "format": "date-time"
+        },
+        "name": {
+          "type": "string"
         }
       }
     },
-    "service.api.v1.CreateUserRequest": {
+    "ClusterInfo": {
+      "type": "object",
+      "properties": {
+        "uuid": {
+          "type": "string"
+        },
+        "expiration_timeout": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "host": {
+          "type": "string"
+        },
+        "lifetime_limit": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "Port": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "max_memory_size": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "max_memory_time_limit": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "name": {
+          "type": "string"
+        },
+        "security_level": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "session_fault_tolerance_level": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "load_balancing_mode": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "errors_count_threshold": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "kill_problem_processes": {
+          "type": "boolean"
+        },
+        "kill_by_memory_with_dump": {
+          "type": "boolean",
+          "title": "version \u003e= 9"
+        }
+      }
+    },
+    "CreateUserRequest": {
       "type": "object",
       "properties": {
         "user": {
@@ -456,18 +1177,208 @@
         }
       }
     },
-    "service.api.v1.GetClientsResponse": {
+    "DeleteApplicationResponse": {
+      "type": "object"
+    },
+    "ErrorObject": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "integer",
+          "description": "Response code",
+          "title": "code",
+          "pattern": "^[0-9]$"
+        },
+        "message": {
+          "type": "string",
+          "description": "Response message",
+          "title": "message",
+          "pattern": "^[a-zA-Z0-9]{1, 32}$"
+        }
+      }
+    },
+    "ErrorResponse": {
+      "type": "object",
+      "properties": {
+        "correlationId": {
+          "type": "string",
+          "format": "uuid",
+          "example": "2438ac3c-37eb-4902-adef-ed16b4431030",
+          "description": "Unique event identifier for server requests",
+          "title": "x-correlation-id",
+          "pattern": "^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$"
+        },
+        "error": {
+          "$ref": "#/definitions/ErrorObject"
+        }
+      }
+    },
+    "GetApplicationRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Наименование сервера приложений 1С указанное при регистрации"
+        },
+        "uuid": {
+          "type": "string",
+          "description": "Уникальный идентификатор присвоенный при регистрации"
+        }
+      }
+    },
+    "GetApplicationResponse": {
+      "type": "object",
+      "properties": {
+        "info": {
+          "$ref": "#/definitions/ClientInfo"
+        }
+      }
+    },
+    "GetClientsResponse": {
       "type": "object",
       "properties": {
         "clients": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/service.api.v1.ClientInfo"
+            "$ref": "#/definitions/ClientInfo"
           }
         }
       }
     },
-    "service.api.v1.LoginRequest": {
+    "GetClusterInfoResponse": {
+      "type": "object",
+      "properties": {
+        "cluster_info": {
+          "$ref": "#/definitions/ClusterInfo"
+        }
+      }
+    },
+    "GetClustersResponse": {
+      "type": "object",
+      "properties": {
+        "clusters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ClusterInfo"
+          }
+        }
+      }
+    },
+    "GetInfobaseSessionsResponse": {
+      "type": "object",
+      "properties": {
+        "infobases": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SessionInfo"
+          }
+        }
+      }
+    },
+    "GetInfobasesShortResponse": {
+      "type": "object",
+      "properties": {
+        "sessions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/InfobaseSummaryInfo"
+          }
+        }
+      }
+    },
+    "GetSessionsResponse": {
+      "type": "object",
+      "properties": {
+        "sessions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SessionInfo"
+          }
+        }
+      }
+    },
+    "InfobaseSummaryInfo": {
+      "type": "object",
+      "properties": {
+        "uuid": {
+          "type": "string",
+          "title": "all versions"
+        },
+        "descr": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "LicenseInfo": {
+      "type": "object",
+      "properties": {
+        "cluster_id": {
+          "type": "string",
+          "title": "ignore\r\nneed fill"
+        },
+        "process_id": {
+          "type": "string"
+        },
+        "session_id": {
+          "type": "string"
+        },
+        "user_name": {
+          "type": "string"
+        },
+        "host": {
+          "type": "string"
+        },
+        "app_id": {
+          "type": "string"
+        },
+        "full_name": {
+          "type": "string",
+          "title": "all version"
+        },
+        "full_presentation": {
+          "type": "string"
+        },
+        "issued_by_server": {
+          "type": "boolean"
+        },
+        "license_type": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "max_users_all": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "max_users_cur": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "net": {
+          "type": "boolean"
+        },
+        "rmngr_address": {
+          "type": "string"
+        },
+        "rmngr_pid": {
+          "type": "string"
+        },
+        "rmngr_port": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "series": {
+          "type": "string"
+        },
+        "short_presentation": {
+          "type": "string"
+        }
+      }
+    },
+    "LoginRequest": {
       "type": "object",
       "example": {
         "user": "admin",
@@ -487,98 +1398,33 @@
         "password"
       ]
     },
-    "service.api.v1.RefreshRequest": {
+    "RefreshRequest": {
       "type": "object",
       "properties": {
-        "refreshToken": {
+        "refresh_token": {
           "type": "string"
         }
       }
     },
-    "service.api.v1.RegisterResponse": {
+    "RegClusterResponse": {
       "type": "object",
       "properties": {
-        "uuid": {
+        "cluster_id": {
           "type": "string"
         }
       }
     },
-    "service.api.v1.Tokens": {
+    "RegisterRequest": {
       "type": "object",
       "properties": {
-        "accessToken": {
-          "type": "string"
-        },
-        "refreshToken": {
-          "type": "string"
-        }
-      }
-    },
-    "v8platform.serialize.v1.ClusterInfo": {
-      "type": "object",
-      "properties": {
-        "uuid": {
-          "type": "string"
-        },
-        "expirationTimeout": {
-          "type": "integer",
-          "format": "int32"
-        },
         "host": {
           "type": "string"
         },
-        "lifetimeLimit": {
+        "idle_timeout": {
           "type": "integer",
           "format": "int32"
         },
-        "Port": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "maxMemorySize": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "maxMemoryTimeLimit": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "name": {
-          "type": "string"
-        },
-        "securityLevel": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "sessionFaultToleranceLevel": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "loadBalancingMode": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "errorsCountThreshold": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "killProblemProcesses": {
-          "type": "boolean"
-        },
-        "killByMemoryWithDump": {
-          "type": "boolean",
-          "title": "version \u003e= 9"
-        }
-      }
-    },
-    "v8platform.serialize.v1.InfobaseSummaryInfo": {
-      "type": "object",
-      "properties": {
         "uuid": {
-          "type": "string",
-          "title": "all versions"
-        },
-        "descr": {
           "type": "string"
         },
         "name": {
@@ -586,271 +1432,244 @@
         }
       }
     },
-    "v8platform.serialize.v1.LicenseInfo": {
+    "RegisterResponse": {
       "type": "object",
       "properties": {
-        "clusterId": {
-          "type": "string",
-          "title": "ignore\r\nneed fill"
-        },
-        "processId": {
-          "type": "string"
-        },
-        "sessionId": {
-          "type": "string"
-        },
-        "userName": {
-          "type": "string"
-        },
-        "host": {
-          "type": "string"
-        },
-        "appId": {
-          "type": "string"
-        },
-        "fullName": {
-          "type": "string",
-          "title": "all version"
-        },
-        "fullPresentation": {
-          "type": "string"
-        },
-        "issuedByServer": {
-          "type": "boolean"
-        },
-        "licenseType": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "maxUsersAll": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "maxUsersCur": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "net": {
-          "type": "boolean"
-        },
-        "rmngrAddress": {
-          "type": "string"
-        },
-        "rmngrPid": {
-          "type": "string"
-        },
-        "rmngrPort": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "series": {
-          "type": "string"
-        },
-        "shortPresentation": {
+        "uuid": {
           "type": "string"
         }
       }
     },
-    "v8platform.serialize.v1.SessionInfo": {
+    "SessionInfo": {
       "type": "object",
       "properties": {
         "uuid": {
           "type": "string"
         },
-        "appId": {
+        "app_id": {
           "type": "string"
         },
-        "blockedByDbms": {
+        "blocked_by_dbms": {
           "type": "integer",
           "format": "int32"
         },
-        "blockedByLs": {
+        "blocked_by_ls": {
           "type": "integer",
           "format": "int32"
         },
-        "bytesAll": {
+        "bytes_all": {
           "type": "string",
           "format": "int64"
         },
-        "bytesLast5min": {
+        "bytes_last5min": {
           "type": "string",
           "format": "int64"
         },
-        "callsAll": {
+        "calls_all": {
           "type": "integer",
           "format": "int32"
         },
-        "callsLast5min": {
+        "calls_last5min": {
           "type": "string",
           "format": "int64"
         },
-        "connectionId": {
+        "connection_id": {
           "type": "string"
         },
-        "dbmsBytesAll": {
+        "dbms_bytes_all": {
           "type": "string",
           "format": "int64"
         },
-        "dbmsBytesLast5min": {
+        "dbms_bytes_last5min": {
           "type": "string",
           "format": "int64"
         },
-        "dbProcInfo": {
+        "db_proc_info": {
           "type": "string"
         },
-        "dbProcTook": {
+        "db_proc_took": {
           "type": "integer",
           "format": "int32"
         },
-        "dbProcTookAt": {
+        "db_proc_took_at": {
           "type": "string",
           "format": "date-time"
         },
-        "durationAll": {
+        "duration_all": {
           "type": "integer",
           "format": "int32"
         },
-        "durationAllDbms": {
+        "duration_all_dbms": {
           "type": "integer",
           "format": "int32"
         },
-        "durationCurrent": {
+        "duration_current": {
           "type": "integer",
           "format": "int32"
         },
-        "durationCurrentDbms": {
+        "duration_current_dbms": {
           "type": "integer",
           "format": "int32"
         },
-        "durationLast5Min": {
+        "duration_last_5_min": {
           "type": "string",
           "format": "int64"
         },
-        "durationLast5MinDbms": {
+        "duration_last_5_min_dbms": {
           "type": "string",
           "format": "int64"
         },
         "host": {
           "type": "string"
         },
-        "infobaseId": {
+        "infobase_id": {
           "type": "string"
         },
-        "lastActiveAt": {
+        "last_active_at": {
           "type": "string",
           "format": "date-time"
         },
         "hibernate": {
           "type": "boolean"
         },
-        "passiveSessionHibernateTime": {
+        "passive_session_hibernate_time": {
           "type": "integer",
           "format": "int32"
         },
-        "hibernateSessionTerminateTime": {
+        "hibernate_session_terminate_time": {
           "type": "integer",
           "format": "int32"
         },
         "licenses": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/v8platform.serialize.v1.LicenseInfo"
+            "$ref": "#/definitions/LicenseInfo"
           }
         },
         "locale": {
           "type": "string"
         },
-        "processId": {
+        "process_id": {
           "type": "string"
         },
         "id": {
           "type": "integer",
           "format": "int32"
         },
-        "startedAt": {
+        "started_at": {
           "type": "string",
           "format": "date-time"
         },
-        "userName": {
+        "user_name": {
           "type": "string"
         },
-        "memoryCurrent": {
+        "memory_current": {
           "type": "string",
           "format": "int64",
           "title": "version \u003e= 4"
         },
-        "memoryLast5min": {
+        "memory_last5min": {
           "type": "string",
           "format": "int64"
         },
-        "memoryTotal": {
+        "memory_total": {
           "type": "string",
           "format": "int64"
         },
-        "readCurrent": {
+        "read_current": {
           "type": "string",
           "format": "int64"
         },
-        "readLast5min": {
+        "read_last5min": {
           "type": "string",
           "format": "int64"
         },
-        "readTotal": {
+        "read_total": {
           "type": "string",
           "format": "int64"
         },
-        "writeCurrent": {
+        "write_current": {
           "type": "string",
           "format": "int64"
         },
-        "writeLast5min": {
+        "write_last5min": {
           "type": "string",
           "format": "int64"
         },
-        "writeTotal": {
+        "write_total": {
           "type": "string",
           "format": "int64"
         },
-        "durationCurrentService": {
+        "duration_current_service": {
           "type": "integer",
           "format": "int32",
           "title": "version \u003e= 5"
         },
-        "durationLast5minService": {
+        "duration_last5min_service": {
           "type": "string",
           "format": "int64"
         },
-        "durationAllService": {
+        "duration_all_service": {
           "type": "integer",
           "format": "int32"
         },
-        "currentServiceName": {
+        "current_service_name": {
           "type": "string"
         },
-        "cpuTimeCurrent": {
+        "cpu_time_current": {
           "type": "string",
           "format": "int64",
           "title": "version \u003e= 6"
         },
-        "cpuTimeLast5min": {
+        "cpu_time_last5min": {
           "type": "string",
           "format": "int64"
         },
-        "cpuTimeTotal": {
+        "cpu_time_total": {
           "type": "string",
           "format": "int64"
         },
-        "dataSeparation": {
+        "data_separation": {
           "type": "string",
           "title": "version \u003e= 7"
         },
-        "clientIpAddress": {
+        "client_ip_address": {
           "type": "string",
           "title": "version \u003e= 10"
         },
-        "clusterId": {
+        "cluster_id": {
           "type": "string",
           "title": "ignore"
+        }
+      }
+    },
+    "Tokens": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "type": "string"
+        },
+        "refresh_token": {
+          "type": "string"
+        }
+      }
+    },
+    "UpdateApplicationRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "uuid": {
+          "type": "string"
+        }
+      }
+    },
+    "UpdateApplicationResponse": {
+      "type": "object",
+      "properties": {
+        "info": {
+          "$ref": "#/definitions/ClientInfo"
         }
       }
     }
@@ -859,12 +1678,6 @@
     "AdminAuth": {
       "type": "apiKey",
       "name": "authorization",
-      "in": "header",
-      "x-default": "12312312"
-    },
-    "ClientAuth": {
-      "type": "apiKey",
-      "name": "x-client",
       "in": "header",
       "x-default": "12312312"
     },
@@ -877,9 +1690,7 @@
   },
   "security": [
     {
-      "ClientAuth": [],
       "UserAuth": []
     }
-  ],
-  "x-something-something": "yadda"
+  ]
 }

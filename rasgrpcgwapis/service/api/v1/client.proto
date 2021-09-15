@@ -4,18 +4,175 @@ package service.api.v1;
 
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
-//import "";
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
 
 option go_package = "github.com/v8platform/ras-grpc-gw/pkg/gen/access/service;access_service";
 
-service ClientService {
+service ApplicationsService {
 
-  rpc Register(RegisterRequest) returns (RegisterResponse) {};
-//  rpc Get(GetClientRequest) returns (Tokens) {};
-//  rpc Refresh(RefreshRequest) returns (Tokens) {};
-  rpc GetClients(GetClientsRequest) returns (GetClientsResponse) {};
-  rpc ResetClients(ResetClientsRequest) returns (google.protobuf.Empty) {};
+  rpc Register(RegisterRequest) returns (RegisterResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/apps"
+      body: "*"
+      selector: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Регистрация нового сервера приложений 1С Предприятие";
+      description: "Выполняет регистрацию нового сервера приложений 1С Предприятие и присваивает ему новый uuid для запросов";
+      tags: "Applications";
+      security: {
+        security_requirement:{
+          key: "UserAuth"
+        };
+      };
+      responses: {
+        key: "203"
+        value: {
+          schema {
+            json_schema: {
+              ref: ".service.api.v1.RegisterResponse"
+            }
+          }
+          description: "Created";
+          headers: {
+            key: "x-application"
+            value:  {
+              type: "string"
+              description: "Уникальный идентификатор зарегистрированного сервера приложений 1С"
+            }
+          }
+        }
+      }
+      responses: {
+        key: "200"
+      }
+    };
 
+  };
+
+  rpc GetApplications(GetClientsRequest) returns (GetClientsResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/apps"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Получение списка серверов приложений 1С Предприятие";
+      description: "Выполняет регистрацию нового сервера приложений 1С Предприятие и присваивает ему новый uuid для запросов";
+      tags: "Applications";
+      security: {
+        security_requirement:{
+          key: "UserAuth"
+        };
+      };
+    };
+  };
+
+  rpc UpdateApplication(UpdateApplicationRequest) returns (UpdateApplicationResponse) {
+    option (google.api.http) = {
+      put: "/api/v1/apps:update"
+      response_body: "info"
+      body: "*"
+      additional_bindings {
+        put: "/api/v1/apps/{uuid}"
+        body: "*"
+      }
+      additional_bindings {
+        put: "/api/v1/apps/byName/{name}"
+        body: "*"
+      }
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Изменение данных сервера приложений 1С Предприятие";
+      description: "Выполняет изменение данных сервера приложений 1С Предприятие";
+      tags: "Applications";
+      security: {
+        security_requirement:{
+          key: "UserAuth"
+        };
+      };
+    };
+  };
+
+  rpc GetApplication(GetApplicationRequest) returns (GetApplicationResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/apps:get"
+      response_body: "info"
+      body: "*"
+      additional_bindings {
+        get: "/api/v1/apps/{uuid}"
+      }
+      additional_bindings {
+        get: "/api/v1/apps/byName/{name}"
+      }
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Получение данных сервера приложений 1С Предприятие";
+      description: "Выполняет получение данных сервера приложений 1С Предприятие";
+      tags: "Applications";
+      security: {
+        security_requirement:{
+          key: "UserAuth"
+        };
+      };
+    };
+  };
+
+  rpc DeleteApplication(DeleteApplicationRequest) returns (DeleteApplicationResponse) {
+    option (google.api.http) = {
+      delete: "/api/v1/apps/{uuid}"
+      additional_bindings {
+        delete: "/api/v1/apps/byName/{name}"
+      }
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Удаление сервера приложений 1С Предприятие";
+      description: "Выполняет удаление сервера приложений 1С Предприятие";
+      tags: "Applications";
+      security: {
+        security_requirement:{
+          key: "UserAuth"
+        };
+      };
+    };
+  };
+//  rpc ResetClients(ResetClientsRequest) returns (google.protobuf.Empty) {};
+
+}
+
+message GetApplicationRequest{
+  oneof id {
+    string name = 1 [(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+          description: "Наименование сервера приложений 1С указанное при регистрации"}
+    ];
+    string uuid = 2 [
+       (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+          description: "Уникальный идентификатор присвоенный при регистрации"}
+    ];
+  }
+}
+
+message UpdateApplicationRequest{
+  oneof id {
+    string name = 1;
+    string uuid = 2;
+  }
+}
+message DeleteApplicationResponse {
+}
+
+message DeleteApplicationRequest{
+  oneof id {
+    string name = 1;
+    string uuid = 2;
+  }
+}
+
+message GetApplicationResponse {
+  ClientInfo info = 1;
+}
+message UpdateApplicationResponse {
+  ClientInfo info = 1;
 }
 
 message GetClientRequest {
@@ -36,17 +193,19 @@ message ClientInfo {
   string host = 1; // Хост службы RAS
   int32  idle_timeout = 2; // Таймаут простоя  работы с клиентов
   string uuid = 3; // Желаемый uuid. для смежных запросов
-  bool active = 4;
+  bool connected = 4;
   google.protobuf.Timestamp last_used = 5;
   google.protobuf.Timestamp idle_at = 6;
+  string name = 7;
 }
 
 
 message RegisterRequest {
 
-  string host = 1; // Хост службы RAS
+  string host = 1 ; // Хост службы RAS
   int32  idle_timeout = 2; // Таймаут простоя  работы с клиентов
   optional string uuid = 3; // Желаемый uuid. для смежных запросов
+  string name = 4; // Желаемый uuid. для смежных запросов
 
 }
 
