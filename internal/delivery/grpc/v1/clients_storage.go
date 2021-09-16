@@ -33,7 +33,8 @@ type Endpoint struct {
 	client *ras_client.ClientConn
 	impl   clientv1.EndpointServiceImpl
 
-	context map[endpointContext]interface{}
+	context    map[endpointContext]interface{}
+	clientUuid string
 }
 
 type endpointContext = int
@@ -52,7 +53,8 @@ func (e *Endpoint) Request(ctx context.Context, req *clientv1.EndpointRequest) (
 
 	defer func() {
 		header := metadata.New(map[string]string{
-			"x-endpoint": cast.ToString(e.uuid),
+			"X-Endpoint": cast.ToString(e.uuid),
+			"X-App":      cast.ToString(e.clientUuid),
 		})
 		_ = grpc.SendHeader(ctx, header)
 	}()
@@ -110,10 +112,11 @@ func (c *clientsStorage) initEndpoint(ctx context.Context, endpointId string) (*
 	// TODO init context
 
 	endpoint := &Endpoint{
-		uuid:    endpointId,
-		client:  conn,
-		impl:    endpointImpl,
-		context: map[endpointContext]interface{}{},
+		uuid:       endpointId,
+		clientUuid: client.UUID,
+		client:     conn,
+		impl:       endpointImpl,
+		context:    map[endpointContext]interface{}{},
 	}
 
 	c.mu.Lock()

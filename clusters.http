@@ -1,0 +1,24 @@
+# curl -X GET "http://localhost:3001/api/v1/sessions?cluster_id=41124614-1c19-4521-ac8b-c8286573d2cf"
+# -H "Accept: application/json"
+# -H "authorization: bearer eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzE4ODIxMDEsImlhdCI6MTYzMTc5NTcwMSwiaXNzIjoieW5oU0JBVlpIZ2FDYm9adnJiOFNzOSIsInN1YiI6ImFjY2VzcyJ9.OSqyaClTr6R6RN5X2nsKcgSxos-IrwEEo7o5Wl64cMBqF0r70oGEbJFGR78SFhpcT3mrX4uebfmEUD_ZNC6rCw"
+# -H "X-App: 2GqRfUCnmQj7GokzCRvYe9"
+# -H "X-Endpoint: tj3bnwFzGTWNtCsgdFy52c"
+GET http://localhost:3001/api/v1/sessions?cluster_id=41124614-1c19-4521-ac8b-c8286573d2cf
+Accept: application/json
+authorization: bearer eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzE4ODIxMDEsImlhdCI6MTYzMTc5NTcwMSwiaXNzIjoieW5oU0JBVlpIZ2FDYm9adnJiOFNzOSIsInN1YiI6ImFjY2VzcyJ9.OSqyaClTr6R6RN5X2nsKcgSxos-IrwEEo7o5Wl64cMBqF0r70oGEbJFGR78SFhpcT3mrX4uebfmEUD_ZNC6rCw
+X-App: 2GqRfUCnmQj7GokzCRvYe9
+X-Endpoint: tj3bnwFzGTWNtCsgdFy52c
+
+###
+
+# curl -X GET "http://localhost:3001/api/v1/clusters"
+# -H "Accept: application/json"
+# -H "authorization: bearer eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzE4ODIxMDEsImlhdCI6MTYzMTc5NTcwMSwiaXNzIjoieW5oU0JBVlpIZ2FDYm9adnJiOFNzOSIsInN1YiI6ImFjY2VzcyJ9.OSqyaClTr6R6RN5X2nsKcgSxos-IrwEEo7o5Wl64cMBqF0r70oGEbJFGR78SFhpcT3mrX4uebfmEUD_ZNC6rCw"
+# -H "X-App: 2GqRfUCnmQj7GokzCRvYe9"
+GET http://localhost:3001/api/v1/clusters?pretty
+Accept: application/json+pretty
+authorization: bearer eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzE4ODIxMDEsImlhdCI6MTYzMTc5NTcwMSwiaXNzIjoieW5oU0JBVlpIZ2FDYm9adnJiOFNzOSIsInN1YiI6ImFjY2VzcyJ9.OSqyaClTr6R6RN5X2nsKcgSxos-IrwEEo7o5Wl64cMBqF0r70oGEbJFGR78SFhpcT3mrX4uebfmEUD_ZNC6rCw
+X-App: 2GqRfUCnmQj7GokzCRvYe9
+
+###
+

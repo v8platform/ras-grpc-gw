@@ -17,3 +17,5 @@ func Handler() http.Handler {
 	}
 	return http.FileServer(http.FS(subFS))
 }
+
+//go:generate C:/Users/khorevaa/go/go1.17.1/bin/go.exe run -ldflags "-X 'main.File=./docs.swagger.json'" ./cmd/gen.go

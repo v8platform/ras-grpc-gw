@@ -22,15 +22,15 @@ func UserFromContext(ctx context.Context) (domain.User, bool) {
 
 }
 
-func ClientToContext(ctx context.Context, value domain.Client) context.Context {
+func ClientToContext(ctx context.Context, value domain.Application) context.Context {
 
 	return context.WithValue(ctx, identClient{}, value)
 
 }
 
-func ClientFromContext(ctx context.Context) (domain.Client, bool) {
+func ClientFromContext(ctx context.Context) (domain.Application, bool) {
 
-	u, ok := ctx.Value(identClient{}).(domain.Client)
+	u, ok := ctx.Value(identClient{}).(domain.Application)
 	return u, ok
 
 }

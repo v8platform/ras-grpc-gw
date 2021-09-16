@@ -21,8 +21,6 @@ const _ = grpc.SupportPackageIsVersion7
 type InfobasesServiceClient interface {
 	// GetInfobasesShortRequest
 	GetShortInfobases(ctx context.Context, in *v1.GetInfobasesShortRequest, opts ...grpc.CallOption) (*v1.GetInfobasesShortResponse, error)
-	// GetInfobaseSessionsRequest
-	GetInfobaseSessions(ctx context.Context, in *v1.GetInfobaseSessionsRequest, opts ...grpc.CallOption) (*v1.GetInfobaseSessionsResponse, error)
 }
 
 type infobasesServiceClient struct {
@@ -42,23 +40,12 @@ func (c *infobasesServiceClient) GetShortInfobases(ctx context.Context, in *v1.G
 	return out, nil
 }
 
-func (c *infobasesServiceClient) GetInfobaseSessions(ctx context.Context, in *v1.GetInfobaseSessionsRequest, opts ...grpc.CallOption) (*v1.GetInfobaseSessionsResponse, error) {
-	out := new(v1.GetInfobaseSessionsResponse)
-	err := c.cc.Invoke(ctx, "/service.api.v1.InfobasesService/GetInfobaseSessions", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // InfobasesServiceServer is the server API for InfobasesService service.
 // All implementations must embed UnimplementedInfobasesServiceServer
 // for forward compatibility
 type InfobasesServiceServer interface {
 	// GetInfobasesShortRequest
 	GetShortInfobases(context.Context, *v1.GetInfobasesShortRequest) (*v1.GetInfobasesShortResponse, error)
-	// GetInfobaseSessionsRequest
-	GetInfobaseSessions(context.Context, *v1.GetInfobaseSessionsRequest) (*v1.GetInfobaseSessionsResponse, error)
 	mustEmbedUnimplementedInfobasesServiceServer()
 }
 
@@ -68,9 +55,6 @@ type UnimplementedInfobasesServiceServer struct {
 
 func (UnimplementedInfobasesServiceServer) GetShortInfobases(context.Context, *v1.GetInfobasesShortRequest) (*v1.GetInfobasesShortResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetShortInfobases not implemented")
-}
-func (UnimplementedInfobasesServiceServer) GetInfobaseSessions(context.Context, *v1.GetInfobaseSessionsRequest) (*v1.GetInfobaseSessionsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetInfobaseSessions not implemented")
 }
 func (UnimplementedInfobasesServiceServer) mustEmbedUnimplementedInfobasesServiceServer() {}
 
@@ -103,24 +87,6 @@ func _InfobasesService_GetShortInfobases_Handler(srv interface{}, ctx context.Co
 	return interceptor(ctx, in, info, handler)
 }
 
-func _InfobasesService_GetInfobaseSessions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(v1.GetInfobaseSessionsRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(InfobasesServiceServer).GetInfobaseSessions(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/service.api.v1.InfobasesService/GetInfobaseSessions",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InfobasesServiceServer).GetInfobaseSessions(ctx, req.(*v1.GetInfobaseSessionsRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // InfobasesService_ServiceDesc is the grpc.ServiceDesc for InfobasesService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -131,10 +97,6 @@ var InfobasesService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetShortInfobases",
 			Handler:    _InfobasesService_GetShortInfobases_Handler,
-		},
-		{
-			MethodName: "GetInfobaseSessions",
-			Handler:    _InfobasesService_GetInfobaseSessions_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -6,5 +6,5 @@ type User struct {
 	PasswordHash string
 	Email        string
 	IsAdmin      bool
-	Clients      []string
+	Applications []string
 }

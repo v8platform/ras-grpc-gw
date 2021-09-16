@@ -14,7 +14,7 @@ type builder struct {
 func (b *builder) ClientsService(clients repository.Clients, cache cache.Cache) {
 
 	b.services = append(b.services, func(services *Services) {
-		services.Clients = NewClientService(clients, cache, services)
+		services.Applications = NewClientService(clients, cache, services)
 	})
 }
 
@@ -76,9 +76,9 @@ type Options struct {
 }
 
 type Services struct {
-	Tokens  TokensService
-	Clients ClientsService
-	Users   UsersService
+	Tokens       TokensService
+	Applications ApplicationsService
+	Users        UsersService
 
 	Cache        cache.Cache
 	Hasher       hash.PasswordHasher

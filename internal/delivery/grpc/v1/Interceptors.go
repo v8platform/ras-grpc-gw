@@ -49,19 +49,12 @@ func authTokenFunc(services *service.Services) grpc_auth.AuthFunc {
 func getClientFunc(services *service.Services) grpc.UnaryServerInterceptor {
 
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
-		var client string
-		token := metautils.ExtractIncoming(ctx).Get("x-client")
-		if token != "" {
-			tokenInfo, err := services.TokenManager.Validate(token, "access")
-			if err != nil {
-				return nil, status.Errorf(codes.Unavailable, "invalid client token: %v", err)
-			}
-			client = tokenInfo
-		}
+
+		client := metautils.ExtractIncoming(ctx).Get("x-app")
 
 		if len(client) > 0 {
 
-			client, err := services.Clients.GetByID(ctx, client)
+			client, err := services.Applications.GetByID(ctx, client)
 			if err != nil {
 				return nil, err
 			}

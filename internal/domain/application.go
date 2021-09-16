@@ -2,7 +2,7 @@ package domain
 
 import "time"
 
-type Client struct {
+type Application struct {
 	UUID          string
 	Name          string
 	Host          string

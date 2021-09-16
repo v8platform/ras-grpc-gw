@@ -8,7 +8,7 @@ import (
 	"google.golang.org/grpc"
 )
 
-func RegisterServerServices(services *service.Services) (func(server *grpc.Server), func(ctx context.Context, mux *runtime.ServeMux) error) {
+func RegisterServerServices(services *service.Services) (func(server *grpc.Server), func(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error) {
 	users := NewUsersServiceServer(services)
 
 	clientsStorage := NewRasClientsStorage()
@@ -17,14 +17,25 @@ func RegisterServerServices(services *service.Services) (func(server *grpc.Serve
 	clusters := NewClustersServiceServer(services, clientsStorage)
 	return func(server *grpc.Server) {
 			apiv1.RegisterUsersServiceServer(server, users)
+			apiv1.RegisterApplicationsServiceServer(server, NewApplicationsServerService(services))
 			apiv1.RegisterClustersServiceServer(server, clusters)
+			apiv1.RegisterAuthServiceServer(server, NewAuthServiceServer(services, clientsStorage))
+			apiv1.RegisterSessionsServiceServer(server, NewSessionsServiceServer(services, clientsStorage))
 		},
-		func(ctx context.Context, mux *runtime.ServeMux) error {
-			if err := apiv1.RegisterUsersServiceHandlerServer(ctx, mux, users); err != nil {
+		func(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
+			if err := apiv1.RegisterUsersServiceHandler(ctx, mux, conn); err != nil {
 				return err
 			}
-
-			if err := apiv1.RegisterClustersServiceHandlerServer(ctx, mux, clusters); err != nil {
+			if err := apiv1.RegisterApplicationsServiceHandler(ctx, mux, conn); err != nil {
+				return err
+			}
+			if err := apiv1.RegisterClustersServiceHandler(ctx, mux, conn); err != nil {
+				return err
+			}
+			if err := apiv1.RegisterAuthServiceHandler(ctx, mux, conn); err != nil {
+				return err
+			}
+			if err := apiv1.RegisterSessionsServiceHandler(ctx, mux, conn); err != nil {
 				return err
 			}
 

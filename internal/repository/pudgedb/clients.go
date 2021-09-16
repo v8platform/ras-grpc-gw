@@ -57,17 +57,17 @@ func (r *ClientsRepository) delete(key interface{}) error {
 	return table.Delete(key)
 }
 
-func (r *ClientsRepository) Fetch(_ context.Context) (res []domain.Client, err error) {
+func (r *ClientsRepository) Fetch(_ context.Context) (res []domain.Application, err error) {
 	panic("implement me")
 }
 
-func (r *ClientsRepository) GetByUser(_ context.Context, user domain.User) ([]domain.Client, error) {
+func (r *ClientsRepository) GetByUser(_ context.Context, user domain.User) ([]domain.Application, error) {
 
-	var clients []domain.Client
+	var clients []domain.Application
 
-	for _, clientId := range user.Clients {
+	for _, clientId := range user.Applications {
 
-		var client domain.Client
+		var client domain.Application
 
 		err := r.get(clientId, &client)
 		if err != nil {
@@ -82,17 +82,17 @@ func (r *ClientsRepository) GetByUser(_ context.Context, user domain.User) ([]do
 
 }
 
-func (r *ClientsRepository) GetByID(ctx context.Context, id string) (domain.Client, error) {
-	var client domain.Client
+func (r *ClientsRepository) GetByID(ctx context.Context, id string) (domain.Application, error) {
+	var client domain.Application
 
 	err := r.get(id, &client)
 	if err != nil {
-		return domain.Client{}, err
+		return domain.Application{}, err
 	}
 	return client, nil
 }
 
-func (r *ClientsRepository) Update(ctx context.Context, client domain.Client) error {
+func (r *ClientsRepository) Update(ctx context.Context, client domain.Application) error {
 	err := r.set(client.UUID, client)
 	if err != nil {
 		return err
@@ -100,7 +100,7 @@ func (r *ClientsRepository) Update(ctx context.Context, client domain.Client) er
 	return nil
 }
 
-func (r *ClientsRepository) Store(_ context.Context, client domain.Client) error {
+func (r *ClientsRepository) Store(_ context.Context, client domain.Application) error {
 
 	err := r.set(client.UUID, client)
 	if err != nil {

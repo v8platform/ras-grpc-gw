@@ -241,5 +241,5 @@ var ApplicationsService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "service/api/v1/client.proto",
+	Metadata: "service/api/v1/applications.proto",
 }

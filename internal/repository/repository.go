@@ -15,16 +15,16 @@ type Users interface {
 	Update(ctx context.Context, user domain.User) error
 	Store(ctx context.Context, user domain.User) error
 	Delete(ctx context.Context, id string) error
-	AttachClient(ctx context.Context, userId string, clientId string) (domain.User, error)
+	AttachApplication(ctx context.Context, userId string, clientId string) (domain.User, error)
 }
 
 // Clients represent the repository
 type Clients interface {
-	Fetch(ctx context.Context) (res []domain.Client, err error)
-	GetByUser(_ context.Context, user domain.User) ([]domain.Client, error)
-	GetByID(ctx context.Context, id string) (domain.Client, error)
-	Update(ctx context.Context, client domain.Client) error
-	Store(ctx context.Context, client domain.Client) error
+	Fetch(ctx context.Context) (res []domain.Application, err error)
+	GetByUser(_ context.Context, user domain.User) ([]domain.Application, error)
+	GetByID(ctx context.Context, id string) (domain.Application, error)
+	Update(ctx context.Context, client domain.Application) error
+	Store(ctx context.Context, client domain.Application) error
 	Delete(ctx context.Context, id string) error
 }
 

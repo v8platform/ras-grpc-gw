@@ -3,6 +3,7 @@ module github.com/v8platform/ras-grpc-gw
 go 1.17
 
 require (
+	github.com/Jeffail/gabs/v2 v2.6.1
 	github.com/btcsuite/btcutil v1.0.2
 	github.com/google/uuid v1.2.0
 	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0
@@ -14,6 +15,7 @@ require (
 	github.com/recoilme/pudge v1.0.3
 	github.com/spf13/cast v1.4.1
 	github.com/swaggo/http-swagger v1.1.1
+	github.com/ungerik/go-dry v0.0.0-20210209114055-a3e162a9e62e
 	github.com/urfave/cli/v2 v2.3.0
 	github.com/v8platform/protos v0.2.0
 	google.golang.org/genproto v0.0.0-20210903162649-d08c68adba83

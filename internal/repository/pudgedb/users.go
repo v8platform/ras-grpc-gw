@@ -38,7 +38,7 @@ func (r *UsersRepository) GetByName(_ context.Context, username string) (domain.
 	return domain.User{}, domain.ErrUserNotFound
 }
 
-func (r *UsersRepository) AttachClient(_ context.Context, userId string, clientId string) (domain.User, error) {
+func (r *UsersRepository) AttachApplication(_ context.Context, userId string, clientId string) (domain.User, error) {
 
 	table, err := r.table()
 	if err != nil {
@@ -46,11 +46,11 @@ func (r *UsersRepository) AttachClient(_ context.Context, userId string, clientI
 	}
 	var user domain.User
 
-	if err := table.Get(userId, &user); err == nil {
+	if err := table.Get(userId, &user); err != nil {
 		return user, nil
 	}
 
-	user.Clients = append(user.Clients, clientId)
+	user.Applications = append(user.Applications, clientId)
 
 	err = table.Set(user.UUID, user)
 	if err != nil {

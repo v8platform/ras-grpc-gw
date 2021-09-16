@@ -14,9 +14,9 @@ var _ UsersService = (*usersService)(nil)
 // UsersService реализует бизнес-логику работы
 type UsersService interface {
 	GetByCredentials(ctx context.Context, user string, password string) (domain.User, error)
-	GetUserClients(ctx context.Context, userId int32) ([]domain.Client, error)
+	GetUserApplication(ctx context.Context, userId string) ([]domain.Application, error)
 	GetByUUID(ctx context.Context, uuid string) (domain.User, error)
-	RegisterClient(ctx context.Context, userID string, host, name string) (domain.Client, error)
+	RegisterApplication(ctx context.Context, userID string, host, name string) (domain.Application, error)
 	Register(ctx context.Context, user string, password string) (domain.User, error)
 }
 
@@ -44,7 +44,7 @@ func (u usersService) Register(ctx context.Context, username string, password st
 		PasswordHash: passwordHash,
 		Email:        "",
 		IsAdmin:      false,
-		Clients:      []string{},
+		Applications: []string{},
 	}
 	err = u.r.Store(ctx, user)
 	if err != nil {
@@ -55,19 +55,19 @@ func (u usersService) Register(ctx context.Context, username string, password st
 
 }
 
-func (u usersService) RegisterClient(ctx context.Context, userID string, host, name string) (domain.Client, error) {
+func (u usersService) RegisterApplication(ctx context.Context, userID string, host, name string) (domain.Application, error) {
 
-	client, err := u.services.Clients.Create(ctx, host, name)
+	application, err := u.services.Applications.Create(ctx, host, name)
 	if err != nil {
-		return client, err
+		return application, err
 	}
 
-	_, err = u.r.AttachClient(ctx, userID, client.UUID)
+	_, err = u.r.AttachApplication(ctx, userID, application.UUID)
 	if err != nil {
-		return domain.Client{}, err
+		return domain.Application{}, err
 	}
 
-	return client, nil
+	return application, nil
 }
 
 func (u usersService) GetByUUID(ctx context.Context, uuid string) (domain.User, error) {
@@ -94,7 +94,7 @@ func (u usersService) GetByCredentials(ctx context.Context, username string, pas
 	return user, nil
 }
 
-func (u usersService) GetUserClients(ctx context.Context, userId int32) ([]domain.Client, error) {
+func (u usersService) GetUserApplication(ctx context.Context, userId string) ([]domain.Application, error) {
 	panic("implement me")
 }
 

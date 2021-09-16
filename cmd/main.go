@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/urfave/cli/v2"
 	"github.com/v8platform/ras-grpc-gw/internal/database/pudgedb"
 	grpc_v1 "github.com/v8platform/ras-grpc-gw/internal/delivery/grpc/v1"
@@ -11,6 +12,7 @@ import (
 	"github.com/v8platform/ras-grpc-gw/pkg/cache"
 	"github.com/v8platform/ras-grpc-gw/pkg/docs/rapidoc"
 	"github.com/v8platform/ras-grpc-gw/pkg/hash"
+	"google.golang.org/protobuf/encoding/protojson"
 	"log"
 	"os"
 )
@@ -80,6 +82,46 @@ func main() {
 				server.UnaryInterceptor(interceptors...),
 				server.GRPCServiceRegister(gRPCServiceRegisterFunc),
 				server.ReverseProxyRegister(reverseProxyRegisterFunc),
+				server.MuxOption(runtime.WithIncomingHeaderMatcher(func(key string) (string, bool) {
+					switch key {
+					case "X-App":
+						return key, true
+					case "X-Endpoint":
+						return key, true
+					default:
+						return runtime.DefaultHeaderMatcher(key)
+					}
+				})),
+				server.MuxOption(runtime.WithOutgoingHeaderMatcher(func(key string) (string, bool) {
+					switch key {
+					case "x-app":
+						return "X-App", true
+					case "x-endpoint":
+						return "X-Endpoint", true
+					default:
+						return runtime.DefaultHeaderMatcher(key)
+					}
+				})),
+				server.MuxOption(runtime.WithMarshalerOption(runtime.MIMEWildcard, &runtime.JSONPb{
+					MarshalOptions: protojson.MarshalOptions{
+						UseProtoNames:   true,
+						EmitUnpopulated: true,
+					},
+					UnmarshalOptions: protojson.UnmarshalOptions{
+						DiscardUnknown: true,
+					},
+				})),
+				// server.MuxOption(runtime.WithMarshalerOption("application/json+pretty", &runtime.JSONPb{
+				// 	MarshalOptions: protojson.MarshalOptions{
+				// 		Indent: "",
+				// 		Multiline: false, // Optional, implied by presence of "Indent".
+				// 		UseProtoNames: true,
+				// 		EmitUnpopulated: true,
+				// 	},
+				// 	UnmarshalOptions: protojson.UnmarshalOptions{
+				// 		DiscardUnknown: true,
+				// 	},
+				// })),
 				server.Swagger(&server.SwaggerOpts{
 					Up:      true,
 					Path:    "/docs/**",
@@ -90,6 +132,7 @@ func main() {
 						rapidoc.Layout(rapidoc.Layout_Row),
 					),
 				}),
+				// server.MuxOption(runtime.WithMarshalerOption(runtime.MIMEWildcard, &runtime.JSONBuiltin{})),
 			)
 
 			if err := svr.Start(c.Uint("http-port"), c.Uint("grpc-port")); err != nil {

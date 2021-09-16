@@ -3,6 +3,7 @@ syntax = "proto3";
 package service.api.v1;
 import "google/protobuf/empty.proto";
 import "ras/messages/v1/sessions_messages.proto";
+import "ras/messages/v1/infobases_messages.proto";
 import "google/api/annotations.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
@@ -11,14 +12,23 @@ option go_package = "github.com/v8platform/ras-grpc-gw/pkg/gen/service/api/v1;se
 service SessionsService {
   rpc GetSessions(ras.messages.v1.GetSessionsRequest) returns (ras.messages.v1.GetSessionsResponse) {
     option (google.api.http) = {
-      get: "/clusters/sessions"
-      additional_bindings: {
-        get: "/sessions"
-      }
+      get: "/api/v1/sessions"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
-      description: "Получение списка кластеров клиентая";
-      summary: "Выполняет получение списка кластеров клиентая";
+      summary: "Получение списка сессий локального кластера";
+      description: "Выполняет получение списка сессий локального кластера";
+      tags: "Sessions";
+    };
+  };
+
+  // GetInfobaseSessionsRequest
+  rpc GetInfobaseSessions(ras.messages.v1.GetInfobaseSessionsRequest) returns (ras.messages.v1.GetInfobaseSessionsResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/sessions/infobase"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Получение списка сессий информационной базы локального кластера";
+      description: "Выполняет получение списка сессий информационной базы локального кластера";
       tags: "Sessions";
     };
   };

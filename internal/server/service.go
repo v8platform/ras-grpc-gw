@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"fmt"
+	"google.golang.org/grpc/grpclog"
 	"net"
 	"net/http"
 	"os"
@@ -70,7 +71,7 @@ type ReverseProxyFunc func(ctx context.Context, mux *runtime.ServeMux, grpcHostA
 type GRPCServiceRegisterFunc func(server *grpc.Server)
 
 // ReverseProxyFunc is the callback that the caller should implement to steps to reverse-proxy the HTTP/1 requests to gRPC
-type ReverseProxyRegisterFunc func(ctx context.Context, mux *runtime.ServeMux) error
+type ReverseProxyRegisterFunc func(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error
 
 // HTTPHandlerFunc is the http middleware handler function
 type HTTPHandlerFunc func(*runtime.ServeMux) http.Handler
@@ -248,7 +249,22 @@ func (s *Service) startGRPCGateway(httpPort uint, grpcPort uint) error {
 
 	}
 
-	err := s.reverseProxyRegister(context.Background(), s.mux)
+	endpoint := fmt.Sprintf(":%d", grpcPort)
+
+	conn, err := grpc.Dial(endpoint, grpc.WithInsecure())
+	if err != nil {
+		return err
+	}
+	defer func() {
+		if err != nil {
+			if cerr := conn.Close(); cerr != nil {
+				grpclog.Infof("Failed to close conn to %s: %v", endpoint, cerr)
+			}
+			return
+		}
+	}()
+
+	err = s.reverseProxyRegister(context.Background(), s.mux, conn)
 	if err != nil {
 		return err
 	}

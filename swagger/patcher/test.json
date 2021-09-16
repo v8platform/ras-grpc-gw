@@ -1,0 +1,18 @@
+{
+  "paths": {
+    "/api/v1/apps": {
+      "get": {
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RegisterRequest"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

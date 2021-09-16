@@ -20,6 +20,8 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type SessionsServiceClient interface {
 	GetSessions(ctx context.Context, in *v1.GetSessionsRequest, opts ...grpc.CallOption) (*v1.GetSessionsResponse, error)
+	// GetInfobaseSessionsRequest
+	GetInfobaseSessions(ctx context.Context, in *v1.GetInfobaseSessionsRequest, opts ...grpc.CallOption) (*v1.GetInfobaseSessionsResponse, error)
 }
 
 type sessionsServiceClient struct {
@@ -39,11 +41,22 @@ func (c *sessionsServiceClient) GetSessions(ctx context.Context, in *v1.GetSessi
 	return out, nil
 }
 
+func (c *sessionsServiceClient) GetInfobaseSessions(ctx context.Context, in *v1.GetInfobaseSessionsRequest, opts ...grpc.CallOption) (*v1.GetInfobaseSessionsResponse, error) {
+	out := new(v1.GetInfobaseSessionsResponse)
+	err := c.cc.Invoke(ctx, "/service.api.v1.SessionsService/GetInfobaseSessions", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SessionsServiceServer is the server API for SessionsService service.
 // All implementations must embed UnimplementedSessionsServiceServer
 // for forward compatibility
 type SessionsServiceServer interface {
 	GetSessions(context.Context, *v1.GetSessionsRequest) (*v1.GetSessionsResponse, error)
+	// GetInfobaseSessionsRequest
+	GetInfobaseSessions(context.Context, *v1.GetInfobaseSessionsRequest) (*v1.GetInfobaseSessionsResponse, error)
 	mustEmbedUnimplementedSessionsServiceServer()
 }
 
@@ -53,6 +66,9 @@ type UnimplementedSessionsServiceServer struct {
 
 func (UnimplementedSessionsServiceServer) GetSessions(context.Context, *v1.GetSessionsRequest) (*v1.GetSessionsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetSessions not implemented")
+}
+func (UnimplementedSessionsServiceServer) GetInfobaseSessions(context.Context, *v1.GetInfobaseSessionsRequest) (*v1.GetInfobaseSessionsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetInfobaseSessions not implemented")
 }
 func (UnimplementedSessionsServiceServer) mustEmbedUnimplementedSessionsServiceServer() {}
 
@@ -85,6 +101,24 @@ func _SessionsService_GetSessions_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SessionsService_GetInfobaseSessions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(v1.GetInfobaseSessionsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SessionsServiceServer).GetInfobaseSessions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/service.api.v1.SessionsService/GetInfobaseSessions",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SessionsServiceServer).GetInfobaseSessions(ctx, req.(*v1.GetInfobaseSessionsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // SessionsService_ServiceDesc is the grpc.ServiceDesc for SessionsService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -95,6 +129,10 @@ var SessionsService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetSessions",
 			Handler:    _SessionsService_GetSessions_Handler,
+		},
+		{
+			MethodName: "GetInfobaseSessions",
+			Handler:    _SessionsService_GetInfobaseSessions_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
