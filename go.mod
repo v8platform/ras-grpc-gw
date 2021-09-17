@@ -17,7 +17,7 @@ require (
 	github.com/swaggo/http-swagger v1.1.1
 	github.com/ungerik/go-dry v0.0.0-20210209114055-a3e162a9e62e
 	github.com/urfave/cli/v2 v2.3.0
-	github.com/v8platform/protos v0.2.0
+	github.com/v8platform/protos v0.3.0
 	google.golang.org/genproto v0.0.0-20210903162649-d08c68adba83
 	google.golang.org/grpc v1.40.0
 	google.golang.org/protobuf v1.27.1
@@ -38,7 +38,6 @@ require (
 	github.com/goccy/go-json v0.7.6 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
-	github.com/kr/pretty v0.3.0 // indirect
 	github.com/lestrrat-go/backoff/v2 v2.0.8 // indirect
 	github.com/lestrrat-go/blackmagic v1.0.0 // indirect
 	github.com/lestrrat-go/httpcc v1.0.0 // indirect
@@ -50,13 +49,14 @@ require (
 	github.com/prometheus/client_model v0.2.0 // indirect
 	github.com/prometheus/common v0.26.0 // indirect
 	github.com/prometheus/procfs v0.6.0 // indirect
+	github.com/rogpeppe/go-internal v1.6.1 // indirect
 	github.com/russross/blackfriday/v2 v2.0.1 // indirect
 	github.com/satori/go.uuid v1.2.0 // indirect
 	github.com/shurcooL/sanitized_anchor_name v1.0.0 // indirect
 	github.com/swaggo/files v0.0.0-20190704085106-630677cd5c14 // indirect
 	github.com/swaggo/swag v1.7.0 // indirect
-	github.com/v8platform/encoder v0.0.3 // indirect
-	github.com/v8platform/protoc-gen-go-ras v0.0.0-20210902165457-013367855358 // indirect
+	github.com/v8platform/encoder v0.0.4 // indirect
+	github.com/v8platform/protoc-gen-go-ras v0.2.1 // indirect
 	golang.org/x/crypto v0.0.0-20210513164829-c07d793c2f9a // indirect
 	golang.org/x/net v0.0.0-20210610132358-84b48f89b13b // indirect
 	golang.org/x/sys v0.0.0-20210611083646-a4fc73990273 // indirect

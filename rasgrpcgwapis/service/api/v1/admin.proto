@@ -1,0 +1,296 @@
+syntax = "proto3";
+
+package service.api.v1;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "github.com/v8platform/ras-grpc-gw/pkg/gen/service/api/v1;service_v1";
+
+service AccessService {
+
+  rpc Login(LoginRequest) returns (Tokens) {
+    option (google.api.http) = {
+      post: "/api/v1/login";
+      body: "*";
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      description: "Вход в систему для пользователя";
+      summary: "Выполняет вход в систему и возвращает токены доступа";
+      tags: "Access";
+      security: {};
+    };
+  };
+  rpc Refresh(RefreshRequest) returns (Tokens) {
+    option (google.api.http) = {
+      post: "/api/v1/refresh"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      description: "Обновление токена доступа для пользователя";
+      summary: "Выполняет обновление токена доступа";
+      tags: "Access";
+      security: {
+        security_requirement:{
+          key: "UserAuth"
+        };
+      };
+    };
+  };
+}
+
+message LoginRequest {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_schema) = {
+    json_schema: {
+      title: "LoginRequest";
+      description: "";
+      required: ["user", "password"];
+    };
+    example: "{\"user\": \"admin\", \"password\": \"pwd\"}";
+  };
+  string user = 1;
+  string password = 2;
+
+}
+
+message Tokens {
+  string access_token = 1;
+  string refresh_token = 2;
+}
+
+message RefreshRequest {
+  string refresh_token = 1;
+}
+
+service AdminService {
+
+  rpc GetConfig(google.protobuf.Empty) returns (ServerConfig) {
+    option (google.api.http) = {
+      get: "/api/v1/admin/config";
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Получение конфигурации сервиса";
+      description: "Получение текущей конфигурации сервиса";
+      tags: "Admin";
+      security: {
+        security_requirement: { key: "AdminAuth"}
+      };
+    };
+  };
+  rpc UpdateConfig(ServerConfig) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/api/v1/admin/config";
+      body: "*";
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Обновление конфигурации сервиса";
+      description: "Выполняет обновление конфигурации сервиса";
+      tags: "Admin";
+      security: {
+        security_requirement: { key: "AdminAuth"}
+      };
+    };
+  };
+
+  rpc GetClientStatus(google.protobuf.Empty) returns (ClientStatus) {
+    option (google.api.http) = {
+      get: "/api/v1/admin/client";
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Получение состояния клиента сервиса";
+      description: "Получение состояния клиент сервиса";
+      tags: "Admin";
+      security: {
+        security_requirement: { key: "AdminAuth"}
+      };
+    };
+  };
+  rpc GetConnections(google.protobuf.Empty) returns (GetConnectionsResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/admin/connections";
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Получение списка подключений клиента сервиса";
+      description: "Получение списка подключений клиента сервиса";
+      tags: "Admin";
+      security: {
+        security_requirement: { key: "AdminAuth"}
+      };
+    };
+  };
+
+  rpc GetEndpoints(google.protobuf.Empty) returns (GetEndpointsResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/admin/endpoints";
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Получение точек обмена клиента сервиса";
+      description: "Получение точек обмена клиента сервиса";
+      tags: "Admin";
+      security: {
+        security_requirement: { key: "AdminAuth"}
+      };
+    };
+  };
+
+  rpc ConfigureEndpoint(ConfigureEndpointRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/api/v1/admin/endpoints";
+      body: "*"
+      additional_bindings: {
+        post: "/api/v1/admin/endpoints/{endpoint_id}"
+        body: "config"
+      }
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Конфигурация точек обмена клиента сервиса";
+      description: "Конфигурация точек обмена клиента сервиса";
+      tags: "Admin";
+      security: {
+        security_requirement: { key: "AdminAuth"}
+      };
+    };
+  };
+
+}
+
+message ConfigureEndpointRequest{
+
+  // Уникальный идентификатор точки обмена
+  string endpoint_id = 1;
+  // Конфигурация точки обмена
+  EndpointConfig config = 2;
+
+}
+
+message GetEndpointsResponse {
+  // Открытые точки подключения
+  repeated Endpoint endpoints = 1;
+}
+
+message GetConnectionsResponse {
+  // Список подключений клиента
+  repeated ConnectionInfo connections = 1;
+}
+
+// Состояние клиента и его подключений
+message ClientStatus {
+
+  // Количество подключение в пуле
+  int32 connections_pooled = 1;
+  // Количество всех подключений
+  int32 connections_count = 2;
+  // Количество всех точек обмена
+  int32 endpoints_count = 3;
+
+  // Последнее использование клиента
+  google.protobuf.Timestamp last_used_at = 5;
+
+  // Список подключений клиента
+  repeated ConnectionInfo connections = 4;
+
+}
+// Информация о подключении клиента
+message ConnectionInfo {
+
+  // Уникальный идентификатор подключения
+  string id = 1;
+
+  // Состояние подключения клиента
+  bool connected = 4;
+
+  // Последнее использование клиента
+  google.protobuf.Timestamp last_used_at = 5;
+
+  // Открытые точки подключения
+  repeated Endpoint endpoints = 6;
+
+  // Признак вхождения в пул соединений
+  bool pooled = 7;
+
+}
+
+message ServerConfig {
+
+  // Адрес службы RAS сервера 1С
+  string ras_host = 1;
+
+  // Версия подключенной клиента
+  string ras_version = 2;
+
+  // Размер пула соединений клиента
+  int32 conn_pool_size = 3;
+
+  // Таймаут простоя соединения
+  int32 conn_idle_timeout = 5;
+
+  // Период проверки простоя соединения
+  int32 conn_idle_check_timer = 6;
+
+  // Разрешено небезопасное подключение
+  bool allow_insecure = 7;
+
+  // Настройка точки обмена по умолчанию
+  EndpointConfig default_endpoint_config = 8;
+
+  // Известная авторизация на информационных базах
+  map<string, EndpointCommonAuth> default_infobases_auth = 9;
+
+  // Максимальное число открытых точек обмена на подключение
+  int32 conn_max_endpoints_count = 10;
+
+}
+
+message Endpoint {
+
+  // Уникальный идентификатор точки обмена
+  string id = 1;
+
+  // Конфигурация точки обмена
+  EndpointConfig config = 2;
+
+  // Признак вхождения в пул соединений
+  bool pooled = 3;
+
+}
+
+// Сообщение авторизации
+message EndpointServerAuth {
+
+  // Имя пользователя
+  string user = 1;
+  // Пароль пользователя
+  string password = 2;
+
+}
+
+/* Сообщение авторизации на точке обмена
+ Используется для установка
+ * авторизации на локальном кластере
+ * авторизации в информационной базе на локальном кластере */
+message EndpointCommonAuth {
+
+  // Обязательное указание уникального идентификатора кластера
+  string cluster_id = 1;
+  // Имя пользователя
+  string user = 2;
+  // Пароль пользователя
+  string password = 3;
+
+}
+
+// Конфигурация точки обмена
+message EndpointConfig {
+
+  // Авторизация на сервере 1С
+  EndpointServerAuth server_auth = 1;
+
+  // Авторизация на локальном кластере
+  EndpointCommonAuth cluster_auth = 2;
+
+  // Авторизация информационной базы на локальном кластере
+  EndpointCommonAuth infobase_auth = 3;
+
+}

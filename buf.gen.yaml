@@ -20,15 +20,18 @@ plugins:
     out: ./pkg/gen
     opt:
       - paths=source_relative
+      - allow_delete_body=true
   - name: openapiv2
     out: ./swagger
     opt:
+      - allow_delete_body=true
       - allow_merge=true
       - merge_file_name=docs.json
       - openapi_naming_strategy=simple
       - allow_repeated_fields_in_body=true
       - disable_default_errors=true
       - json_names_for_fields=false
+
 #  - name: js
 #    out: ./pkg/gen/js
 #    opt: paths=source_relative
