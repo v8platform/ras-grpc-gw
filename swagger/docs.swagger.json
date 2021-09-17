@@ -15,31 +15,48 @@
   },
   "tags": [
     {
-      "name": "AccessService"
+      "name": "Access",
+      "description": "Сервис управления доступом службы сервиса"
     },
     {
-      "name": "AdminService"
+      "name": "Config",
+      "description": "Сервис управления конфигурацией службы сервиса"
     },
     {
-      "name": "AuthService"
+      "name": "Authorizations",
+      "description": "Сервис управления доступом на локальном кластере"
     },
     {
-      "name": "SessionsService"
+      "name": "Sessions",
+      "description": "Сервис управления сессиями локального кластера"
     },
     {
-      "name": "InfobasesService"
+      "name": "Infobases",
+      "description": "Сервис управления информационными базами локального кластера"
     },
     {
-      "name": "ClustersService"
+      "name": "Clusters",
+      "description": "Сервис управления локальными кластерами сервера 1С Предприятие"
     },
     {
-      "name": "ManagersService"
+      "name": "Managers",
+      "description": "Сервис получения менеджеров локального кластера"
     },
     {
-      "name": "ProcessesService"
+      "name": "Processes",
+      "description": "Сервис получения рабочих процессов локального кластера"
     },
     {
-      "name": "ServersService"
+      "name": "Servers",
+      "description": "Сервис получения и изменения рабочих серверов локального кластера"
+    },
+    {
+      "name": "Connections",
+      "description": "Сервис получения соединений локального кластера"
+    },
+    {
+      "name": "Locks",
+      "description": "Сервис получения блокировок локального кластера"
     }
   ],
   "host": "localhost:3001",
@@ -54,267 +71,11 @@
     "application/json"
   ],
   "paths": {
-    "/api/v1/admin/client": {
-      "get": {
-        "summary": "Получение состояния клиента сервиса",
-        "description": "Получение состояния клиент сервиса",
-        "operationId": "AdminService_GetClientStatus",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/ClientStatus"
-            }
-          },
-          "403": {
-            "description": "User does not have permission to access the resource.",
-            "schema": {}
-          },
-          "404": {
-            "description": "Resource does not exist.",
-            "schema": {
-              "type": "string",
-              "format": "string"
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          }
-        },
-        "tags": [
-          "Admin"
-        ],
-        "security": [
-          {
-            "AdminAuth": []
-          }
-        ]
-      }
-    },
-    "/api/v1/admin/config": {
-      "get": {
-        "summary": "Получение конфигурации сервиса",
-        "description": "Получение текущей конфигурации сервиса",
-        "operationId": "AdminService_GetConfig",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/ServerConfig"
-            }
-          },
-          "403": {
-            "description": "User does not have permission to access the resource.",
-            "schema": {}
-          },
-          "404": {
-            "description": "Resource does not exist.",
-            "schema": {
-              "type": "string",
-              "format": "string"
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          }
-        },
-        "tags": [
-          "Admin"
-        ],
-        "security": [
-          {
-            "AdminAuth": []
-          }
-        ]
-      },
-      "post": {
-        "summary": "Обновление конфигурации сервиса",
-        "description": "Выполняет обновление конфигурации сервиса",
-        "operationId": "AdminService_UpdateConfig",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "properties": {}
-            }
-          },
-          "403": {
-            "description": "User does not have permission to access the resource.",
-            "schema": {}
-          },
-          "404": {
-            "description": "Resource does not exist.",
-            "schema": {
-              "type": "string",
-              "format": "string"
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/ServerConfig"
-            }
-          }
-        ],
-        "tags": [
-          "Admin"
-        ],
-        "security": [
-          {
-            "AdminAuth": []
-          }
-        ]
-      }
-    },
-    "/api/v1/admin/connections": {
-      "get": {
-        "summary": "Получение списка подключений клиента сервиса",
-        "description": "Получение списка подключений клиента сервиса",
-        "operationId": "AdminService_GetConnections",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/GetConnectionsResponse"
-            }
-          },
-          "403": {
-            "description": "User does not have permission to access the resource.",
-            "schema": {}
-          },
-          "404": {
-            "description": "Resource does not exist.",
-            "schema": {
-              "type": "string",
-              "format": "string"
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          }
-        },
-        "tags": [
-          "Admin"
-        ],
-        "security": [
-          {
-            "AdminAuth": []
-          }
-        ]
-      }
-    },
-    "/api/v1/admin/endpoints": {
-      "get": {
-        "summary": "Получение точек обмена клиента сервиса",
-        "description": "Получение точек обмена клиента сервиса",
-        "operationId": "AdminService_GetEndpoints",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/GetEndpointsResponse"
-            }
-          },
-          "403": {
-            "description": "User does not have permission to access the resource.",
-            "schema": {}
-          },
-          "404": {
-            "description": "Resource does not exist.",
-            "schema": {
-              "type": "string",
-              "format": "string"
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          }
-        },
-        "tags": [
-          "Admin"
-        ],
-        "security": [
-          {
-            "AdminAuth": []
-          }
-        ]
-      },
-      "post": {
-        "summary": "Конфигурация точек обмена клиента сервиса",
-        "description": "Конфигурация точек обмена клиента сервиса",
-        "operationId": "AdminService_ConfigureEndpoint",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "properties": {}
-            }
-          },
-          "403": {
-            "description": "User does not have permission to access the resource.",
-            "schema": {}
-          },
-          "404": {
-            "description": "Resource does not exist.",
-            "schema": {
-              "type": "string",
-              "format": "string"
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "schema": {
-              "$ref": "#/definitions/ErrorResponse"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/ConfigureEndpointRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Admin"
-        ],
-        "security": [
-          {
-            "AdminAuth": []
-          }
-        ]
-      }
-    },
     "/api/v1/admin/endpoints/{endpoint_id}": {
       "post": {
         "summary": "Конфигурация точек обмена клиента сервиса",
         "description": "Конфигурация точек обмена клиента сервиса",
-        "operationId": "AdminService_ConfigureEndpoint2",
+        "operationId": "Config_ConfigureEndpoint2",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -359,7 +120,7 @@
           }
         ],
         "tags": [
-          "Admin"
+          "Config"
         ],
         "security": [
           {
@@ -372,7 +133,7 @@
       "post": {
         "summary": "Установка авторизации администратора сервера 1С",
         "description": "Выполняет установку авторизации администратора сервера 1С",
-        "operationId": "AuthService_AuthenticateAgent",
+        "operationId": "Authorizations_AuthenticateAgent",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -409,7 +170,6 @@
           }
         ],
         "tags": [
-          "Server",
           "Authorizations"
         ]
       }
@@ -418,7 +178,7 @@
       "get": {
         "summary": "Получение списка локальных кластеров",
         "description": "Выполняет получение списка локальных кластеров сервера 1С Предприятия",
-        "operationId": "ClustersService_GetClusters",
+        "operationId": "Clusters_GetClusters",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -451,7 +211,7 @@
       "post": {
         "summary": "Регистрация нового локального кластере на сервере",
         "description": "Выполняет регистрацию нового локального кластере на сервере",
-        "operationId": "ClustersService_RegCluster",
+        "operationId": "Clusters_RegCluster",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -496,7 +256,7 @@
       "post": {
         "summary": "Установка авторизации администратора на локальном кластере сервера 1С",
         "description": "Выполняет установку авторизации администратора на локальном кластере сервера 1С",
-        "operationId": "AuthService_AuthenticateCluster",
+        "operationId": "Authorizations_AuthenticateCluster",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -542,7 +302,7 @@
       "get": {
         "summary": "Получение информации о локальном кластере",
         "description": "Выполняет получение информации о локальном кластере",
-        "operationId": "ClustersService_GetClusterInfo",
+        "operationId": "Clusters_GetClusterInfo",
         "responses": {
           "200": {
             "description": "",
@@ -584,7 +344,7 @@
       "delete": {
         "summary": "Отмена регистрации локального кластера на сервере",
         "description": "Выполняет отмену регистрации локального кластера на сервере",
-        "operationId": "ClustersService_UnregCluster",
+        "operationId": "Clusters_UnregCluster",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -628,7 +388,7 @@
       "post": {
         "summary": "Установка авторизации администратора на локальном кластере сервера 1С",
         "description": "Выполняет установку авторизации администратора на локальном кластере сервера 1С",
-        "operationId": "AuthService_AuthenticateCluster2",
+        "operationId": "Authorizations_AuthenticateCluster2",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -691,11 +451,425 @@
         ]
       }
     },
+    "/api/v1/config": {
+      "get": {
+        "summary": "Получение конфигурации сервиса",
+        "description": "Получение текущей конфигурации сервиса",
+        "operationId": "Config_GetConfig",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ServerConfig"
+            }
+          },
+          "403": {
+            "description": "User does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "tags": [
+          "Config"
+        ],
+        "security": [
+          {
+            "AdminAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "Обновление конфигурации сервиса",
+        "description": "Выполняет обновление конфигурации сервиса",
+        "operationId": "Config_UpdateConfig",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "403": {
+            "description": "User does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ServerConfig"
+            }
+          }
+        ],
+        "tags": [
+          "Config"
+        ],
+        "security": [
+          {
+            "AdminAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/config/client": {
+      "get": {
+        "summary": "Получение состояния клиента сервиса",
+        "description": "Получение состояния клиент сервиса",
+        "operationId": "Config_GetClientStatus",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ClientStatus"
+            }
+          },
+          "403": {
+            "description": "User does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "tags": [
+          "Config"
+        ],
+        "security": [
+          {
+            "AdminAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/config/connections": {
+      "get": {
+        "summary": "Получение списка подключений клиента сервиса",
+        "description": "Получение списка подключений клиента сервиса",
+        "operationId": "Config_GetConnections",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/api.v1.GetConnectionsResponse"
+            }
+          },
+          "403": {
+            "description": "User does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "tags": [
+          "Config"
+        ],
+        "security": [
+          {
+            "AdminAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/config/endpoints": {
+      "get": {
+        "summary": "Получение точек обмена клиента сервиса",
+        "description": "Получение точек обмена клиента сервиса",
+        "operationId": "Config_GetEndpoints",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetEndpointsResponse"
+            }
+          },
+          "403": {
+            "description": "User does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "tags": [
+          "Config"
+        ],
+        "security": [
+          {
+            "AdminAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "Конфигурация точек обмена клиента сервиса",
+        "description": "Конфигурация точек обмена клиента сервиса",
+        "operationId": "Config_ConfigureEndpoint",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "403": {
+            "description": "User does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ConfigureEndpointRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Config"
+        ],
+        "security": [
+          {
+            "AdminAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/connections": {
+      "get": {
+        "summary": "Получение списка соединений локального кластера",
+        "description": "Выполняет получение списка соединений локального кластера сервера 1С Предприятия",
+        "operationId": "Connections_GetConnections",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/messages.v1.GetConnectionsResponse"
+            }
+          },
+          "403": {
+            "description": "User does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "description": "Уникальный идентификатор локального кластера",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "tags": [
+          "Connections"
+        ]
+      }
+    },
+    "/api/v1/connections/{connection_id}": {
+      "delete": {
+        "summary": "Отключение соединения рабочего сервера локального кластера",
+        "description": "Выполняет отключение соединения рабочего сервера локального кластера сервера 1С Предприятия",
+        "operationId": "Connections_DisconnectConnection",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "403": {
+            "description": "User does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "connection_id",
+            "description": "Уникальный идентификатор соединения локального кластера",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "cluster_id",
+            "description": "Уникальный идентификатор локального кластера",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "process_id",
+            "description": "Уникальный идентификатор рабочего процесса локального кластера",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "tags": [
+          "Connections"
+        ]
+      }
+    },
+    "/api/v1/connections:infobase": {
+      "get": {
+        "summary": "Получение списка соединений информационной базы локального кластера",
+        "description": "Выполняет получение списка соединений информационной базы локального кластера сервера 1С Предприятия",
+        "operationId": "Connections_GetInfobaseConnections",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetInfobaseConnectionsResponse"
+            }
+          },
+          "403": {
+            "description": "User does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "description": "Уникальный идентификатор локального кластера",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "infobase_id",
+            "description": "Уникальный идентификатор информационной базы кластера",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "tags": [
+          "Connections"
+        ]
+      }
+    },
     "/api/v1/infobases": {
       "get": {
         "summary": "Получение списка информационных баз на локальном кластере",
         "description": "Выполняет получение списка информационных баз на локальном кластере",
-        "operationId": "InfobasesService_GetInfobases",
+        "operationId": "Infobases_GetInfobases",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -738,7 +912,7 @@
       "post": {
         "summary": "Создание информационной базы на локальном кластере",
         "description": "Выполняет создание информационной базы на локальном кластере",
-        "operationId": "InfobasesService_CreateInfobase",
+        "operationId": "Infobases_CreateInfobase",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -798,7 +972,7 @@
       "post": {
         "summary": "Установка авторизации в информационной базе на локальном кластере сервера 1С",
         "description": "Выполняет установку авторизации в информационной базе на локальном кластере сервера 1С",
-        "operationId": "AuthService_AuthenticateInfobase",
+        "operationId": "Authorizations_AuthenticateInfobase",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -844,7 +1018,7 @@
       "post": {
         "summary": "Обновление информационной базы на локальном кластере",
         "description": "Выполняет обновление информационной базы на локальном кластере",
-        "operationId": "InfobasesService_UpdateInfobase",
+        "operationId": "Infobases_UpdateInfobase",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -903,7 +1077,7 @@
       "get": {
         "summary": "Получение информации о информационное базе на локальном кластере",
         "description": "Выполняет получение информации о информационное базе на локальном кластере",
-        "operationId": "InfobasesService_GetInfobase",
+        "operationId": "Infobases_GetInfobase",
         "responses": {
           "200": {
             "description": "",
@@ -953,7 +1127,7 @@
       "delete": {
         "summary": "Удаление информационной базы на локальном кластере",
         "description": "Выполняет удаление информационной базы на локальном кластере",
-        "operationId": "InfobasesService_DeleteInfobase",
+        "operationId": "Infobases_DeleteInfobase",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -1012,7 +1186,7 @@
       "get": {
         "summary": "Получение сводного списка информационных баз на локальном кластере",
         "description": "Выполняет получение сводного списка информационных баз на локальном кластере",
-        "operationId": "InfobasesService_GetInfobasesSummary",
+        "operationId": "Infobases_GetInfobasesSummary",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -1057,7 +1231,7 @@
       "post": {
         "summary": "Обновление сводной информации информационной базы на локальном кластере",
         "description": "Выполняет обновление сводной информации  информационной базы на локальном кластере",
-        "operationId": "InfobasesService_UpdateInfobaseSummary",
+        "operationId": "Infobases_UpdateInfobaseSummary",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -1113,11 +1287,223 @@
         ]
       }
     },
+    "/api/v1/locks": {
+      "get": {
+        "summary": "Получение списка блокировок локального кластера",
+        "description": "Выполняет получение списка блокировок локального кластера сервера 1С Предприятия",
+        "operationId": "Locks_GetLocks",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetLocksResponse"
+            }
+          },
+          "403": {
+            "description": "User does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "description": "Уникальный идентификатор локального кластера",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "tags": [
+          "Locks"
+        ]
+      }
+    },
+    "/api/v1/locks:connection": {
+      "get": {
+        "summary": "Получение списка блокировок соединения локального кластера",
+        "description": "Выполняет получение списка блокировок соединения локального кластера сервера 1С Предприятия",
+        "operationId": "Locks_GetConnectionLocks",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetConnectionLocksResponse"
+            }
+          },
+          "403": {
+            "description": "User does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "description": "Уникальный идентификатор локального кластера",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "connection_id",
+            "description": "Уникальный идентификатор соединения локального кластера",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "tags": [
+          "Locks"
+        ]
+      }
+    },
+    "/api/v1/locks:infobase": {
+      "get": {
+        "summary": "Получение списка блокировок информационной базы локального кластера",
+        "description": "Выполняет получение списка блокировок информационной базы локального кластера сервера 1С Предприятия",
+        "operationId": "Locks_GetInfobaseLocks",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetInfobaseLocksResponse"
+            }
+          },
+          "403": {
+            "description": "User does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "description": "Уникальный идентификатор локального кластера",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "infobase_id",
+            "description": "Уникальный идентификатор информационной базы кластера",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "tags": [
+          "Locks"
+        ]
+      }
+    },
+    "/api/v1/locks:session": {
+      "get": {
+        "summary": "Получение списка блокировок сессии информационной базы локального кластера",
+        "description": "Выполняет получение списка блокировок сессии информационной базы локального кластера сервера 1С Предприятия",
+        "operationId": "Locks_GetSessionLocks",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetSessionLocksResponse"
+            }
+          },
+          "403": {
+            "description": "User does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cluster_id",
+            "description": "Уникальный идентификатор локального кластера",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "infobase_id",
+            "description": "Уникальный идентификатор информационной базы кластера",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "session_id",
+            "description": "Уникальный идентификатор сессии",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "tags": [
+          "Locks"
+        ]
+      }
+    },
     "/api/v1/login": {
       "post": {
         "summary": "Выполняет вход в систему и возвращает токены доступа",
         "description": "Вход в систему для пользователя",
-        "operationId": "AccessService_Login",
+        "operationId": "Access_Login",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -1163,7 +1549,7 @@
       "get": {
         "summary": "Получение списка менеджеров локального кластера",
         "description": "Выполняет получение  списка менеджеров локального кластера сервера 1С Предприятия",
-        "operationId": "ManagersService_GetClusterManagers",
+        "operationId": "Managers_GetClusterManagers",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -1208,7 +1594,7 @@
       "get": {
         "summary": "Получение информации о менеджере локальном кластере",
         "description": "Выполняет получение информации о менеджере локального кластера сервера 1С Предприятия",
-        "operationId": "ManagersService_GetClusterManagerInfo",
+        "operationId": "Managers_GetClusterManagerInfo",
         "responses": {
           "200": {
             "description": "",
@@ -1260,7 +1646,7 @@
       "get": {
         "summary": "Получение списка рабочих процессов локального кластера",
         "description": "Выполняет получение списка рабочих процессов локального кластера сервера 1С Предприятия",
-        "operationId": "ProcessesService_GetWorkingProcesses",
+        "operationId": "Processes_GetWorkingProcesses",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -1305,7 +1691,7 @@
       "get": {
         "summary": "Получение информации о рабочем процессе локального кластера",
         "description": "Выполняет получение информации о рабочем процессе локального кластера сервера 1С Предприятия",
-        "operationId": "ProcessesService_GetWorkingProcessInfo",
+        "operationId": "Processes_GetWorkingProcessInfo",
         "responses": {
           "200": {
             "description": "",
@@ -1357,7 +1743,7 @@
       "get": {
         "summary": "Получение списка рабочих процессов рабочего сервера локального кластера",
         "description": "Выполняет списка рабочих процессов рабочего сервера локального кластера сервера 1С Предприятия",
-        "operationId": "ProcessesService_GetServerWorkingProcesses",
+        "operationId": "Processes_GetServerWorkingProcesses",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -1409,7 +1795,7 @@
       "post": {
         "summary": "Выполняет обновление токена доступа",
         "description": "Обновление токена доступа для пользователя",
-        "operationId": "AccessService_Refresh",
+        "operationId": "Access_Refresh",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -1447,11 +1833,6 @@
         ],
         "tags": [
           "Access"
-        ],
-        "security": [
-          {
-            "UserAuth": []
-          }
         ]
       }
     },
@@ -1459,7 +1840,7 @@
       "get": {
         "summary": "Получение списка рабочих серверов локального кластера",
         "description": "Выполняет получение списка рабочих серверов локального кластера сервера 1С Предприятия",
-        "operationId": "ServersService_GetWorkingServers",
+        "operationId": "Servers_GetWorkingServers",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -1502,7 +1883,7 @@
       "post": {
         "summary": "Добавление рабочего сервера локального кластера",
         "description": "Выполняет добавление рабочего сервера локального кластера сервера 1С Предприятия",
-        "operationId": "ServersService_AddWorkingServer",
+        "operationId": "Servers_AddWorkingServer",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -1555,7 +1936,7 @@
       "get": {
         "summary": "Получение информации о рабочем сервере локального кластера",
         "description": "Выполняет получение информации о рабочем сервере локального кластера сервера 1С Предприятия",
-        "operationId": "ServersService_GetWorkingServerInfo",
+        "operationId": "Servers_GetWorkingServerInfo",
         "responses": {
           "200": {
             "description": "",
@@ -1604,8 +1985,8 @@
       },
       "delete": {
         "summary": "Удаление рабочего сервера локального кластера",
-        "description": "Выполняет Удаление рабочего сервера локального кластера сервера 1С Предприятия",
-        "operationId": "ServersService_DeleteWorkingServer",
+        "description": "Выполняет удаление рабочего сервера локального кластера сервера 1С Предприятия",
+        "operationId": "Servers_DeleteWorkingServer",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -1657,7 +2038,7 @@
       "get": {
         "summary": "Получение списка сессий локального кластера",
         "description": "Выполняет получение списка сессий локального кластера",
-        "operationId": "SessionsService_GetSessions",
+        "operationId": "Sessions_GetSessions",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -1702,7 +2083,7 @@
       "delete": {
         "summary": "Отключение сессии локального кластера",
         "description": "Выполняет Отключение сессии локального кластера",
-        "operationId": "SessionsService_TerminateSession",
+        "operationId": "Sessions_TerminateSession",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -1762,7 +2143,7 @@
       "get": {
         "summary": "Получение списка сессий информационной базы локального кластера",
         "description": "Выполняет получение списка сессий информационной базы локального кластера",
-        "operationId": "SessionsService_GetInfobaseSessions",
+        "operationId": "Sessions_GetInfobaseSessions",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -1873,7 +2254,7 @@
         "connections": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ConnectionInfo"
+            "$ref": "#/definitions/api.v1.ConnectionInfo"
           },
           "title": "Список подключений клиента"
         }
@@ -1973,36 +2354,6 @@
         }
       }
     },
-    "ConnectionInfo": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "title": "Уникальный идентификатор подключения"
-        },
-        "connected": {
-          "type": "boolean",
-          "title": "Состояние подключения клиента"
-        },
-        "last_used_at": {
-          "type": "string",
-          "format": "date-time",
-          "title": "Последнее использование клиента"
-        },
-        "endpoints": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Endpoint"
-          },
-          "title": "Открытые точки подключения"
-        },
-        "pooled": {
-          "type": "boolean",
-          "title": "Признак вхождения в пул соединений"
-        }
-      },
-      "title": "Информация о подключении клиента"
-    },
     "CreateInfobaseResponse": {
       "type": "object",
       "properties": {
@@ -2047,7 +2398,7 @@
           "title": "Пароль пользователя"
         }
       },
-      "title": "Сообщение авторизации на точке обмена\r\nИспользуется для установка\r\nавторизации на локальном кластере\r\nавторизации в информационной базе на локальном кластере"
+      "title": "Сообщение авторизации на точке обмена\nИспользуется для установка\nавторизации на локальном кластере\nавторизации в информационной базе на локальном кластере"
     },
     "EndpointConfig": {
       "type": "object",
@@ -2150,15 +2501,14 @@
         }
       }
     },
-    "GetConnectionsResponse": {
+    "GetConnectionLocksResponse": {
       "type": "object",
       "properties": {
-        "connections": {
+        "locks": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/ConnectionInfo"
-          },
-          "title": "Список подключений клиента"
+            "$ref": "#/definitions/LockInfo"
+          }
         }
       }
     },
@@ -2174,11 +2524,33 @@
         }
       }
     },
+    "GetInfobaseConnectionsResponse": {
+      "type": "object",
+      "properties": {
+        "connections": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/serialize.v1.ConnectionInfo"
+          }
+        }
+      }
+    },
     "GetInfobaseInfoResponse": {
       "type": "object",
       "properties": {
         "info": {
           "$ref": "#/definitions/InfobaseInfo"
+        }
+      }
+    },
+    "GetInfobaseLocksResponse": {
+      "type": "object",
+      "properties": {
+        "locks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/LockInfo"
+          }
         }
       }
     },
@@ -2217,11 +2589,33 @@
       },
       "title": "Renamed GetInfobasesShortResponse"
     },
+    "GetLocksResponse": {
+      "type": "object",
+      "properties": {
+        "locks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/LockInfo"
+          }
+        }
+      }
+    },
     "GetServerWorkingProcessesResponse": {
       "type": "object",
       "properties": {
         "processes": {
           "$ref": "#/definitions/ProcessInfo"
+        }
+      }
+    },
+    "GetSessionLocksResponse": {
+      "type": "object",
+      "properties": {
+        "locks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/LockInfo"
+          }
         }
       }
     },
@@ -2427,6 +2821,27 @@
           "type": "string"
         },
         "short_presentation": {
+          "type": "string"
+        }
+      }
+    },
+    "LockInfo": {
+      "type": "object",
+      "properties": {
+        "connection_id": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "locked_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "object_id": {
+          "type": "string"
+        },
+        "session_id": {
           "type": "string"
         }
       }
@@ -2934,6 +3349,95 @@
         },
         "refresh_token": {
           "type": "string"
+        }
+      }
+    },
+    "api.v1.ConnectionInfo": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "Уникальный идентификатор подключения"
+        },
+        "connected": {
+          "type": "boolean",
+          "title": "Состояние подключения клиента"
+        },
+        "last_used_at": {
+          "type": "string",
+          "format": "date-time",
+          "title": "Последнее использование клиента"
+        },
+        "endpoints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Endpoint"
+          },
+          "title": "Открытые точки подключения"
+        },
+        "pooled": {
+          "type": "boolean",
+          "title": "Признак вхождения в пул соединений"
+        }
+      },
+      "title": "Информация о подключении клиента"
+    },
+    "api.v1.GetConnectionsResponse": {
+      "type": "object",
+      "properties": {
+        "connections": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/api.v1.ConnectionInfo"
+          },
+          "title": "Список подключений клиента"
+        }
+      }
+    },
+    "messages.v1.GetConnectionsResponse": {
+      "type": "object",
+      "properties": {
+        "connections": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/serialize.v1.ConnectionInfo"
+          }
+        }
+      }
+    },
+    "serialize.v1.ConnectionInfo": {
+      "type": "object",
+      "properties": {
+        "uuid": {
+          "type": "string"
+        },
+        "application": {
+          "type": "string"
+        },
+        "blocked_by_ls": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "connected_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "host": {
+          "type": "string"
+        },
+        "infobase_id": {
+          "type": "string"
+        },
+        "process_id": {
+          "type": "string"
+        },
+        "session_id": {
+          "type": "integer",
+          "format": "int32"
         }
       }
     }

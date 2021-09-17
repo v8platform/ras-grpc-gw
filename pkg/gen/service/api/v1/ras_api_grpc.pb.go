@@ -16,326 +16,326 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// AuthServiceClient is the client API for AuthService service.
+// AuthorizationsClient is the client API for Authorizations service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type AuthServiceClient interface {
+type AuthorizationsClient interface {
 	AuthenticateCluster(ctx context.Context, in *v1.ClusterAuthenticateRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	AuthenticateInfobase(ctx context.Context, in *v1.AuthenticateInfobaseRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	AuthenticateAgent(ctx context.Context, in *v1.ServerAuthenticateRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
-type authServiceClient struct {
+type authorizationsClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewAuthServiceClient(cc grpc.ClientConnInterface) AuthServiceClient {
-	return &authServiceClient{cc}
+func NewAuthorizationsClient(cc grpc.ClientConnInterface) AuthorizationsClient {
+	return &authorizationsClient{cc}
 }
 
-func (c *authServiceClient) AuthenticateCluster(ctx context.Context, in *v1.ClusterAuthenticateRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *authorizationsClient) AuthenticateCluster(ctx context.Context, in *v1.ClusterAuthenticateRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/service.api.v1.AuthService/AuthenticateCluster", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/service.api.v1.Authorizations/AuthenticateCluster", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *authServiceClient) AuthenticateInfobase(ctx context.Context, in *v1.AuthenticateInfobaseRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *authorizationsClient) AuthenticateInfobase(ctx context.Context, in *v1.AuthenticateInfobaseRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/service.api.v1.AuthService/AuthenticateInfobase", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/service.api.v1.Authorizations/AuthenticateInfobase", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *authServiceClient) AuthenticateAgent(ctx context.Context, in *v1.ServerAuthenticateRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *authorizationsClient) AuthenticateAgent(ctx context.Context, in *v1.ServerAuthenticateRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/service.api.v1.AuthService/AuthenticateAgent", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/service.api.v1.Authorizations/AuthenticateAgent", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// AuthServiceServer is the server API for AuthService service.
-// All implementations must embed UnimplementedAuthServiceServer
+// AuthorizationsServer is the server API for Authorizations service.
+// All implementations must embed UnimplementedAuthorizationsServer
 // for forward compatibility
-type AuthServiceServer interface {
+type AuthorizationsServer interface {
 	AuthenticateCluster(context.Context, *v1.ClusterAuthenticateRequest) (*emptypb.Empty, error)
 	AuthenticateInfobase(context.Context, *v1.AuthenticateInfobaseRequest) (*emptypb.Empty, error)
 	AuthenticateAgent(context.Context, *v1.ServerAuthenticateRequest) (*emptypb.Empty, error)
-	mustEmbedUnimplementedAuthServiceServer()
+	mustEmbedUnimplementedAuthorizationsServer()
 }
 
-// UnimplementedAuthServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedAuthServiceServer struct {
+// UnimplementedAuthorizationsServer must be embedded to have forward compatible implementations.
+type UnimplementedAuthorizationsServer struct {
 }
 
-func (UnimplementedAuthServiceServer) AuthenticateCluster(context.Context, *v1.ClusterAuthenticateRequest) (*emptypb.Empty, error) {
+func (UnimplementedAuthorizationsServer) AuthenticateCluster(context.Context, *v1.ClusterAuthenticateRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AuthenticateCluster not implemented")
 }
-func (UnimplementedAuthServiceServer) AuthenticateInfobase(context.Context, *v1.AuthenticateInfobaseRequest) (*emptypb.Empty, error) {
+func (UnimplementedAuthorizationsServer) AuthenticateInfobase(context.Context, *v1.AuthenticateInfobaseRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AuthenticateInfobase not implemented")
 }
-func (UnimplementedAuthServiceServer) AuthenticateAgent(context.Context, *v1.ServerAuthenticateRequest) (*emptypb.Empty, error) {
+func (UnimplementedAuthorizationsServer) AuthenticateAgent(context.Context, *v1.ServerAuthenticateRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AuthenticateAgent not implemented")
 }
-func (UnimplementedAuthServiceServer) mustEmbedUnimplementedAuthServiceServer() {}
+func (UnimplementedAuthorizationsServer) mustEmbedUnimplementedAuthorizationsServer() {}
 
-// UnsafeAuthServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to AuthServiceServer will
+// UnsafeAuthorizationsServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to AuthorizationsServer will
 // result in compilation errors.
-type UnsafeAuthServiceServer interface {
-	mustEmbedUnimplementedAuthServiceServer()
+type UnsafeAuthorizationsServer interface {
+	mustEmbedUnimplementedAuthorizationsServer()
 }
 
-func RegisterAuthServiceServer(s grpc.ServiceRegistrar, srv AuthServiceServer) {
-	s.RegisterService(&AuthService_ServiceDesc, srv)
+func RegisterAuthorizationsServer(s grpc.ServiceRegistrar, srv AuthorizationsServer) {
+	s.RegisterService(&Authorizations_ServiceDesc, srv)
 }
 
-func _AuthService_AuthenticateCluster_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Authorizations_AuthenticateCluster_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(v1.ClusterAuthenticateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AuthServiceServer).AuthenticateCluster(ctx, in)
+		return srv.(AuthorizationsServer).AuthenticateCluster(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.api.v1.AuthService/AuthenticateCluster",
+		FullMethod: "/service.api.v1.Authorizations/AuthenticateCluster",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServiceServer).AuthenticateCluster(ctx, req.(*v1.ClusterAuthenticateRequest))
+		return srv.(AuthorizationsServer).AuthenticateCluster(ctx, req.(*v1.ClusterAuthenticateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AuthService_AuthenticateInfobase_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Authorizations_AuthenticateInfobase_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(v1.AuthenticateInfobaseRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AuthServiceServer).AuthenticateInfobase(ctx, in)
+		return srv.(AuthorizationsServer).AuthenticateInfobase(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.api.v1.AuthService/AuthenticateInfobase",
+		FullMethod: "/service.api.v1.Authorizations/AuthenticateInfobase",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServiceServer).AuthenticateInfobase(ctx, req.(*v1.AuthenticateInfobaseRequest))
+		return srv.(AuthorizationsServer).AuthenticateInfobase(ctx, req.(*v1.AuthenticateInfobaseRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AuthService_AuthenticateAgent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Authorizations_AuthenticateAgent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(v1.ServerAuthenticateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AuthServiceServer).AuthenticateAgent(ctx, in)
+		return srv.(AuthorizationsServer).AuthenticateAgent(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.api.v1.AuthService/AuthenticateAgent",
+		FullMethod: "/service.api.v1.Authorizations/AuthenticateAgent",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServiceServer).AuthenticateAgent(ctx, req.(*v1.ServerAuthenticateRequest))
+		return srv.(AuthorizationsServer).AuthenticateAgent(ctx, req.(*v1.ServerAuthenticateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// AuthService_ServiceDesc is the grpc.ServiceDesc for AuthService service.
+// Authorizations_ServiceDesc is the grpc.ServiceDesc for Authorizations service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var AuthService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "service.api.v1.AuthService",
-	HandlerType: (*AuthServiceServer)(nil),
+var Authorizations_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "service.api.v1.Authorizations",
+	HandlerType: (*AuthorizationsServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "AuthenticateCluster",
-			Handler:    _AuthService_AuthenticateCluster_Handler,
+			Handler:    _Authorizations_AuthenticateCluster_Handler,
 		},
 		{
 			MethodName: "AuthenticateInfobase",
-			Handler:    _AuthService_AuthenticateInfobase_Handler,
+			Handler:    _Authorizations_AuthenticateInfobase_Handler,
 		},
 		{
 			MethodName: "AuthenticateAgent",
-			Handler:    _AuthService_AuthenticateAgent_Handler,
+			Handler:    _Authorizations_AuthenticateAgent_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "service/api/v1/ras_api.proto",
 }
 
-// SessionsServiceClient is the client API for SessionsService service.
+// SessionsClient is the client API for Sessions service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type SessionsServiceClient interface {
+type SessionsClient interface {
 	GetSessions(ctx context.Context, in *v1.GetSessionsRequest, opts ...grpc.CallOption) (*v1.GetSessionsResponse, error)
 	GetInfobaseSessions(ctx context.Context, in *v1.GetInfobaseSessionsRequest, opts ...grpc.CallOption) (*v1.GetInfobaseSessionsResponse, error)
 	TerminateSession(ctx context.Context, in *v1.TerminateSessionRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
-type sessionsServiceClient struct {
+type sessionsClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewSessionsServiceClient(cc grpc.ClientConnInterface) SessionsServiceClient {
-	return &sessionsServiceClient{cc}
+func NewSessionsClient(cc grpc.ClientConnInterface) SessionsClient {
+	return &sessionsClient{cc}
 }
 
-func (c *sessionsServiceClient) GetSessions(ctx context.Context, in *v1.GetSessionsRequest, opts ...grpc.CallOption) (*v1.GetSessionsResponse, error) {
+func (c *sessionsClient) GetSessions(ctx context.Context, in *v1.GetSessionsRequest, opts ...grpc.CallOption) (*v1.GetSessionsResponse, error) {
 	out := new(v1.GetSessionsResponse)
-	err := c.cc.Invoke(ctx, "/service.api.v1.SessionsService/GetSessions", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/service.api.v1.Sessions/GetSessions", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *sessionsServiceClient) GetInfobaseSessions(ctx context.Context, in *v1.GetInfobaseSessionsRequest, opts ...grpc.CallOption) (*v1.GetInfobaseSessionsResponse, error) {
+func (c *sessionsClient) GetInfobaseSessions(ctx context.Context, in *v1.GetInfobaseSessionsRequest, opts ...grpc.CallOption) (*v1.GetInfobaseSessionsResponse, error) {
 	out := new(v1.GetInfobaseSessionsResponse)
-	err := c.cc.Invoke(ctx, "/service.api.v1.SessionsService/GetInfobaseSessions", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/service.api.v1.Sessions/GetInfobaseSessions", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *sessionsServiceClient) TerminateSession(ctx context.Context, in *v1.TerminateSessionRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *sessionsClient) TerminateSession(ctx context.Context, in *v1.TerminateSessionRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/service.api.v1.SessionsService/TerminateSession", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/service.api.v1.Sessions/TerminateSession", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// SessionsServiceServer is the server API for SessionsService service.
-// All implementations must embed UnimplementedSessionsServiceServer
+// SessionsServer is the server API for Sessions service.
+// All implementations must embed UnimplementedSessionsServer
 // for forward compatibility
-type SessionsServiceServer interface {
+type SessionsServer interface {
 	GetSessions(context.Context, *v1.GetSessionsRequest) (*v1.GetSessionsResponse, error)
 	GetInfobaseSessions(context.Context, *v1.GetInfobaseSessionsRequest) (*v1.GetInfobaseSessionsResponse, error)
 	TerminateSession(context.Context, *v1.TerminateSessionRequest) (*emptypb.Empty, error)
-	mustEmbedUnimplementedSessionsServiceServer()
+	mustEmbedUnimplementedSessionsServer()
 }
 
-// UnimplementedSessionsServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedSessionsServiceServer struct {
+// UnimplementedSessionsServer must be embedded to have forward compatible implementations.
+type UnimplementedSessionsServer struct {
 }
 
-func (UnimplementedSessionsServiceServer) GetSessions(context.Context, *v1.GetSessionsRequest) (*v1.GetSessionsResponse, error) {
+func (UnimplementedSessionsServer) GetSessions(context.Context, *v1.GetSessionsRequest) (*v1.GetSessionsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetSessions not implemented")
 }
-func (UnimplementedSessionsServiceServer) GetInfobaseSessions(context.Context, *v1.GetInfobaseSessionsRequest) (*v1.GetInfobaseSessionsResponse, error) {
+func (UnimplementedSessionsServer) GetInfobaseSessions(context.Context, *v1.GetInfobaseSessionsRequest) (*v1.GetInfobaseSessionsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetInfobaseSessions not implemented")
 }
-func (UnimplementedSessionsServiceServer) TerminateSession(context.Context, *v1.TerminateSessionRequest) (*emptypb.Empty, error) {
+func (UnimplementedSessionsServer) TerminateSession(context.Context, *v1.TerminateSessionRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method TerminateSession not implemented")
 }
-func (UnimplementedSessionsServiceServer) mustEmbedUnimplementedSessionsServiceServer() {}
+func (UnimplementedSessionsServer) mustEmbedUnimplementedSessionsServer() {}
 
-// UnsafeSessionsServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to SessionsServiceServer will
+// UnsafeSessionsServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to SessionsServer will
 // result in compilation errors.
-type UnsafeSessionsServiceServer interface {
-	mustEmbedUnimplementedSessionsServiceServer()
+type UnsafeSessionsServer interface {
+	mustEmbedUnimplementedSessionsServer()
 }
 
-func RegisterSessionsServiceServer(s grpc.ServiceRegistrar, srv SessionsServiceServer) {
-	s.RegisterService(&SessionsService_ServiceDesc, srv)
+func RegisterSessionsServer(s grpc.ServiceRegistrar, srv SessionsServer) {
+	s.RegisterService(&Sessions_ServiceDesc, srv)
 }
 
-func _SessionsService_GetSessions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Sessions_GetSessions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(v1.GetSessionsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(SessionsServiceServer).GetSessions(ctx, in)
+		return srv.(SessionsServer).GetSessions(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.api.v1.SessionsService/GetSessions",
+		FullMethod: "/service.api.v1.Sessions/GetSessions",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SessionsServiceServer).GetSessions(ctx, req.(*v1.GetSessionsRequest))
+		return srv.(SessionsServer).GetSessions(ctx, req.(*v1.GetSessionsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _SessionsService_GetInfobaseSessions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Sessions_GetInfobaseSessions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(v1.GetInfobaseSessionsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(SessionsServiceServer).GetInfobaseSessions(ctx, in)
+		return srv.(SessionsServer).GetInfobaseSessions(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.api.v1.SessionsService/GetInfobaseSessions",
+		FullMethod: "/service.api.v1.Sessions/GetInfobaseSessions",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SessionsServiceServer).GetInfobaseSessions(ctx, req.(*v1.GetInfobaseSessionsRequest))
+		return srv.(SessionsServer).GetInfobaseSessions(ctx, req.(*v1.GetInfobaseSessionsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _SessionsService_TerminateSession_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Sessions_TerminateSession_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(v1.TerminateSessionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(SessionsServiceServer).TerminateSession(ctx, in)
+		return srv.(SessionsServer).TerminateSession(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.api.v1.SessionsService/TerminateSession",
+		FullMethod: "/service.api.v1.Sessions/TerminateSession",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SessionsServiceServer).TerminateSession(ctx, req.(*v1.TerminateSessionRequest))
+		return srv.(SessionsServer).TerminateSession(ctx, req.(*v1.TerminateSessionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// SessionsService_ServiceDesc is the grpc.ServiceDesc for SessionsService service.
+// Sessions_ServiceDesc is the grpc.ServiceDesc for Sessions service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var SessionsService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "service.api.v1.SessionsService",
-	HandlerType: (*SessionsServiceServer)(nil),
+var Sessions_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "service.api.v1.Sessions",
+	HandlerType: (*SessionsServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "GetSessions",
-			Handler:    _SessionsService_GetSessions_Handler,
+			Handler:    _Sessions_GetSessions_Handler,
 		},
 		{
 			MethodName: "GetInfobaseSessions",
-			Handler:    _SessionsService_GetInfobaseSessions_Handler,
+			Handler:    _Sessions_GetInfobaseSessions_Handler,
 		},
 		{
 			MethodName: "TerminateSession",
-			Handler:    _SessionsService_TerminateSession_Handler,
+			Handler:    _Sessions_TerminateSession_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "service/api/v1/ras_api.proto",
 }
 
-// InfobasesServiceClient is the client API for InfobasesService service.
+// InfobasesClient is the client API for Infobases service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type InfobasesServiceClient interface {
+type InfobasesClient interface {
 	GetInfobases(ctx context.Context, in *v1.GetInfobasesRequest, opts ...grpc.CallOption) (*v1.GetInfobasesResponse, error)
 	GetInfobasesSummary(ctx context.Context, in *v1.GetInfobasesSummaryRequest, opts ...grpc.CallOption) (*v1.GetInfobasesSummaryResponse, error)
 	GetInfobase(ctx context.Context, in *v1.GetInfobaseInfoRequest, opts ...grpc.CallOption) (*v1.GetInfobaseInfoResponse, error)
@@ -345,81 +345,81 @@ type InfobasesServiceClient interface {
 	UpdateInfobaseSummary(ctx context.Context, in *v1.UpdateInfobaseSummaryRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
-type infobasesServiceClient struct {
+type infobasesClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewInfobasesServiceClient(cc grpc.ClientConnInterface) InfobasesServiceClient {
-	return &infobasesServiceClient{cc}
+func NewInfobasesClient(cc grpc.ClientConnInterface) InfobasesClient {
+	return &infobasesClient{cc}
 }
 
-func (c *infobasesServiceClient) GetInfobases(ctx context.Context, in *v1.GetInfobasesRequest, opts ...grpc.CallOption) (*v1.GetInfobasesResponse, error) {
+func (c *infobasesClient) GetInfobases(ctx context.Context, in *v1.GetInfobasesRequest, opts ...grpc.CallOption) (*v1.GetInfobasesResponse, error) {
 	out := new(v1.GetInfobasesResponse)
-	err := c.cc.Invoke(ctx, "/service.api.v1.InfobasesService/GetInfobases", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/service.api.v1.Infobases/GetInfobases", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *infobasesServiceClient) GetInfobasesSummary(ctx context.Context, in *v1.GetInfobasesSummaryRequest, opts ...grpc.CallOption) (*v1.GetInfobasesSummaryResponse, error) {
+func (c *infobasesClient) GetInfobasesSummary(ctx context.Context, in *v1.GetInfobasesSummaryRequest, opts ...grpc.CallOption) (*v1.GetInfobasesSummaryResponse, error) {
 	out := new(v1.GetInfobasesSummaryResponse)
-	err := c.cc.Invoke(ctx, "/service.api.v1.InfobasesService/GetInfobasesSummary", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/service.api.v1.Infobases/GetInfobasesSummary", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *infobasesServiceClient) GetInfobase(ctx context.Context, in *v1.GetInfobaseInfoRequest, opts ...grpc.CallOption) (*v1.GetInfobaseInfoResponse, error) {
+func (c *infobasesClient) GetInfobase(ctx context.Context, in *v1.GetInfobaseInfoRequest, opts ...grpc.CallOption) (*v1.GetInfobaseInfoResponse, error) {
 	out := new(v1.GetInfobaseInfoResponse)
-	err := c.cc.Invoke(ctx, "/service.api.v1.InfobasesService/GetInfobase", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/service.api.v1.Infobases/GetInfobase", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *infobasesServiceClient) CreateInfobase(ctx context.Context, in *v1.CreateInfobaseRequest, opts ...grpc.CallOption) (*v1.CreateInfobaseResponse, error) {
+func (c *infobasesClient) CreateInfobase(ctx context.Context, in *v1.CreateInfobaseRequest, opts ...grpc.CallOption) (*v1.CreateInfobaseResponse, error) {
 	out := new(v1.CreateInfobaseResponse)
-	err := c.cc.Invoke(ctx, "/service.api.v1.InfobasesService/CreateInfobase", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/service.api.v1.Infobases/CreateInfobase", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *infobasesServiceClient) UpdateInfobase(ctx context.Context, in *v1.UpdateInfobaseRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *infobasesClient) UpdateInfobase(ctx context.Context, in *v1.UpdateInfobaseRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/service.api.v1.InfobasesService/UpdateInfobase", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/service.api.v1.Infobases/UpdateInfobase", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *infobasesServiceClient) DeleteInfobase(ctx context.Context, in *v1.DropInfobaseRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *infobasesClient) DeleteInfobase(ctx context.Context, in *v1.DropInfobaseRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/service.api.v1.InfobasesService/DeleteInfobase", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/service.api.v1.Infobases/DeleteInfobase", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *infobasesServiceClient) UpdateInfobaseSummary(ctx context.Context, in *v1.UpdateInfobaseSummaryRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *infobasesClient) UpdateInfobaseSummary(ctx context.Context, in *v1.UpdateInfobaseSummaryRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/service.api.v1.InfobasesService/UpdateInfobaseSummary", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/service.api.v1.Infobases/UpdateInfobaseSummary", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// InfobasesServiceServer is the server API for InfobasesService service.
-// All implementations must embed UnimplementedInfobasesServiceServer
+// InfobasesServer is the server API for Infobases service.
+// All implementations must embed UnimplementedInfobasesServer
 // for forward compatibility
-type InfobasesServiceServer interface {
+type InfobasesServer interface {
 	GetInfobases(context.Context, *v1.GetInfobasesRequest) (*v1.GetInfobasesResponse, error)
 	GetInfobasesSummary(context.Context, *v1.GetInfobasesSummaryRequest) (*v1.GetInfobasesSummaryResponse, error)
 	GetInfobase(context.Context, *v1.GetInfobaseInfoRequest) (*v1.GetInfobaseInfoResponse, error)
@@ -427,875 +427,1227 @@ type InfobasesServiceServer interface {
 	UpdateInfobase(context.Context, *v1.UpdateInfobaseRequest) (*emptypb.Empty, error)
 	DeleteInfobase(context.Context, *v1.DropInfobaseRequest) (*emptypb.Empty, error)
 	UpdateInfobaseSummary(context.Context, *v1.UpdateInfobaseSummaryRequest) (*emptypb.Empty, error)
-	mustEmbedUnimplementedInfobasesServiceServer()
+	mustEmbedUnimplementedInfobasesServer()
 }
 
-// UnimplementedInfobasesServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedInfobasesServiceServer struct {
+// UnimplementedInfobasesServer must be embedded to have forward compatible implementations.
+type UnimplementedInfobasesServer struct {
 }
 
-func (UnimplementedInfobasesServiceServer) GetInfobases(context.Context, *v1.GetInfobasesRequest) (*v1.GetInfobasesResponse, error) {
+func (UnimplementedInfobasesServer) GetInfobases(context.Context, *v1.GetInfobasesRequest) (*v1.GetInfobasesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetInfobases not implemented")
 }
-func (UnimplementedInfobasesServiceServer) GetInfobasesSummary(context.Context, *v1.GetInfobasesSummaryRequest) (*v1.GetInfobasesSummaryResponse, error) {
+func (UnimplementedInfobasesServer) GetInfobasesSummary(context.Context, *v1.GetInfobasesSummaryRequest) (*v1.GetInfobasesSummaryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetInfobasesSummary not implemented")
 }
-func (UnimplementedInfobasesServiceServer) GetInfobase(context.Context, *v1.GetInfobaseInfoRequest) (*v1.GetInfobaseInfoResponse, error) {
+func (UnimplementedInfobasesServer) GetInfobase(context.Context, *v1.GetInfobaseInfoRequest) (*v1.GetInfobaseInfoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetInfobase not implemented")
 }
-func (UnimplementedInfobasesServiceServer) CreateInfobase(context.Context, *v1.CreateInfobaseRequest) (*v1.CreateInfobaseResponse, error) {
+func (UnimplementedInfobasesServer) CreateInfobase(context.Context, *v1.CreateInfobaseRequest) (*v1.CreateInfobaseResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateInfobase not implemented")
 }
-func (UnimplementedInfobasesServiceServer) UpdateInfobase(context.Context, *v1.UpdateInfobaseRequest) (*emptypb.Empty, error) {
+func (UnimplementedInfobasesServer) UpdateInfobase(context.Context, *v1.UpdateInfobaseRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateInfobase not implemented")
 }
-func (UnimplementedInfobasesServiceServer) DeleteInfobase(context.Context, *v1.DropInfobaseRequest) (*emptypb.Empty, error) {
+func (UnimplementedInfobasesServer) DeleteInfobase(context.Context, *v1.DropInfobaseRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteInfobase not implemented")
 }
-func (UnimplementedInfobasesServiceServer) UpdateInfobaseSummary(context.Context, *v1.UpdateInfobaseSummaryRequest) (*emptypb.Empty, error) {
+func (UnimplementedInfobasesServer) UpdateInfobaseSummary(context.Context, *v1.UpdateInfobaseSummaryRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateInfobaseSummary not implemented")
 }
-func (UnimplementedInfobasesServiceServer) mustEmbedUnimplementedInfobasesServiceServer() {}
+func (UnimplementedInfobasesServer) mustEmbedUnimplementedInfobasesServer() {}
 
-// UnsafeInfobasesServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to InfobasesServiceServer will
+// UnsafeInfobasesServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to InfobasesServer will
 // result in compilation errors.
-type UnsafeInfobasesServiceServer interface {
-	mustEmbedUnimplementedInfobasesServiceServer()
+type UnsafeInfobasesServer interface {
+	mustEmbedUnimplementedInfobasesServer()
 }
 
-func RegisterInfobasesServiceServer(s grpc.ServiceRegistrar, srv InfobasesServiceServer) {
-	s.RegisterService(&InfobasesService_ServiceDesc, srv)
+func RegisterInfobasesServer(s grpc.ServiceRegistrar, srv InfobasesServer) {
+	s.RegisterService(&Infobases_ServiceDesc, srv)
 }
 
-func _InfobasesService_GetInfobases_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Infobases_GetInfobases_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(v1.GetInfobasesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(InfobasesServiceServer).GetInfobases(ctx, in)
+		return srv.(InfobasesServer).GetInfobases(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.api.v1.InfobasesService/GetInfobases",
+		FullMethod: "/service.api.v1.Infobases/GetInfobases",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InfobasesServiceServer).GetInfobases(ctx, req.(*v1.GetInfobasesRequest))
+		return srv.(InfobasesServer).GetInfobases(ctx, req.(*v1.GetInfobasesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _InfobasesService_GetInfobasesSummary_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Infobases_GetInfobasesSummary_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(v1.GetInfobasesSummaryRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(InfobasesServiceServer).GetInfobasesSummary(ctx, in)
+		return srv.(InfobasesServer).GetInfobasesSummary(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.api.v1.InfobasesService/GetInfobasesSummary",
+		FullMethod: "/service.api.v1.Infobases/GetInfobasesSummary",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InfobasesServiceServer).GetInfobasesSummary(ctx, req.(*v1.GetInfobasesSummaryRequest))
+		return srv.(InfobasesServer).GetInfobasesSummary(ctx, req.(*v1.GetInfobasesSummaryRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _InfobasesService_GetInfobase_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Infobases_GetInfobase_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(v1.GetInfobaseInfoRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(InfobasesServiceServer).GetInfobase(ctx, in)
+		return srv.(InfobasesServer).GetInfobase(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.api.v1.InfobasesService/GetInfobase",
+		FullMethod: "/service.api.v1.Infobases/GetInfobase",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InfobasesServiceServer).GetInfobase(ctx, req.(*v1.GetInfobaseInfoRequest))
+		return srv.(InfobasesServer).GetInfobase(ctx, req.(*v1.GetInfobaseInfoRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _InfobasesService_CreateInfobase_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Infobases_CreateInfobase_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(v1.CreateInfobaseRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(InfobasesServiceServer).CreateInfobase(ctx, in)
+		return srv.(InfobasesServer).CreateInfobase(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.api.v1.InfobasesService/CreateInfobase",
+		FullMethod: "/service.api.v1.Infobases/CreateInfobase",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InfobasesServiceServer).CreateInfobase(ctx, req.(*v1.CreateInfobaseRequest))
+		return srv.(InfobasesServer).CreateInfobase(ctx, req.(*v1.CreateInfobaseRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _InfobasesService_UpdateInfobase_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Infobases_UpdateInfobase_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(v1.UpdateInfobaseRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(InfobasesServiceServer).UpdateInfobase(ctx, in)
+		return srv.(InfobasesServer).UpdateInfobase(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.api.v1.InfobasesService/UpdateInfobase",
+		FullMethod: "/service.api.v1.Infobases/UpdateInfobase",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InfobasesServiceServer).UpdateInfobase(ctx, req.(*v1.UpdateInfobaseRequest))
+		return srv.(InfobasesServer).UpdateInfobase(ctx, req.(*v1.UpdateInfobaseRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _InfobasesService_DeleteInfobase_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Infobases_DeleteInfobase_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(v1.DropInfobaseRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(InfobasesServiceServer).DeleteInfobase(ctx, in)
+		return srv.(InfobasesServer).DeleteInfobase(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.api.v1.InfobasesService/DeleteInfobase",
+		FullMethod: "/service.api.v1.Infobases/DeleteInfobase",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InfobasesServiceServer).DeleteInfobase(ctx, req.(*v1.DropInfobaseRequest))
+		return srv.(InfobasesServer).DeleteInfobase(ctx, req.(*v1.DropInfobaseRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _InfobasesService_UpdateInfobaseSummary_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Infobases_UpdateInfobaseSummary_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(v1.UpdateInfobaseSummaryRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(InfobasesServiceServer).UpdateInfobaseSummary(ctx, in)
+		return srv.(InfobasesServer).UpdateInfobaseSummary(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.api.v1.InfobasesService/UpdateInfobaseSummary",
+		FullMethod: "/service.api.v1.Infobases/UpdateInfobaseSummary",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InfobasesServiceServer).UpdateInfobaseSummary(ctx, req.(*v1.UpdateInfobaseSummaryRequest))
+		return srv.(InfobasesServer).UpdateInfobaseSummary(ctx, req.(*v1.UpdateInfobaseSummaryRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// InfobasesService_ServiceDesc is the grpc.ServiceDesc for InfobasesService service.
+// Infobases_ServiceDesc is the grpc.ServiceDesc for Infobases service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var InfobasesService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "service.api.v1.InfobasesService",
-	HandlerType: (*InfobasesServiceServer)(nil),
+var Infobases_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "service.api.v1.Infobases",
+	HandlerType: (*InfobasesServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "GetInfobases",
-			Handler:    _InfobasesService_GetInfobases_Handler,
+			Handler:    _Infobases_GetInfobases_Handler,
 		},
 		{
 			MethodName: "GetInfobasesSummary",
-			Handler:    _InfobasesService_GetInfobasesSummary_Handler,
+			Handler:    _Infobases_GetInfobasesSummary_Handler,
 		},
 		{
 			MethodName: "GetInfobase",
-			Handler:    _InfobasesService_GetInfobase_Handler,
+			Handler:    _Infobases_GetInfobase_Handler,
 		},
 		{
 			MethodName: "CreateInfobase",
-			Handler:    _InfobasesService_CreateInfobase_Handler,
+			Handler:    _Infobases_CreateInfobase_Handler,
 		},
 		{
 			MethodName: "UpdateInfobase",
-			Handler:    _InfobasesService_UpdateInfobase_Handler,
+			Handler:    _Infobases_UpdateInfobase_Handler,
 		},
 		{
 			MethodName: "DeleteInfobase",
-			Handler:    _InfobasesService_DeleteInfobase_Handler,
+			Handler:    _Infobases_DeleteInfobase_Handler,
 		},
 		{
 			MethodName: "UpdateInfobaseSummary",
-			Handler:    _InfobasesService_UpdateInfobaseSummary_Handler,
+			Handler:    _Infobases_UpdateInfobaseSummary_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "service/api/v1/ras_api.proto",
 }
 
-// ClustersServiceClient is the client API for ClustersService service.
+// ClustersClient is the client API for Clusters service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type ClustersServiceClient interface {
+type ClustersClient interface {
 	GetClusters(ctx context.Context, in *v1.GetClustersRequest, opts ...grpc.CallOption) (*v1.GetClustersResponse, error)
 	GetClusterInfo(ctx context.Context, in *v1.GetClusterInfoRequest, opts ...grpc.CallOption) (*v1.GetClusterInfoResponse, error)
 	RegCluster(ctx context.Context, in *v1.RegClusterRequest, opts ...grpc.CallOption) (*v1.RegClusterResponse, error)
 	UnregCluster(ctx context.Context, in *v1.UnregClusterRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
-type clustersServiceClient struct {
+type clustersClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewClustersServiceClient(cc grpc.ClientConnInterface) ClustersServiceClient {
-	return &clustersServiceClient{cc}
+func NewClustersClient(cc grpc.ClientConnInterface) ClustersClient {
+	return &clustersClient{cc}
 }
 
-func (c *clustersServiceClient) GetClusters(ctx context.Context, in *v1.GetClustersRequest, opts ...grpc.CallOption) (*v1.GetClustersResponse, error) {
+func (c *clustersClient) GetClusters(ctx context.Context, in *v1.GetClustersRequest, opts ...grpc.CallOption) (*v1.GetClustersResponse, error) {
 	out := new(v1.GetClustersResponse)
-	err := c.cc.Invoke(ctx, "/service.api.v1.ClustersService/GetClusters", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/service.api.v1.Clusters/GetClusters", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *clustersServiceClient) GetClusterInfo(ctx context.Context, in *v1.GetClusterInfoRequest, opts ...grpc.CallOption) (*v1.GetClusterInfoResponse, error) {
+func (c *clustersClient) GetClusterInfo(ctx context.Context, in *v1.GetClusterInfoRequest, opts ...grpc.CallOption) (*v1.GetClusterInfoResponse, error) {
 	out := new(v1.GetClusterInfoResponse)
-	err := c.cc.Invoke(ctx, "/service.api.v1.ClustersService/GetClusterInfo", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/service.api.v1.Clusters/GetClusterInfo", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *clustersServiceClient) RegCluster(ctx context.Context, in *v1.RegClusterRequest, opts ...grpc.CallOption) (*v1.RegClusterResponse, error) {
+func (c *clustersClient) RegCluster(ctx context.Context, in *v1.RegClusterRequest, opts ...grpc.CallOption) (*v1.RegClusterResponse, error) {
 	out := new(v1.RegClusterResponse)
-	err := c.cc.Invoke(ctx, "/service.api.v1.ClustersService/RegCluster", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/service.api.v1.Clusters/RegCluster", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *clustersServiceClient) UnregCluster(ctx context.Context, in *v1.UnregClusterRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *clustersClient) UnregCluster(ctx context.Context, in *v1.UnregClusterRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/service.api.v1.ClustersService/UnregCluster", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/service.api.v1.Clusters/UnregCluster", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// ClustersServiceServer is the server API for ClustersService service.
-// All implementations must embed UnimplementedClustersServiceServer
+// ClustersServer is the server API for Clusters service.
+// All implementations must embed UnimplementedClustersServer
 // for forward compatibility
-type ClustersServiceServer interface {
+type ClustersServer interface {
 	GetClusters(context.Context, *v1.GetClustersRequest) (*v1.GetClustersResponse, error)
 	GetClusterInfo(context.Context, *v1.GetClusterInfoRequest) (*v1.GetClusterInfoResponse, error)
 	RegCluster(context.Context, *v1.RegClusterRequest) (*v1.RegClusterResponse, error)
 	UnregCluster(context.Context, *v1.UnregClusterRequest) (*emptypb.Empty, error)
-	mustEmbedUnimplementedClustersServiceServer()
+	mustEmbedUnimplementedClustersServer()
 }
 
-// UnimplementedClustersServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedClustersServiceServer struct {
+// UnimplementedClustersServer must be embedded to have forward compatible implementations.
+type UnimplementedClustersServer struct {
 }
 
-func (UnimplementedClustersServiceServer) GetClusters(context.Context, *v1.GetClustersRequest) (*v1.GetClustersResponse, error) {
+func (UnimplementedClustersServer) GetClusters(context.Context, *v1.GetClustersRequest) (*v1.GetClustersResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetClusters not implemented")
 }
-func (UnimplementedClustersServiceServer) GetClusterInfo(context.Context, *v1.GetClusterInfoRequest) (*v1.GetClusterInfoResponse, error) {
+func (UnimplementedClustersServer) GetClusterInfo(context.Context, *v1.GetClusterInfoRequest) (*v1.GetClusterInfoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetClusterInfo not implemented")
 }
-func (UnimplementedClustersServiceServer) RegCluster(context.Context, *v1.RegClusterRequest) (*v1.RegClusterResponse, error) {
+func (UnimplementedClustersServer) RegCluster(context.Context, *v1.RegClusterRequest) (*v1.RegClusterResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RegCluster not implemented")
 }
-func (UnimplementedClustersServiceServer) UnregCluster(context.Context, *v1.UnregClusterRequest) (*emptypb.Empty, error) {
+func (UnimplementedClustersServer) UnregCluster(context.Context, *v1.UnregClusterRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UnregCluster not implemented")
 }
-func (UnimplementedClustersServiceServer) mustEmbedUnimplementedClustersServiceServer() {}
+func (UnimplementedClustersServer) mustEmbedUnimplementedClustersServer() {}
 
-// UnsafeClustersServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to ClustersServiceServer will
+// UnsafeClustersServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to ClustersServer will
 // result in compilation errors.
-type UnsafeClustersServiceServer interface {
-	mustEmbedUnimplementedClustersServiceServer()
+type UnsafeClustersServer interface {
+	mustEmbedUnimplementedClustersServer()
 }
 
-func RegisterClustersServiceServer(s grpc.ServiceRegistrar, srv ClustersServiceServer) {
-	s.RegisterService(&ClustersService_ServiceDesc, srv)
+func RegisterClustersServer(s grpc.ServiceRegistrar, srv ClustersServer) {
+	s.RegisterService(&Clusters_ServiceDesc, srv)
 }
 
-func _ClustersService_GetClusters_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Clusters_GetClusters_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(v1.GetClustersRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ClustersServiceServer).GetClusters(ctx, in)
+		return srv.(ClustersServer).GetClusters(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.api.v1.ClustersService/GetClusters",
+		FullMethod: "/service.api.v1.Clusters/GetClusters",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ClustersServiceServer).GetClusters(ctx, req.(*v1.GetClustersRequest))
+		return srv.(ClustersServer).GetClusters(ctx, req.(*v1.GetClustersRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ClustersService_GetClusterInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Clusters_GetClusterInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(v1.GetClusterInfoRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ClustersServiceServer).GetClusterInfo(ctx, in)
+		return srv.(ClustersServer).GetClusterInfo(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.api.v1.ClustersService/GetClusterInfo",
+		FullMethod: "/service.api.v1.Clusters/GetClusterInfo",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ClustersServiceServer).GetClusterInfo(ctx, req.(*v1.GetClusterInfoRequest))
+		return srv.(ClustersServer).GetClusterInfo(ctx, req.(*v1.GetClusterInfoRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ClustersService_RegCluster_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Clusters_RegCluster_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(v1.RegClusterRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ClustersServiceServer).RegCluster(ctx, in)
+		return srv.(ClustersServer).RegCluster(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.api.v1.ClustersService/RegCluster",
+		FullMethod: "/service.api.v1.Clusters/RegCluster",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ClustersServiceServer).RegCluster(ctx, req.(*v1.RegClusterRequest))
+		return srv.(ClustersServer).RegCluster(ctx, req.(*v1.RegClusterRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ClustersService_UnregCluster_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Clusters_UnregCluster_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(v1.UnregClusterRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ClustersServiceServer).UnregCluster(ctx, in)
+		return srv.(ClustersServer).UnregCluster(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.api.v1.ClustersService/UnregCluster",
+		FullMethod: "/service.api.v1.Clusters/UnregCluster",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ClustersServiceServer).UnregCluster(ctx, req.(*v1.UnregClusterRequest))
+		return srv.(ClustersServer).UnregCluster(ctx, req.(*v1.UnregClusterRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// ClustersService_ServiceDesc is the grpc.ServiceDesc for ClustersService service.
+// Clusters_ServiceDesc is the grpc.ServiceDesc for Clusters service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var ClustersService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "service.api.v1.ClustersService",
-	HandlerType: (*ClustersServiceServer)(nil),
+var Clusters_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "service.api.v1.Clusters",
+	HandlerType: (*ClustersServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "GetClusters",
-			Handler:    _ClustersService_GetClusters_Handler,
+			Handler:    _Clusters_GetClusters_Handler,
 		},
 		{
 			MethodName: "GetClusterInfo",
-			Handler:    _ClustersService_GetClusterInfo_Handler,
+			Handler:    _Clusters_GetClusterInfo_Handler,
 		},
 		{
 			MethodName: "RegCluster",
-			Handler:    _ClustersService_RegCluster_Handler,
+			Handler:    _Clusters_RegCluster_Handler,
 		},
 		{
 			MethodName: "UnregCluster",
-			Handler:    _ClustersService_UnregCluster_Handler,
+			Handler:    _Clusters_UnregCluster_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "service/api/v1/ras_api.proto",
 }
 
-// ManagersServiceClient is the client API for ManagersService service.
+// ManagersClient is the client API for Managers service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type ManagersServiceClient interface {
+type ManagersClient interface {
 	GetClusterManagers(ctx context.Context, in *v1.GetClusterManagersRequest, opts ...grpc.CallOption) (*v1.GetClusterManagersResponse, error)
 	GetClusterManagerInfo(ctx context.Context, in *v1.GetClusterManagerInfoRequest, opts ...grpc.CallOption) (*v1.GetClusterManagerInfoResponse, error)
 }
 
-type managersServiceClient struct {
+type managersClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewManagersServiceClient(cc grpc.ClientConnInterface) ManagersServiceClient {
-	return &managersServiceClient{cc}
+func NewManagersClient(cc grpc.ClientConnInterface) ManagersClient {
+	return &managersClient{cc}
 }
 
-func (c *managersServiceClient) GetClusterManagers(ctx context.Context, in *v1.GetClusterManagersRequest, opts ...grpc.CallOption) (*v1.GetClusterManagersResponse, error) {
+func (c *managersClient) GetClusterManagers(ctx context.Context, in *v1.GetClusterManagersRequest, opts ...grpc.CallOption) (*v1.GetClusterManagersResponse, error) {
 	out := new(v1.GetClusterManagersResponse)
-	err := c.cc.Invoke(ctx, "/service.api.v1.ManagersService/GetClusterManagers", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/service.api.v1.Managers/GetClusterManagers", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *managersServiceClient) GetClusterManagerInfo(ctx context.Context, in *v1.GetClusterManagerInfoRequest, opts ...grpc.CallOption) (*v1.GetClusterManagerInfoResponse, error) {
+func (c *managersClient) GetClusterManagerInfo(ctx context.Context, in *v1.GetClusterManagerInfoRequest, opts ...grpc.CallOption) (*v1.GetClusterManagerInfoResponse, error) {
 	out := new(v1.GetClusterManagerInfoResponse)
-	err := c.cc.Invoke(ctx, "/service.api.v1.ManagersService/GetClusterManagerInfo", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/service.api.v1.Managers/GetClusterManagerInfo", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// ManagersServiceServer is the server API for ManagersService service.
-// All implementations must embed UnimplementedManagersServiceServer
+// ManagersServer is the server API for Managers service.
+// All implementations must embed UnimplementedManagersServer
 // for forward compatibility
-type ManagersServiceServer interface {
+type ManagersServer interface {
 	GetClusterManagers(context.Context, *v1.GetClusterManagersRequest) (*v1.GetClusterManagersResponse, error)
 	GetClusterManagerInfo(context.Context, *v1.GetClusterManagerInfoRequest) (*v1.GetClusterManagerInfoResponse, error)
-	mustEmbedUnimplementedManagersServiceServer()
+	mustEmbedUnimplementedManagersServer()
 }
 
-// UnimplementedManagersServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedManagersServiceServer struct {
+// UnimplementedManagersServer must be embedded to have forward compatible implementations.
+type UnimplementedManagersServer struct {
 }
 
-func (UnimplementedManagersServiceServer) GetClusterManagers(context.Context, *v1.GetClusterManagersRequest) (*v1.GetClusterManagersResponse, error) {
+func (UnimplementedManagersServer) GetClusterManagers(context.Context, *v1.GetClusterManagersRequest) (*v1.GetClusterManagersResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetClusterManagers not implemented")
 }
-func (UnimplementedManagersServiceServer) GetClusterManagerInfo(context.Context, *v1.GetClusterManagerInfoRequest) (*v1.GetClusterManagerInfoResponse, error) {
+func (UnimplementedManagersServer) GetClusterManagerInfo(context.Context, *v1.GetClusterManagerInfoRequest) (*v1.GetClusterManagerInfoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetClusterManagerInfo not implemented")
 }
-func (UnimplementedManagersServiceServer) mustEmbedUnimplementedManagersServiceServer() {}
+func (UnimplementedManagersServer) mustEmbedUnimplementedManagersServer() {}
 
-// UnsafeManagersServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to ManagersServiceServer will
+// UnsafeManagersServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to ManagersServer will
 // result in compilation errors.
-type UnsafeManagersServiceServer interface {
-	mustEmbedUnimplementedManagersServiceServer()
+type UnsafeManagersServer interface {
+	mustEmbedUnimplementedManagersServer()
 }
 
-func RegisterManagersServiceServer(s grpc.ServiceRegistrar, srv ManagersServiceServer) {
-	s.RegisterService(&ManagersService_ServiceDesc, srv)
+func RegisterManagersServer(s grpc.ServiceRegistrar, srv ManagersServer) {
+	s.RegisterService(&Managers_ServiceDesc, srv)
 }
 
-func _ManagersService_GetClusterManagers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Managers_GetClusterManagers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(v1.GetClusterManagersRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ManagersServiceServer).GetClusterManagers(ctx, in)
+		return srv.(ManagersServer).GetClusterManagers(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.api.v1.ManagersService/GetClusterManagers",
+		FullMethod: "/service.api.v1.Managers/GetClusterManagers",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ManagersServiceServer).GetClusterManagers(ctx, req.(*v1.GetClusterManagersRequest))
+		return srv.(ManagersServer).GetClusterManagers(ctx, req.(*v1.GetClusterManagersRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ManagersService_GetClusterManagerInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Managers_GetClusterManagerInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(v1.GetClusterManagerInfoRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ManagersServiceServer).GetClusterManagerInfo(ctx, in)
+		return srv.(ManagersServer).GetClusterManagerInfo(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.api.v1.ManagersService/GetClusterManagerInfo",
+		FullMethod: "/service.api.v1.Managers/GetClusterManagerInfo",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ManagersServiceServer).GetClusterManagerInfo(ctx, req.(*v1.GetClusterManagerInfoRequest))
+		return srv.(ManagersServer).GetClusterManagerInfo(ctx, req.(*v1.GetClusterManagerInfoRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// ManagersService_ServiceDesc is the grpc.ServiceDesc for ManagersService service.
+// Managers_ServiceDesc is the grpc.ServiceDesc for Managers service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var ManagersService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "service.api.v1.ManagersService",
-	HandlerType: (*ManagersServiceServer)(nil),
+var Managers_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "service.api.v1.Managers",
+	HandlerType: (*ManagersServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "GetClusterManagers",
-			Handler:    _ManagersService_GetClusterManagers_Handler,
+			Handler:    _Managers_GetClusterManagers_Handler,
 		},
 		{
 			MethodName: "GetClusterManagerInfo",
-			Handler:    _ManagersService_GetClusterManagerInfo_Handler,
+			Handler:    _Managers_GetClusterManagerInfo_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "service/api/v1/ras_api.proto",
 }
 
-// ProcessesServiceClient is the client API for ProcessesService service.
+// ProcessesClient is the client API for Processes service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type ProcessesServiceClient interface {
+type ProcessesClient interface {
 	GetWorkingProcesses(ctx context.Context, in *v1.GetWorkingProcessesRequest, opts ...grpc.CallOption) (*v1.GetWorkingProcessesResponse, error)
 	GetServerWorkingProcesses(ctx context.Context, in *v1.GetServerWorkingProcessesRequest, opts ...grpc.CallOption) (*v1.GetServerWorkingProcessesResponse, error)
 	GetWorkingProcessInfo(ctx context.Context, in *v1.GetWorkingProcessInfoRequest, opts ...grpc.CallOption) (*v1.GetWorkingProcessInfoResponse, error)
 }
 
-type processesServiceClient struct {
+type processesClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewProcessesServiceClient(cc grpc.ClientConnInterface) ProcessesServiceClient {
-	return &processesServiceClient{cc}
+func NewProcessesClient(cc grpc.ClientConnInterface) ProcessesClient {
+	return &processesClient{cc}
 }
 
-func (c *processesServiceClient) GetWorkingProcesses(ctx context.Context, in *v1.GetWorkingProcessesRequest, opts ...grpc.CallOption) (*v1.GetWorkingProcessesResponse, error) {
+func (c *processesClient) GetWorkingProcesses(ctx context.Context, in *v1.GetWorkingProcessesRequest, opts ...grpc.CallOption) (*v1.GetWorkingProcessesResponse, error) {
 	out := new(v1.GetWorkingProcessesResponse)
-	err := c.cc.Invoke(ctx, "/service.api.v1.ProcessesService/GetWorkingProcesses", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/service.api.v1.Processes/GetWorkingProcesses", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *processesServiceClient) GetServerWorkingProcesses(ctx context.Context, in *v1.GetServerWorkingProcessesRequest, opts ...grpc.CallOption) (*v1.GetServerWorkingProcessesResponse, error) {
+func (c *processesClient) GetServerWorkingProcesses(ctx context.Context, in *v1.GetServerWorkingProcessesRequest, opts ...grpc.CallOption) (*v1.GetServerWorkingProcessesResponse, error) {
 	out := new(v1.GetServerWorkingProcessesResponse)
-	err := c.cc.Invoke(ctx, "/service.api.v1.ProcessesService/GetServerWorkingProcesses", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/service.api.v1.Processes/GetServerWorkingProcesses", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *processesServiceClient) GetWorkingProcessInfo(ctx context.Context, in *v1.GetWorkingProcessInfoRequest, opts ...grpc.CallOption) (*v1.GetWorkingProcessInfoResponse, error) {
+func (c *processesClient) GetWorkingProcessInfo(ctx context.Context, in *v1.GetWorkingProcessInfoRequest, opts ...grpc.CallOption) (*v1.GetWorkingProcessInfoResponse, error) {
 	out := new(v1.GetWorkingProcessInfoResponse)
-	err := c.cc.Invoke(ctx, "/service.api.v1.ProcessesService/GetWorkingProcessInfo", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/service.api.v1.Processes/GetWorkingProcessInfo", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// ProcessesServiceServer is the server API for ProcessesService service.
-// All implementations must embed UnimplementedProcessesServiceServer
+// ProcessesServer is the server API for Processes service.
+// All implementations must embed UnimplementedProcessesServer
 // for forward compatibility
-type ProcessesServiceServer interface {
+type ProcessesServer interface {
 	GetWorkingProcesses(context.Context, *v1.GetWorkingProcessesRequest) (*v1.GetWorkingProcessesResponse, error)
 	GetServerWorkingProcesses(context.Context, *v1.GetServerWorkingProcessesRequest) (*v1.GetServerWorkingProcessesResponse, error)
 	GetWorkingProcessInfo(context.Context, *v1.GetWorkingProcessInfoRequest) (*v1.GetWorkingProcessInfoResponse, error)
-	mustEmbedUnimplementedProcessesServiceServer()
+	mustEmbedUnimplementedProcessesServer()
 }
 
-// UnimplementedProcessesServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedProcessesServiceServer struct {
+// UnimplementedProcessesServer must be embedded to have forward compatible implementations.
+type UnimplementedProcessesServer struct {
 }
 
-func (UnimplementedProcessesServiceServer) GetWorkingProcesses(context.Context, *v1.GetWorkingProcessesRequest) (*v1.GetWorkingProcessesResponse, error) {
+func (UnimplementedProcessesServer) GetWorkingProcesses(context.Context, *v1.GetWorkingProcessesRequest) (*v1.GetWorkingProcessesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetWorkingProcesses not implemented")
 }
-func (UnimplementedProcessesServiceServer) GetServerWorkingProcesses(context.Context, *v1.GetServerWorkingProcessesRequest) (*v1.GetServerWorkingProcessesResponse, error) {
+func (UnimplementedProcessesServer) GetServerWorkingProcesses(context.Context, *v1.GetServerWorkingProcessesRequest) (*v1.GetServerWorkingProcessesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetServerWorkingProcesses not implemented")
 }
-func (UnimplementedProcessesServiceServer) GetWorkingProcessInfo(context.Context, *v1.GetWorkingProcessInfoRequest) (*v1.GetWorkingProcessInfoResponse, error) {
+func (UnimplementedProcessesServer) GetWorkingProcessInfo(context.Context, *v1.GetWorkingProcessInfoRequest) (*v1.GetWorkingProcessInfoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetWorkingProcessInfo not implemented")
 }
-func (UnimplementedProcessesServiceServer) mustEmbedUnimplementedProcessesServiceServer() {}
+func (UnimplementedProcessesServer) mustEmbedUnimplementedProcessesServer() {}
 
-// UnsafeProcessesServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to ProcessesServiceServer will
+// UnsafeProcessesServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to ProcessesServer will
 // result in compilation errors.
-type UnsafeProcessesServiceServer interface {
-	mustEmbedUnimplementedProcessesServiceServer()
+type UnsafeProcessesServer interface {
+	mustEmbedUnimplementedProcessesServer()
 }
 
-func RegisterProcessesServiceServer(s grpc.ServiceRegistrar, srv ProcessesServiceServer) {
-	s.RegisterService(&ProcessesService_ServiceDesc, srv)
+func RegisterProcessesServer(s grpc.ServiceRegistrar, srv ProcessesServer) {
+	s.RegisterService(&Processes_ServiceDesc, srv)
 }
 
-func _ProcessesService_GetWorkingProcesses_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Processes_GetWorkingProcesses_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(v1.GetWorkingProcessesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ProcessesServiceServer).GetWorkingProcesses(ctx, in)
+		return srv.(ProcessesServer).GetWorkingProcesses(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.api.v1.ProcessesService/GetWorkingProcesses",
+		FullMethod: "/service.api.v1.Processes/GetWorkingProcesses",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProcessesServiceServer).GetWorkingProcesses(ctx, req.(*v1.GetWorkingProcessesRequest))
+		return srv.(ProcessesServer).GetWorkingProcesses(ctx, req.(*v1.GetWorkingProcessesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ProcessesService_GetServerWorkingProcesses_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Processes_GetServerWorkingProcesses_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(v1.GetServerWorkingProcessesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ProcessesServiceServer).GetServerWorkingProcesses(ctx, in)
+		return srv.(ProcessesServer).GetServerWorkingProcesses(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.api.v1.ProcessesService/GetServerWorkingProcesses",
+		FullMethod: "/service.api.v1.Processes/GetServerWorkingProcesses",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProcessesServiceServer).GetServerWorkingProcesses(ctx, req.(*v1.GetServerWorkingProcessesRequest))
+		return srv.(ProcessesServer).GetServerWorkingProcesses(ctx, req.(*v1.GetServerWorkingProcessesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ProcessesService_GetWorkingProcessInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Processes_GetWorkingProcessInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(v1.GetWorkingProcessInfoRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ProcessesServiceServer).GetWorkingProcessInfo(ctx, in)
+		return srv.(ProcessesServer).GetWorkingProcessInfo(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.api.v1.ProcessesService/GetWorkingProcessInfo",
+		FullMethod: "/service.api.v1.Processes/GetWorkingProcessInfo",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProcessesServiceServer).GetWorkingProcessInfo(ctx, req.(*v1.GetWorkingProcessInfoRequest))
+		return srv.(ProcessesServer).GetWorkingProcessInfo(ctx, req.(*v1.GetWorkingProcessInfoRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// ProcessesService_ServiceDesc is the grpc.ServiceDesc for ProcessesService service.
+// Processes_ServiceDesc is the grpc.ServiceDesc for Processes service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var ProcessesService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "service.api.v1.ProcessesService",
-	HandlerType: (*ProcessesServiceServer)(nil),
+var Processes_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "service.api.v1.Processes",
+	HandlerType: (*ProcessesServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "GetWorkingProcesses",
-			Handler:    _ProcessesService_GetWorkingProcesses_Handler,
+			Handler:    _Processes_GetWorkingProcesses_Handler,
 		},
 		{
 			MethodName: "GetServerWorkingProcesses",
-			Handler:    _ProcessesService_GetServerWorkingProcesses_Handler,
+			Handler:    _Processes_GetServerWorkingProcesses_Handler,
 		},
 		{
 			MethodName: "GetWorkingProcessInfo",
-			Handler:    _ProcessesService_GetWorkingProcessInfo_Handler,
+			Handler:    _Processes_GetWorkingProcessInfo_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "service/api/v1/ras_api.proto",
 }
 
-// ServersServiceClient is the client API for ServersService service.
+// ServersClient is the client API for Servers service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type ServersServiceClient interface {
+type ServersClient interface {
 	GetWorkingServers(ctx context.Context, in *v1.GetWorkingServersRequest, opts ...grpc.CallOption) (*v1.GetWorkingServersResponse, error)
 	GetWorkingServerInfo(ctx context.Context, in *v1.GetWorkingServerInfoRequest, opts ...grpc.CallOption) (*v1.GetWorkingServerInfoResponse, error)
 	AddWorkingServer(ctx context.Context, in *v1.AddWorkingServerRequest, opts ...grpc.CallOption) (*v1.AddWorkingServerResponse, error)
 	DeleteWorkingServer(ctx context.Context, in *v1.DeleteWorkingServerRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
-type serversServiceClient struct {
+type serversClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewServersServiceClient(cc grpc.ClientConnInterface) ServersServiceClient {
-	return &serversServiceClient{cc}
+func NewServersClient(cc grpc.ClientConnInterface) ServersClient {
+	return &serversClient{cc}
 }
 
-func (c *serversServiceClient) GetWorkingServers(ctx context.Context, in *v1.GetWorkingServersRequest, opts ...grpc.CallOption) (*v1.GetWorkingServersResponse, error) {
+func (c *serversClient) GetWorkingServers(ctx context.Context, in *v1.GetWorkingServersRequest, opts ...grpc.CallOption) (*v1.GetWorkingServersResponse, error) {
 	out := new(v1.GetWorkingServersResponse)
-	err := c.cc.Invoke(ctx, "/service.api.v1.ServersService/GetWorkingServers", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/service.api.v1.Servers/GetWorkingServers", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *serversServiceClient) GetWorkingServerInfo(ctx context.Context, in *v1.GetWorkingServerInfoRequest, opts ...grpc.CallOption) (*v1.GetWorkingServerInfoResponse, error) {
+func (c *serversClient) GetWorkingServerInfo(ctx context.Context, in *v1.GetWorkingServerInfoRequest, opts ...grpc.CallOption) (*v1.GetWorkingServerInfoResponse, error) {
 	out := new(v1.GetWorkingServerInfoResponse)
-	err := c.cc.Invoke(ctx, "/service.api.v1.ServersService/GetWorkingServerInfo", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/service.api.v1.Servers/GetWorkingServerInfo", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *serversServiceClient) AddWorkingServer(ctx context.Context, in *v1.AddWorkingServerRequest, opts ...grpc.CallOption) (*v1.AddWorkingServerResponse, error) {
+func (c *serversClient) AddWorkingServer(ctx context.Context, in *v1.AddWorkingServerRequest, opts ...grpc.CallOption) (*v1.AddWorkingServerResponse, error) {
 	out := new(v1.AddWorkingServerResponse)
-	err := c.cc.Invoke(ctx, "/service.api.v1.ServersService/AddWorkingServer", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/service.api.v1.Servers/AddWorkingServer", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *serversServiceClient) DeleteWorkingServer(ctx context.Context, in *v1.DeleteWorkingServerRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *serversClient) DeleteWorkingServer(ctx context.Context, in *v1.DeleteWorkingServerRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/service.api.v1.ServersService/DeleteWorkingServer", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/service.api.v1.Servers/DeleteWorkingServer", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// ServersServiceServer is the server API for ServersService service.
-// All implementations must embed UnimplementedServersServiceServer
+// ServersServer is the server API for Servers service.
+// All implementations must embed UnimplementedServersServer
 // for forward compatibility
-type ServersServiceServer interface {
+type ServersServer interface {
 	GetWorkingServers(context.Context, *v1.GetWorkingServersRequest) (*v1.GetWorkingServersResponse, error)
 	GetWorkingServerInfo(context.Context, *v1.GetWorkingServerInfoRequest) (*v1.GetWorkingServerInfoResponse, error)
 	AddWorkingServer(context.Context, *v1.AddWorkingServerRequest) (*v1.AddWorkingServerResponse, error)
 	DeleteWorkingServer(context.Context, *v1.DeleteWorkingServerRequest) (*emptypb.Empty, error)
-	mustEmbedUnimplementedServersServiceServer()
+	mustEmbedUnimplementedServersServer()
 }
 
-// UnimplementedServersServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedServersServiceServer struct {
+// UnimplementedServersServer must be embedded to have forward compatible implementations.
+type UnimplementedServersServer struct {
 }
 
-func (UnimplementedServersServiceServer) GetWorkingServers(context.Context, *v1.GetWorkingServersRequest) (*v1.GetWorkingServersResponse, error) {
+func (UnimplementedServersServer) GetWorkingServers(context.Context, *v1.GetWorkingServersRequest) (*v1.GetWorkingServersResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetWorkingServers not implemented")
 }
-func (UnimplementedServersServiceServer) GetWorkingServerInfo(context.Context, *v1.GetWorkingServerInfoRequest) (*v1.GetWorkingServerInfoResponse, error) {
+func (UnimplementedServersServer) GetWorkingServerInfo(context.Context, *v1.GetWorkingServerInfoRequest) (*v1.GetWorkingServerInfoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetWorkingServerInfo not implemented")
 }
-func (UnimplementedServersServiceServer) AddWorkingServer(context.Context, *v1.AddWorkingServerRequest) (*v1.AddWorkingServerResponse, error) {
+func (UnimplementedServersServer) AddWorkingServer(context.Context, *v1.AddWorkingServerRequest) (*v1.AddWorkingServerResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddWorkingServer not implemented")
 }
-func (UnimplementedServersServiceServer) DeleteWorkingServer(context.Context, *v1.DeleteWorkingServerRequest) (*emptypb.Empty, error) {
+func (UnimplementedServersServer) DeleteWorkingServer(context.Context, *v1.DeleteWorkingServerRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteWorkingServer not implemented")
 }
-func (UnimplementedServersServiceServer) mustEmbedUnimplementedServersServiceServer() {}
+func (UnimplementedServersServer) mustEmbedUnimplementedServersServer() {}
 
-// UnsafeServersServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to ServersServiceServer will
+// UnsafeServersServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to ServersServer will
 // result in compilation errors.
-type UnsafeServersServiceServer interface {
-	mustEmbedUnimplementedServersServiceServer()
+type UnsafeServersServer interface {
+	mustEmbedUnimplementedServersServer()
 }
 
-func RegisterServersServiceServer(s grpc.ServiceRegistrar, srv ServersServiceServer) {
-	s.RegisterService(&ServersService_ServiceDesc, srv)
+func RegisterServersServer(s grpc.ServiceRegistrar, srv ServersServer) {
+	s.RegisterService(&Servers_ServiceDesc, srv)
 }
 
-func _ServersService_GetWorkingServers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Servers_GetWorkingServers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(v1.GetWorkingServersRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ServersServiceServer).GetWorkingServers(ctx, in)
+		return srv.(ServersServer).GetWorkingServers(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.api.v1.ServersService/GetWorkingServers",
+		FullMethod: "/service.api.v1.Servers/GetWorkingServers",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServersServiceServer).GetWorkingServers(ctx, req.(*v1.GetWorkingServersRequest))
+		return srv.(ServersServer).GetWorkingServers(ctx, req.(*v1.GetWorkingServersRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ServersService_GetWorkingServerInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Servers_GetWorkingServerInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(v1.GetWorkingServerInfoRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ServersServiceServer).GetWorkingServerInfo(ctx, in)
+		return srv.(ServersServer).GetWorkingServerInfo(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.api.v1.ServersService/GetWorkingServerInfo",
+		FullMethod: "/service.api.v1.Servers/GetWorkingServerInfo",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServersServiceServer).GetWorkingServerInfo(ctx, req.(*v1.GetWorkingServerInfoRequest))
+		return srv.(ServersServer).GetWorkingServerInfo(ctx, req.(*v1.GetWorkingServerInfoRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ServersService_AddWorkingServer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Servers_AddWorkingServer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(v1.AddWorkingServerRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ServersServiceServer).AddWorkingServer(ctx, in)
+		return srv.(ServersServer).AddWorkingServer(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.api.v1.ServersService/AddWorkingServer",
+		FullMethod: "/service.api.v1.Servers/AddWorkingServer",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServersServiceServer).AddWorkingServer(ctx, req.(*v1.AddWorkingServerRequest))
+		return srv.(ServersServer).AddWorkingServer(ctx, req.(*v1.AddWorkingServerRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ServersService_DeleteWorkingServer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Servers_DeleteWorkingServer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(v1.DeleteWorkingServerRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ServersServiceServer).DeleteWorkingServer(ctx, in)
+		return srv.(ServersServer).DeleteWorkingServer(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.api.v1.ServersService/DeleteWorkingServer",
+		FullMethod: "/service.api.v1.Servers/DeleteWorkingServer",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServersServiceServer).DeleteWorkingServer(ctx, req.(*v1.DeleteWorkingServerRequest))
+		return srv.(ServersServer).DeleteWorkingServer(ctx, req.(*v1.DeleteWorkingServerRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// ServersService_ServiceDesc is the grpc.ServiceDesc for ServersService service.
+// Servers_ServiceDesc is the grpc.ServiceDesc for Servers service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var ServersService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "service.api.v1.ServersService",
-	HandlerType: (*ServersServiceServer)(nil),
+var Servers_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "service.api.v1.Servers",
+	HandlerType: (*ServersServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "GetWorkingServers",
-			Handler:    _ServersService_GetWorkingServers_Handler,
+			Handler:    _Servers_GetWorkingServers_Handler,
 		},
 		{
 			MethodName: "GetWorkingServerInfo",
-			Handler:    _ServersService_GetWorkingServerInfo_Handler,
+			Handler:    _Servers_GetWorkingServerInfo_Handler,
 		},
 		{
 			MethodName: "AddWorkingServer",
-			Handler:    _ServersService_AddWorkingServer_Handler,
+			Handler:    _Servers_AddWorkingServer_Handler,
 		},
 		{
 			MethodName: "DeleteWorkingServer",
-			Handler:    _ServersService_DeleteWorkingServer_Handler,
+			Handler:    _Servers_DeleteWorkingServer_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "service/api/v1/ras_api.proto",
+}
+
+// ConnectionsClient is the client API for Connections service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type ConnectionsClient interface {
+	GetConnections(ctx context.Context, in *v1.GetConnectionsRequest, opts ...grpc.CallOption) (*v1.GetConnectionsResponse, error)
+	GetInfobaseConnections(ctx context.Context, in *v1.GetInfobaseConnectionsRequest, opts ...grpc.CallOption) (*v1.GetInfobaseConnectionsResponse, error)
+	DisconnectConnection(ctx context.Context, in *v1.DisconnectConnectionRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+}
+
+type connectionsClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewConnectionsClient(cc grpc.ClientConnInterface) ConnectionsClient {
+	return &connectionsClient{cc}
+}
+
+func (c *connectionsClient) GetConnections(ctx context.Context, in *v1.GetConnectionsRequest, opts ...grpc.CallOption) (*v1.GetConnectionsResponse, error) {
+	out := new(v1.GetConnectionsResponse)
+	err := c.cc.Invoke(ctx, "/service.api.v1.Connections/GetConnections", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *connectionsClient) GetInfobaseConnections(ctx context.Context, in *v1.GetInfobaseConnectionsRequest, opts ...grpc.CallOption) (*v1.GetInfobaseConnectionsResponse, error) {
+	out := new(v1.GetInfobaseConnectionsResponse)
+	err := c.cc.Invoke(ctx, "/service.api.v1.Connections/GetInfobaseConnections", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *connectionsClient) DisconnectConnection(ctx context.Context, in *v1.DisconnectConnectionRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/service.api.v1.Connections/DisconnectConnection", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// ConnectionsServer is the server API for Connections service.
+// All implementations must embed UnimplementedConnectionsServer
+// for forward compatibility
+type ConnectionsServer interface {
+	GetConnections(context.Context, *v1.GetConnectionsRequest) (*v1.GetConnectionsResponse, error)
+	GetInfobaseConnections(context.Context, *v1.GetInfobaseConnectionsRequest) (*v1.GetInfobaseConnectionsResponse, error)
+	DisconnectConnection(context.Context, *v1.DisconnectConnectionRequest) (*emptypb.Empty, error)
+	mustEmbedUnimplementedConnectionsServer()
+}
+
+// UnimplementedConnectionsServer must be embedded to have forward compatible implementations.
+type UnimplementedConnectionsServer struct {
+}
+
+func (UnimplementedConnectionsServer) GetConnections(context.Context, *v1.GetConnectionsRequest) (*v1.GetConnectionsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetConnections not implemented")
+}
+func (UnimplementedConnectionsServer) GetInfobaseConnections(context.Context, *v1.GetInfobaseConnectionsRequest) (*v1.GetInfobaseConnectionsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetInfobaseConnections not implemented")
+}
+func (UnimplementedConnectionsServer) DisconnectConnection(context.Context, *v1.DisconnectConnectionRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DisconnectConnection not implemented")
+}
+func (UnimplementedConnectionsServer) mustEmbedUnimplementedConnectionsServer() {}
+
+// UnsafeConnectionsServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to ConnectionsServer will
+// result in compilation errors.
+type UnsafeConnectionsServer interface {
+	mustEmbedUnimplementedConnectionsServer()
+}
+
+func RegisterConnectionsServer(s grpc.ServiceRegistrar, srv ConnectionsServer) {
+	s.RegisterService(&Connections_ServiceDesc, srv)
+}
+
+func _Connections_GetConnections_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(v1.GetConnectionsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ConnectionsServer).GetConnections(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/service.api.v1.Connections/GetConnections",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ConnectionsServer).GetConnections(ctx, req.(*v1.GetConnectionsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Connections_GetInfobaseConnections_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(v1.GetInfobaseConnectionsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ConnectionsServer).GetInfobaseConnections(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/service.api.v1.Connections/GetInfobaseConnections",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ConnectionsServer).GetInfobaseConnections(ctx, req.(*v1.GetInfobaseConnectionsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Connections_DisconnectConnection_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(v1.DisconnectConnectionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ConnectionsServer).DisconnectConnection(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/service.api.v1.Connections/DisconnectConnection",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ConnectionsServer).DisconnectConnection(ctx, req.(*v1.DisconnectConnectionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// Connections_ServiceDesc is the grpc.ServiceDesc for Connections service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var Connections_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "service.api.v1.Connections",
+	HandlerType: (*ConnectionsServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "GetConnections",
+			Handler:    _Connections_GetConnections_Handler,
+		},
+		{
+			MethodName: "GetInfobaseConnections",
+			Handler:    _Connections_GetInfobaseConnections_Handler,
+		},
+		{
+			MethodName: "DisconnectConnection",
+			Handler:    _Connections_DisconnectConnection_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "service/api/v1/ras_api.proto",
+}
+
+// LocksClient is the client API for Locks service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type LocksClient interface {
+	GetLocks(ctx context.Context, in *v1.GetLocksRequest, opts ...grpc.CallOption) (*v1.GetLocksResponse, error)
+	GetInfobaseLocks(ctx context.Context, in *v1.GetInfobaseLocksRequest, opts ...grpc.CallOption) (*v1.GetInfobaseLocksResponse, error)
+	GetSessionLocks(ctx context.Context, in *v1.GetSessionLocksRequest, opts ...grpc.CallOption) (*v1.GetSessionLocksResponse, error)
+	GetConnectionLocks(ctx context.Context, in *v1.GetConnectionLocksRequest, opts ...grpc.CallOption) (*v1.GetConnectionLocksResponse, error)
+}
+
+type locksClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewLocksClient(cc grpc.ClientConnInterface) LocksClient {
+	return &locksClient{cc}
+}
+
+func (c *locksClient) GetLocks(ctx context.Context, in *v1.GetLocksRequest, opts ...grpc.CallOption) (*v1.GetLocksResponse, error) {
+	out := new(v1.GetLocksResponse)
+	err := c.cc.Invoke(ctx, "/service.api.v1.Locks/GetLocks", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *locksClient) GetInfobaseLocks(ctx context.Context, in *v1.GetInfobaseLocksRequest, opts ...grpc.CallOption) (*v1.GetInfobaseLocksResponse, error) {
+	out := new(v1.GetInfobaseLocksResponse)
+	err := c.cc.Invoke(ctx, "/service.api.v1.Locks/GetInfobaseLocks", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *locksClient) GetSessionLocks(ctx context.Context, in *v1.GetSessionLocksRequest, opts ...grpc.CallOption) (*v1.GetSessionLocksResponse, error) {
+	out := new(v1.GetSessionLocksResponse)
+	err := c.cc.Invoke(ctx, "/service.api.v1.Locks/GetSessionLocks", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *locksClient) GetConnectionLocks(ctx context.Context, in *v1.GetConnectionLocksRequest, opts ...grpc.CallOption) (*v1.GetConnectionLocksResponse, error) {
+	out := new(v1.GetConnectionLocksResponse)
+	err := c.cc.Invoke(ctx, "/service.api.v1.Locks/GetConnectionLocks", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// LocksServer is the server API for Locks service.
+// All implementations must embed UnimplementedLocksServer
+// for forward compatibility
+type LocksServer interface {
+	GetLocks(context.Context, *v1.GetLocksRequest) (*v1.GetLocksResponse, error)
+	GetInfobaseLocks(context.Context, *v1.GetInfobaseLocksRequest) (*v1.GetInfobaseLocksResponse, error)
+	GetSessionLocks(context.Context, *v1.GetSessionLocksRequest) (*v1.GetSessionLocksResponse, error)
+	GetConnectionLocks(context.Context, *v1.GetConnectionLocksRequest) (*v1.GetConnectionLocksResponse, error)
+	mustEmbedUnimplementedLocksServer()
+}
+
+// UnimplementedLocksServer must be embedded to have forward compatible implementations.
+type UnimplementedLocksServer struct {
+}
+
+func (UnimplementedLocksServer) GetLocks(context.Context, *v1.GetLocksRequest) (*v1.GetLocksResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetLocks not implemented")
+}
+func (UnimplementedLocksServer) GetInfobaseLocks(context.Context, *v1.GetInfobaseLocksRequest) (*v1.GetInfobaseLocksResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetInfobaseLocks not implemented")
+}
+func (UnimplementedLocksServer) GetSessionLocks(context.Context, *v1.GetSessionLocksRequest) (*v1.GetSessionLocksResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetSessionLocks not implemented")
+}
+func (UnimplementedLocksServer) GetConnectionLocks(context.Context, *v1.GetConnectionLocksRequest) (*v1.GetConnectionLocksResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetConnectionLocks not implemented")
+}
+func (UnimplementedLocksServer) mustEmbedUnimplementedLocksServer() {}
+
+// UnsafeLocksServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to LocksServer will
+// result in compilation errors.
+type UnsafeLocksServer interface {
+	mustEmbedUnimplementedLocksServer()
+}
+
+func RegisterLocksServer(s grpc.ServiceRegistrar, srv LocksServer) {
+	s.RegisterService(&Locks_ServiceDesc, srv)
+}
+
+func _Locks_GetLocks_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(v1.GetLocksRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LocksServer).GetLocks(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/service.api.v1.Locks/GetLocks",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LocksServer).GetLocks(ctx, req.(*v1.GetLocksRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Locks_GetInfobaseLocks_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(v1.GetInfobaseLocksRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LocksServer).GetInfobaseLocks(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/service.api.v1.Locks/GetInfobaseLocks",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LocksServer).GetInfobaseLocks(ctx, req.(*v1.GetInfobaseLocksRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Locks_GetSessionLocks_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(v1.GetSessionLocksRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LocksServer).GetSessionLocks(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/service.api.v1.Locks/GetSessionLocks",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LocksServer).GetSessionLocks(ctx, req.(*v1.GetSessionLocksRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Locks_GetConnectionLocks_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(v1.GetConnectionLocksRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LocksServer).GetConnectionLocks(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/service.api.v1.Locks/GetConnectionLocks",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LocksServer).GetConnectionLocks(ctx, req.(*v1.GetConnectionLocksRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// Locks_ServiceDesc is the grpc.ServiceDesc for Locks service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var Locks_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "service.api.v1.Locks",
+	HandlerType: (*LocksServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "GetLocks",
+			Handler:    _Locks_GetLocks_Handler,
+		},
+		{
+			MethodName: "GetInfobaseLocks",
+			Handler:    _Locks_GetInfobaseLocks_Handler,
+		},
+		{
+			MethodName: "GetSessionLocks",
+			Handler:    _Locks_GetSessionLocks_Handler,
+		},
+		{
+			MethodName: "GetConnectionLocks",
+			Handler:    _Locks_GetConnectionLocks_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

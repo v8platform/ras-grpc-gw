@@ -32,7 +32,7 @@ var _ = runtime.String
 var _ = utilities.NewDoubleArray
 var _ = metadata.Join
 
-func request_AuthService_AuthenticateCluster_0(ctx context.Context, marshaler runtime.Marshaler, client AuthServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Authorizations_AuthenticateCluster_0(ctx context.Context, marshaler runtime.Marshaler, client AuthorizationsClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.ClusterAuthenticateRequest
 	var metadata runtime.ServerMetadata
 
@@ -49,7 +49,7 @@ func request_AuthService_AuthenticateCluster_0(ctx context.Context, marshaler ru
 
 }
 
-func local_request_AuthService_AuthenticateCluster_0(ctx context.Context, marshaler runtime.Marshaler, server AuthServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Authorizations_AuthenticateCluster_0(ctx context.Context, marshaler runtime.Marshaler, server AuthorizationsServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.ClusterAuthenticateRequest
 	var metadata runtime.ServerMetadata
 
@@ -66,7 +66,7 @@ func local_request_AuthService_AuthenticateCluster_0(ctx context.Context, marsha
 
 }
 
-func request_AuthService_AuthenticateCluster_1(ctx context.Context, marshaler runtime.Marshaler, client AuthServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Authorizations_AuthenticateCluster_1(ctx context.Context, marshaler runtime.Marshaler, client AuthorizationsClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.ClusterAuthenticateRequest
 	var metadata runtime.ServerMetadata
 
@@ -100,7 +100,7 @@ func request_AuthService_AuthenticateCluster_1(ctx context.Context, marshaler ru
 
 }
 
-func local_request_AuthService_AuthenticateCluster_1(ctx context.Context, marshaler runtime.Marshaler, server AuthServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Authorizations_AuthenticateCluster_1(ctx context.Context, marshaler runtime.Marshaler, server AuthorizationsServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.ClusterAuthenticateRequest
 	var metadata runtime.ServerMetadata
 
@@ -134,7 +134,7 @@ func local_request_AuthService_AuthenticateCluster_1(ctx context.Context, marsha
 
 }
 
-func request_AuthService_AuthenticateInfobase_0(ctx context.Context, marshaler runtime.Marshaler, client AuthServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Authorizations_AuthenticateInfobase_0(ctx context.Context, marshaler runtime.Marshaler, client AuthorizationsClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.AuthenticateInfobaseRequest
 	var metadata runtime.ServerMetadata
 
@@ -151,7 +151,7 @@ func request_AuthService_AuthenticateInfobase_0(ctx context.Context, marshaler r
 
 }
 
-func local_request_AuthService_AuthenticateInfobase_0(ctx context.Context, marshaler runtime.Marshaler, server AuthServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Authorizations_AuthenticateInfobase_0(ctx context.Context, marshaler runtime.Marshaler, server AuthorizationsServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.AuthenticateInfobaseRequest
 	var metadata runtime.ServerMetadata
 
@@ -168,7 +168,7 @@ func local_request_AuthService_AuthenticateInfobase_0(ctx context.Context, marsh
 
 }
 
-func request_AuthService_AuthenticateAgent_0(ctx context.Context, marshaler runtime.Marshaler, client AuthServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Authorizations_AuthenticateAgent_0(ctx context.Context, marshaler runtime.Marshaler, client AuthorizationsClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.ServerAuthenticateRequest
 	var metadata runtime.ServerMetadata
 
@@ -185,7 +185,7 @@ func request_AuthService_AuthenticateAgent_0(ctx context.Context, marshaler runt
 
 }
 
-func local_request_AuthService_AuthenticateAgent_0(ctx context.Context, marshaler runtime.Marshaler, server AuthServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Authorizations_AuthenticateAgent_0(ctx context.Context, marshaler runtime.Marshaler, server AuthorizationsServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.ServerAuthenticateRequest
 	var metadata runtime.ServerMetadata
 
@@ -203,17 +203,17 @@ func local_request_AuthService_AuthenticateAgent_0(ctx context.Context, marshale
 }
 
 var (
-	filter_SessionsService_GetSessions_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
+	filter_Sessions_GetSessions_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
 )
 
-func request_SessionsService_GetSessions_0(ctx context.Context, marshaler runtime.Marshaler, client SessionsServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Sessions_GetSessions_0(ctx context.Context, marshaler runtime.Marshaler, client SessionsClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.GetSessionsRequest
 	var metadata runtime.ServerMetadata
 
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_SessionsService_GetSessions_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Sessions_GetSessions_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -222,14 +222,14 @@ func request_SessionsService_GetSessions_0(ctx context.Context, marshaler runtim
 
 }
 
-func local_request_SessionsService_GetSessions_0(ctx context.Context, marshaler runtime.Marshaler, server SessionsServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Sessions_GetSessions_0(ctx context.Context, marshaler runtime.Marshaler, server SessionsServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.GetSessionsRequest
 	var metadata runtime.ServerMetadata
 
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_SessionsService_GetSessions_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Sessions_GetSessions_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -239,17 +239,17 @@ func local_request_SessionsService_GetSessions_0(ctx context.Context, marshaler 
 }
 
 var (
-	filter_SessionsService_GetInfobaseSessions_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
+	filter_Sessions_GetInfobaseSessions_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
 )
 
-func request_SessionsService_GetInfobaseSessions_0(ctx context.Context, marshaler runtime.Marshaler, client SessionsServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Sessions_GetInfobaseSessions_0(ctx context.Context, marshaler runtime.Marshaler, client SessionsClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.GetInfobaseSessionsRequest
 	var metadata runtime.ServerMetadata
 
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_SessionsService_GetInfobaseSessions_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Sessions_GetInfobaseSessions_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -258,14 +258,14 @@ func request_SessionsService_GetInfobaseSessions_0(ctx context.Context, marshale
 
 }
 
-func local_request_SessionsService_GetInfobaseSessions_0(ctx context.Context, marshaler runtime.Marshaler, server SessionsServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Sessions_GetInfobaseSessions_0(ctx context.Context, marshaler runtime.Marshaler, server SessionsServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.GetInfobaseSessionsRequest
 	var metadata runtime.ServerMetadata
 
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_SessionsService_GetInfobaseSessions_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Sessions_GetInfobaseSessions_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -275,10 +275,10 @@ func local_request_SessionsService_GetInfobaseSessions_0(ctx context.Context, ma
 }
 
 var (
-	filter_SessionsService_TerminateSession_0 = &utilities.DoubleArray{Encoding: map[string]int{"session_id": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
+	filter_Sessions_TerminateSession_0 = &utilities.DoubleArray{Encoding: map[string]int{"session_id": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
 )
 
-func request_SessionsService_TerminateSession_0(ctx context.Context, marshaler runtime.Marshaler, client SessionsServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Sessions_TerminateSession_0(ctx context.Context, marshaler runtime.Marshaler, client SessionsClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.TerminateSessionRequest
 	var metadata runtime.ServerMetadata
 
@@ -302,7 +302,7 @@ func request_SessionsService_TerminateSession_0(ctx context.Context, marshaler r
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_SessionsService_TerminateSession_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Sessions_TerminateSession_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -311,7 +311,7 @@ func request_SessionsService_TerminateSession_0(ctx context.Context, marshaler r
 
 }
 
-func local_request_SessionsService_TerminateSession_0(ctx context.Context, marshaler runtime.Marshaler, server SessionsServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Sessions_TerminateSession_0(ctx context.Context, marshaler runtime.Marshaler, server SessionsServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.TerminateSessionRequest
 	var metadata runtime.ServerMetadata
 
@@ -335,7 +335,7 @@ func local_request_SessionsService_TerminateSession_0(ctx context.Context, marsh
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_SessionsService_TerminateSession_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Sessions_TerminateSession_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -345,17 +345,17 @@ func local_request_SessionsService_TerminateSession_0(ctx context.Context, marsh
 }
 
 var (
-	filter_InfobasesService_GetInfobases_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
+	filter_Infobases_GetInfobases_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
 )
 
-func request_InfobasesService_GetInfobases_0(ctx context.Context, marshaler runtime.Marshaler, client InfobasesServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Infobases_GetInfobases_0(ctx context.Context, marshaler runtime.Marshaler, client InfobasesClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.GetInfobasesRequest
 	var metadata runtime.ServerMetadata
 
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_InfobasesService_GetInfobases_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Infobases_GetInfobases_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -364,14 +364,14 @@ func request_InfobasesService_GetInfobases_0(ctx context.Context, marshaler runt
 
 }
 
-func local_request_InfobasesService_GetInfobases_0(ctx context.Context, marshaler runtime.Marshaler, server InfobasesServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Infobases_GetInfobases_0(ctx context.Context, marshaler runtime.Marshaler, server InfobasesServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.GetInfobasesRequest
 	var metadata runtime.ServerMetadata
 
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_InfobasesService_GetInfobases_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Infobases_GetInfobases_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -381,17 +381,17 @@ func local_request_InfobasesService_GetInfobases_0(ctx context.Context, marshale
 }
 
 var (
-	filter_InfobasesService_GetInfobasesSummary_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
+	filter_Infobases_GetInfobasesSummary_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
 )
 
-func request_InfobasesService_GetInfobasesSummary_0(ctx context.Context, marshaler runtime.Marshaler, client InfobasesServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Infobases_GetInfobasesSummary_0(ctx context.Context, marshaler runtime.Marshaler, client InfobasesClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.GetInfobasesSummaryRequest
 	var metadata runtime.ServerMetadata
 
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_InfobasesService_GetInfobasesSummary_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Infobases_GetInfobasesSummary_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -400,14 +400,14 @@ func request_InfobasesService_GetInfobasesSummary_0(ctx context.Context, marshal
 
 }
 
-func local_request_InfobasesService_GetInfobasesSummary_0(ctx context.Context, marshaler runtime.Marshaler, server InfobasesServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Infobases_GetInfobasesSummary_0(ctx context.Context, marshaler runtime.Marshaler, server InfobasesServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.GetInfobasesSummaryRequest
 	var metadata runtime.ServerMetadata
 
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_InfobasesService_GetInfobasesSummary_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Infobases_GetInfobasesSummary_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -417,10 +417,10 @@ func local_request_InfobasesService_GetInfobasesSummary_0(ctx context.Context, m
 }
 
 var (
-	filter_InfobasesService_GetInfobase_0 = &utilities.DoubleArray{Encoding: map[string]int{"infobase_id": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
+	filter_Infobases_GetInfobase_0 = &utilities.DoubleArray{Encoding: map[string]int{"infobase_id": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
 )
 
-func request_InfobasesService_GetInfobase_0(ctx context.Context, marshaler runtime.Marshaler, client InfobasesServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Infobases_GetInfobase_0(ctx context.Context, marshaler runtime.Marshaler, client InfobasesClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.GetInfobaseInfoRequest
 	var metadata runtime.ServerMetadata
 
@@ -444,7 +444,7 @@ func request_InfobasesService_GetInfobase_0(ctx context.Context, marshaler runti
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_InfobasesService_GetInfobase_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Infobases_GetInfobase_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -453,7 +453,7 @@ func request_InfobasesService_GetInfobase_0(ctx context.Context, marshaler runti
 
 }
 
-func local_request_InfobasesService_GetInfobase_0(ctx context.Context, marshaler runtime.Marshaler, server InfobasesServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Infobases_GetInfobase_0(ctx context.Context, marshaler runtime.Marshaler, server InfobasesServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.GetInfobaseInfoRequest
 	var metadata runtime.ServerMetadata
 
@@ -477,7 +477,7 @@ func local_request_InfobasesService_GetInfobase_0(ctx context.Context, marshaler
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_InfobasesService_GetInfobase_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Infobases_GetInfobase_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -487,10 +487,10 @@ func local_request_InfobasesService_GetInfobase_0(ctx context.Context, marshaler
 }
 
 var (
-	filter_InfobasesService_CreateInfobase_0 = &utilities.DoubleArray{Encoding: map[string]int{"info": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
+	filter_Infobases_CreateInfobase_0 = &utilities.DoubleArray{Encoding: map[string]int{"info": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
 )
 
-func request_InfobasesService_CreateInfobase_0(ctx context.Context, marshaler runtime.Marshaler, client InfobasesServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Infobases_CreateInfobase_0(ctx context.Context, marshaler runtime.Marshaler, client InfobasesClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.CreateInfobaseRequest
 	var metadata runtime.ServerMetadata
 
@@ -505,7 +505,7 @@ func request_InfobasesService_CreateInfobase_0(ctx context.Context, marshaler ru
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_InfobasesService_CreateInfobase_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Infobases_CreateInfobase_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -514,7 +514,7 @@ func request_InfobasesService_CreateInfobase_0(ctx context.Context, marshaler ru
 
 }
 
-func local_request_InfobasesService_CreateInfobase_0(ctx context.Context, marshaler runtime.Marshaler, server InfobasesServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Infobases_CreateInfobase_0(ctx context.Context, marshaler runtime.Marshaler, server InfobasesServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.CreateInfobaseRequest
 	var metadata runtime.ServerMetadata
 
@@ -529,7 +529,7 @@ func local_request_InfobasesService_CreateInfobase_0(ctx context.Context, marsha
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_InfobasesService_CreateInfobase_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Infobases_CreateInfobase_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -539,10 +539,10 @@ func local_request_InfobasesService_CreateInfobase_0(ctx context.Context, marsha
 }
 
 var (
-	filter_InfobasesService_UpdateInfobase_0 = &utilities.DoubleArray{Encoding: map[string]int{"info": 0, "uuid": 1}, Base: []int{1, 2, 1, 0, 0}, Check: []int{0, 1, 2, 3, 2}}
+	filter_Infobases_UpdateInfobase_0 = &utilities.DoubleArray{Encoding: map[string]int{"info": 0, "uuid": 1}, Base: []int{1, 2, 1, 0, 0}, Check: []int{0, 1, 2, 3, 2}}
 )
 
-func request_InfobasesService_UpdateInfobase_0(ctx context.Context, marshaler runtime.Marshaler, client InfobasesServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Infobases_UpdateInfobase_0(ctx context.Context, marshaler runtime.Marshaler, client InfobasesClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.UpdateInfobaseRequest
 	var metadata runtime.ServerMetadata
 
@@ -574,7 +574,7 @@ func request_InfobasesService_UpdateInfobase_0(ctx context.Context, marshaler ru
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_InfobasesService_UpdateInfobase_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Infobases_UpdateInfobase_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -583,7 +583,7 @@ func request_InfobasesService_UpdateInfobase_0(ctx context.Context, marshaler ru
 
 }
 
-func local_request_InfobasesService_UpdateInfobase_0(ctx context.Context, marshaler runtime.Marshaler, server InfobasesServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Infobases_UpdateInfobase_0(ctx context.Context, marshaler runtime.Marshaler, server InfobasesServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.UpdateInfobaseRequest
 	var metadata runtime.ServerMetadata
 
@@ -615,7 +615,7 @@ func local_request_InfobasesService_UpdateInfobase_0(ctx context.Context, marsha
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_InfobasesService_UpdateInfobase_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Infobases_UpdateInfobase_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -625,10 +625,10 @@ func local_request_InfobasesService_UpdateInfobase_0(ctx context.Context, marsha
 }
 
 var (
-	filter_InfobasesService_DeleteInfobase_0 = &utilities.DoubleArray{Encoding: map[string]int{"infobase_id": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
+	filter_Infobases_DeleteInfobase_0 = &utilities.DoubleArray{Encoding: map[string]int{"infobase_id": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
 )
 
-func request_InfobasesService_DeleteInfobase_0(ctx context.Context, marshaler runtime.Marshaler, client InfobasesServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Infobases_DeleteInfobase_0(ctx context.Context, marshaler runtime.Marshaler, client InfobasesClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.DropInfobaseRequest
 	var metadata runtime.ServerMetadata
 
@@ -652,7 +652,7 @@ func request_InfobasesService_DeleteInfobase_0(ctx context.Context, marshaler ru
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_InfobasesService_DeleteInfobase_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Infobases_DeleteInfobase_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -661,7 +661,7 @@ func request_InfobasesService_DeleteInfobase_0(ctx context.Context, marshaler ru
 
 }
 
-func local_request_InfobasesService_DeleteInfobase_0(ctx context.Context, marshaler runtime.Marshaler, server InfobasesServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Infobases_DeleteInfobase_0(ctx context.Context, marshaler runtime.Marshaler, server InfobasesServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.DropInfobaseRequest
 	var metadata runtime.ServerMetadata
 
@@ -685,7 +685,7 @@ func local_request_InfobasesService_DeleteInfobase_0(ctx context.Context, marsha
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_InfobasesService_DeleteInfobase_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Infobases_DeleteInfobase_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -695,10 +695,10 @@ func local_request_InfobasesService_DeleteInfobase_0(ctx context.Context, marsha
 }
 
 var (
-	filter_InfobasesService_UpdateInfobaseSummary_0 = &utilities.DoubleArray{Encoding: map[string]int{"summary": 0, "uuid": 1}, Base: []int{1, 2, 1, 0, 0}, Check: []int{0, 1, 2, 3, 2}}
+	filter_Infobases_UpdateInfobaseSummary_0 = &utilities.DoubleArray{Encoding: map[string]int{"summary": 0, "uuid": 1}, Base: []int{1, 2, 1, 0, 0}, Check: []int{0, 1, 2, 3, 2}}
 )
 
-func request_InfobasesService_UpdateInfobaseSummary_0(ctx context.Context, marshaler runtime.Marshaler, client InfobasesServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Infobases_UpdateInfobaseSummary_0(ctx context.Context, marshaler runtime.Marshaler, client InfobasesClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.UpdateInfobaseSummaryRequest
 	var metadata runtime.ServerMetadata
 
@@ -730,7 +730,7 @@ func request_InfobasesService_UpdateInfobaseSummary_0(ctx context.Context, marsh
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_InfobasesService_UpdateInfobaseSummary_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Infobases_UpdateInfobaseSummary_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -739,7 +739,7 @@ func request_InfobasesService_UpdateInfobaseSummary_0(ctx context.Context, marsh
 
 }
 
-func local_request_InfobasesService_UpdateInfobaseSummary_0(ctx context.Context, marshaler runtime.Marshaler, server InfobasesServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Infobases_UpdateInfobaseSummary_0(ctx context.Context, marshaler runtime.Marshaler, server InfobasesServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.UpdateInfobaseSummaryRequest
 	var metadata runtime.ServerMetadata
 
@@ -771,7 +771,7 @@ func local_request_InfobasesService_UpdateInfobaseSummary_0(ctx context.Context,
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_InfobasesService_UpdateInfobaseSummary_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Infobases_UpdateInfobaseSummary_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -780,7 +780,7 @@ func local_request_InfobasesService_UpdateInfobaseSummary_0(ctx context.Context,
 
 }
 
-func request_ClustersService_GetClusters_0(ctx context.Context, marshaler runtime.Marshaler, client ClustersServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Clusters_GetClusters_0(ctx context.Context, marshaler runtime.Marshaler, client ClustersClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.GetClustersRequest
 	var metadata runtime.ServerMetadata
 
@@ -789,7 +789,7 @@ func request_ClustersService_GetClusters_0(ctx context.Context, marshaler runtim
 
 }
 
-func local_request_ClustersService_GetClusters_0(ctx context.Context, marshaler runtime.Marshaler, server ClustersServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Clusters_GetClusters_0(ctx context.Context, marshaler runtime.Marshaler, server ClustersServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.GetClustersRequest
 	var metadata runtime.ServerMetadata
 
@@ -798,7 +798,7 @@ func local_request_ClustersService_GetClusters_0(ctx context.Context, marshaler 
 
 }
 
-func request_ClustersService_GetClusterInfo_0(ctx context.Context, marshaler runtime.Marshaler, client ClustersServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Clusters_GetClusterInfo_0(ctx context.Context, marshaler runtime.Marshaler, client ClustersClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.GetClusterInfoRequest
 	var metadata runtime.ServerMetadata
 
@@ -824,7 +824,7 @@ func request_ClustersService_GetClusterInfo_0(ctx context.Context, marshaler run
 
 }
 
-func local_request_ClustersService_GetClusterInfo_0(ctx context.Context, marshaler runtime.Marshaler, server ClustersServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Clusters_GetClusterInfo_0(ctx context.Context, marshaler runtime.Marshaler, server ClustersServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.GetClusterInfoRequest
 	var metadata runtime.ServerMetadata
 
@@ -850,7 +850,7 @@ func local_request_ClustersService_GetClusterInfo_0(ctx context.Context, marshal
 
 }
 
-func request_ClustersService_RegCluster_0(ctx context.Context, marshaler runtime.Marshaler, client ClustersServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Clusters_RegCluster_0(ctx context.Context, marshaler runtime.Marshaler, client ClustersClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.RegClusterRequest
 	var metadata runtime.ServerMetadata
 
@@ -867,7 +867,7 @@ func request_ClustersService_RegCluster_0(ctx context.Context, marshaler runtime
 
 }
 
-func local_request_ClustersService_RegCluster_0(ctx context.Context, marshaler runtime.Marshaler, server ClustersServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Clusters_RegCluster_0(ctx context.Context, marshaler runtime.Marshaler, server ClustersServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.RegClusterRequest
 	var metadata runtime.ServerMetadata
 
@@ -884,7 +884,7 @@ func local_request_ClustersService_RegCluster_0(ctx context.Context, marshaler r
 
 }
 
-func request_ClustersService_UnregCluster_0(ctx context.Context, marshaler runtime.Marshaler, client ClustersServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Clusters_UnregCluster_0(ctx context.Context, marshaler runtime.Marshaler, client ClustersClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.UnregClusterRequest
 	var metadata runtime.ServerMetadata
 
@@ -910,7 +910,7 @@ func request_ClustersService_UnregCluster_0(ctx context.Context, marshaler runti
 
 }
 
-func local_request_ClustersService_UnregCluster_0(ctx context.Context, marshaler runtime.Marshaler, server ClustersServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Clusters_UnregCluster_0(ctx context.Context, marshaler runtime.Marshaler, server ClustersServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.UnregClusterRequest
 	var metadata runtime.ServerMetadata
 
@@ -937,17 +937,17 @@ func local_request_ClustersService_UnregCluster_0(ctx context.Context, marshaler
 }
 
 var (
-	filter_ManagersService_GetClusterManagers_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
+	filter_Managers_GetClusterManagers_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
 )
 
-func request_ManagersService_GetClusterManagers_0(ctx context.Context, marshaler runtime.Marshaler, client ManagersServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Managers_GetClusterManagers_0(ctx context.Context, marshaler runtime.Marshaler, client ManagersClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.GetClusterManagersRequest
 	var metadata runtime.ServerMetadata
 
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ManagersService_GetClusterManagers_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Managers_GetClusterManagers_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -956,14 +956,14 @@ func request_ManagersService_GetClusterManagers_0(ctx context.Context, marshaler
 
 }
 
-func local_request_ManagersService_GetClusterManagers_0(ctx context.Context, marshaler runtime.Marshaler, server ManagersServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Managers_GetClusterManagers_0(ctx context.Context, marshaler runtime.Marshaler, server ManagersServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.GetClusterManagersRequest
 	var metadata runtime.ServerMetadata
 
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ManagersService_GetClusterManagers_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Managers_GetClusterManagers_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -973,10 +973,10 @@ func local_request_ManagersService_GetClusterManagers_0(ctx context.Context, mar
 }
 
 var (
-	filter_ManagersService_GetClusterManagerInfo_0 = &utilities.DoubleArray{Encoding: map[string]int{"manager_id": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
+	filter_Managers_GetClusterManagerInfo_0 = &utilities.DoubleArray{Encoding: map[string]int{"manager_id": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
 )
 
-func request_ManagersService_GetClusterManagerInfo_0(ctx context.Context, marshaler runtime.Marshaler, client ManagersServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Managers_GetClusterManagerInfo_0(ctx context.Context, marshaler runtime.Marshaler, client ManagersClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.GetClusterManagerInfoRequest
 	var metadata runtime.ServerMetadata
 
@@ -1000,7 +1000,7 @@ func request_ManagersService_GetClusterManagerInfo_0(ctx context.Context, marsha
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ManagersService_GetClusterManagerInfo_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Managers_GetClusterManagerInfo_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -1009,7 +1009,7 @@ func request_ManagersService_GetClusterManagerInfo_0(ctx context.Context, marsha
 
 }
 
-func local_request_ManagersService_GetClusterManagerInfo_0(ctx context.Context, marshaler runtime.Marshaler, server ManagersServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Managers_GetClusterManagerInfo_0(ctx context.Context, marshaler runtime.Marshaler, server ManagersServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.GetClusterManagerInfoRequest
 	var metadata runtime.ServerMetadata
 
@@ -1033,7 +1033,7 @@ func local_request_ManagersService_GetClusterManagerInfo_0(ctx context.Context, 
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ManagersService_GetClusterManagerInfo_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Managers_GetClusterManagerInfo_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -1043,17 +1043,17 @@ func local_request_ManagersService_GetClusterManagerInfo_0(ctx context.Context, 
 }
 
 var (
-	filter_ProcessesService_GetWorkingProcesses_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
+	filter_Processes_GetWorkingProcesses_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
 )
 
-func request_ProcessesService_GetWorkingProcesses_0(ctx context.Context, marshaler runtime.Marshaler, client ProcessesServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Processes_GetWorkingProcesses_0(ctx context.Context, marshaler runtime.Marshaler, client ProcessesClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.GetWorkingProcessesRequest
 	var metadata runtime.ServerMetadata
 
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ProcessesService_GetWorkingProcesses_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Processes_GetWorkingProcesses_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -1062,14 +1062,14 @@ func request_ProcessesService_GetWorkingProcesses_0(ctx context.Context, marshal
 
 }
 
-func local_request_ProcessesService_GetWorkingProcesses_0(ctx context.Context, marshaler runtime.Marshaler, server ProcessesServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Processes_GetWorkingProcesses_0(ctx context.Context, marshaler runtime.Marshaler, server ProcessesServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.GetWorkingProcessesRequest
 	var metadata runtime.ServerMetadata
 
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ProcessesService_GetWorkingProcesses_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Processes_GetWorkingProcesses_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -1079,10 +1079,10 @@ func local_request_ProcessesService_GetWorkingProcesses_0(ctx context.Context, m
 }
 
 var (
-	filter_ProcessesService_GetServerWorkingProcesses_0 = &utilities.DoubleArray{Encoding: map[string]int{"server_id": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
+	filter_Processes_GetServerWorkingProcesses_0 = &utilities.DoubleArray{Encoding: map[string]int{"server_id": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
 )
 
-func request_ProcessesService_GetServerWorkingProcesses_0(ctx context.Context, marshaler runtime.Marshaler, client ProcessesServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Processes_GetServerWorkingProcesses_0(ctx context.Context, marshaler runtime.Marshaler, client ProcessesClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.GetServerWorkingProcessesRequest
 	var metadata runtime.ServerMetadata
 
@@ -1106,7 +1106,7 @@ func request_ProcessesService_GetServerWorkingProcesses_0(ctx context.Context, m
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ProcessesService_GetServerWorkingProcesses_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Processes_GetServerWorkingProcesses_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -1115,7 +1115,7 @@ func request_ProcessesService_GetServerWorkingProcesses_0(ctx context.Context, m
 
 }
 
-func local_request_ProcessesService_GetServerWorkingProcesses_0(ctx context.Context, marshaler runtime.Marshaler, server ProcessesServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Processes_GetServerWorkingProcesses_0(ctx context.Context, marshaler runtime.Marshaler, server ProcessesServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.GetServerWorkingProcessesRequest
 	var metadata runtime.ServerMetadata
 
@@ -1139,7 +1139,7 @@ func local_request_ProcessesService_GetServerWorkingProcesses_0(ctx context.Cont
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ProcessesService_GetServerWorkingProcesses_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Processes_GetServerWorkingProcesses_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -1149,10 +1149,10 @@ func local_request_ProcessesService_GetServerWorkingProcesses_0(ctx context.Cont
 }
 
 var (
-	filter_ProcessesService_GetWorkingProcessInfo_0 = &utilities.DoubleArray{Encoding: map[string]int{"process_id": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
+	filter_Processes_GetWorkingProcessInfo_0 = &utilities.DoubleArray{Encoding: map[string]int{"process_id": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
 )
 
-func request_ProcessesService_GetWorkingProcessInfo_0(ctx context.Context, marshaler runtime.Marshaler, client ProcessesServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Processes_GetWorkingProcessInfo_0(ctx context.Context, marshaler runtime.Marshaler, client ProcessesClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.GetWorkingProcessInfoRequest
 	var metadata runtime.ServerMetadata
 
@@ -1176,7 +1176,7 @@ func request_ProcessesService_GetWorkingProcessInfo_0(ctx context.Context, marsh
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ProcessesService_GetWorkingProcessInfo_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Processes_GetWorkingProcessInfo_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -1185,7 +1185,7 @@ func request_ProcessesService_GetWorkingProcessInfo_0(ctx context.Context, marsh
 
 }
 
-func local_request_ProcessesService_GetWorkingProcessInfo_0(ctx context.Context, marshaler runtime.Marshaler, server ProcessesServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Processes_GetWorkingProcessInfo_0(ctx context.Context, marshaler runtime.Marshaler, server ProcessesServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.GetWorkingProcessInfoRequest
 	var metadata runtime.ServerMetadata
 
@@ -1209,7 +1209,7 @@ func local_request_ProcessesService_GetWorkingProcessInfo_0(ctx context.Context,
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ProcessesService_GetWorkingProcessInfo_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Processes_GetWorkingProcessInfo_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -1219,17 +1219,17 @@ func local_request_ProcessesService_GetWorkingProcessInfo_0(ctx context.Context,
 }
 
 var (
-	filter_ServersService_GetWorkingServers_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
+	filter_Servers_GetWorkingServers_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
 )
 
-func request_ServersService_GetWorkingServers_0(ctx context.Context, marshaler runtime.Marshaler, client ServersServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Servers_GetWorkingServers_0(ctx context.Context, marshaler runtime.Marshaler, client ServersClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.GetWorkingServersRequest
 	var metadata runtime.ServerMetadata
 
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ServersService_GetWorkingServers_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Servers_GetWorkingServers_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -1238,14 +1238,14 @@ func request_ServersService_GetWorkingServers_0(ctx context.Context, marshaler r
 
 }
 
-func local_request_ServersService_GetWorkingServers_0(ctx context.Context, marshaler runtime.Marshaler, server ServersServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Servers_GetWorkingServers_0(ctx context.Context, marshaler runtime.Marshaler, server ServersServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.GetWorkingServersRequest
 	var metadata runtime.ServerMetadata
 
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ServersService_GetWorkingServers_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Servers_GetWorkingServers_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -1255,10 +1255,10 @@ func local_request_ServersService_GetWorkingServers_0(ctx context.Context, marsh
 }
 
 var (
-	filter_ServersService_GetWorkingServerInfo_0 = &utilities.DoubleArray{Encoding: map[string]int{"server_id": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
+	filter_Servers_GetWorkingServerInfo_0 = &utilities.DoubleArray{Encoding: map[string]int{"server_id": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
 )
 
-func request_ServersService_GetWorkingServerInfo_0(ctx context.Context, marshaler runtime.Marshaler, client ServersServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Servers_GetWorkingServerInfo_0(ctx context.Context, marshaler runtime.Marshaler, client ServersClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.GetWorkingServerInfoRequest
 	var metadata runtime.ServerMetadata
 
@@ -1282,7 +1282,7 @@ func request_ServersService_GetWorkingServerInfo_0(ctx context.Context, marshale
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ServersService_GetWorkingServerInfo_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Servers_GetWorkingServerInfo_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -1291,7 +1291,7 @@ func request_ServersService_GetWorkingServerInfo_0(ctx context.Context, marshale
 
 }
 
-func local_request_ServersService_GetWorkingServerInfo_0(ctx context.Context, marshaler runtime.Marshaler, server ServersServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Servers_GetWorkingServerInfo_0(ctx context.Context, marshaler runtime.Marshaler, server ServersServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.GetWorkingServerInfoRequest
 	var metadata runtime.ServerMetadata
 
@@ -1315,7 +1315,7 @@ func local_request_ServersService_GetWorkingServerInfo_0(ctx context.Context, ma
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ServersService_GetWorkingServerInfo_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Servers_GetWorkingServerInfo_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -1325,10 +1325,10 @@ func local_request_ServersService_GetWorkingServerInfo_0(ctx context.Context, ma
 }
 
 var (
-	filter_ServersService_AddWorkingServer_0 = &utilities.DoubleArray{Encoding: map[string]int{"info": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
+	filter_Servers_AddWorkingServer_0 = &utilities.DoubleArray{Encoding: map[string]int{"info": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
 )
 
-func request_ServersService_AddWorkingServer_0(ctx context.Context, marshaler runtime.Marshaler, client ServersServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Servers_AddWorkingServer_0(ctx context.Context, marshaler runtime.Marshaler, client ServersClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.AddWorkingServerRequest
 	var metadata runtime.ServerMetadata
 
@@ -1343,7 +1343,7 @@ func request_ServersService_AddWorkingServer_0(ctx context.Context, marshaler ru
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ServersService_AddWorkingServer_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Servers_AddWorkingServer_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -1352,7 +1352,7 @@ func request_ServersService_AddWorkingServer_0(ctx context.Context, marshaler ru
 
 }
 
-func local_request_ServersService_AddWorkingServer_0(ctx context.Context, marshaler runtime.Marshaler, server ServersServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Servers_AddWorkingServer_0(ctx context.Context, marshaler runtime.Marshaler, server ServersServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.AddWorkingServerRequest
 	var metadata runtime.ServerMetadata
 
@@ -1367,7 +1367,7 @@ func local_request_ServersService_AddWorkingServer_0(ctx context.Context, marsha
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ServersService_AddWorkingServer_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Servers_AddWorkingServer_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -1377,10 +1377,10 @@ func local_request_ServersService_AddWorkingServer_0(ctx context.Context, marsha
 }
 
 var (
-	filter_ServersService_DeleteWorkingServer_0 = &utilities.DoubleArray{Encoding: map[string]int{"server_id": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
+	filter_Servers_DeleteWorkingServer_0 = &utilities.DoubleArray{Encoding: map[string]int{"server_id": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
 )
 
-func request_ServersService_DeleteWorkingServer_0(ctx context.Context, marshaler runtime.Marshaler, client ServersServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Servers_DeleteWorkingServer_0(ctx context.Context, marshaler runtime.Marshaler, client ServersClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.DeleteWorkingServerRequest
 	var metadata runtime.ServerMetadata
 
@@ -1404,7 +1404,7 @@ func request_ServersService_DeleteWorkingServer_0(ctx context.Context, marshaler
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ServersService_DeleteWorkingServer_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Servers_DeleteWorkingServer_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -1413,7 +1413,7 @@ func request_ServersService_DeleteWorkingServer_0(ctx context.Context, marshaler
 
 }
 
-func local_request_ServersService_DeleteWorkingServer_0(ctx context.Context, marshaler runtime.Marshaler, server ServersServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Servers_DeleteWorkingServer_0(ctx context.Context, marshaler runtime.Marshaler, server ServersServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq messagesv1.DeleteWorkingServerRequest
 	var metadata runtime.ServerMetadata
 
@@ -1437,7 +1437,7 @@ func local_request_ServersService_DeleteWorkingServer_0(ctx context.Context, mar
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_ServersService_DeleteWorkingServer_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Servers_DeleteWorkingServer_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -1446,24 +1446,310 @@ func local_request_ServersService_DeleteWorkingServer_0(ctx context.Context, mar
 
 }
 
-// RegisterAuthServiceHandlerServer registers the http handlers for service AuthService to "mux".
-// UnaryRPC     :call AuthServiceServer directly.
+var (
+	filter_Connections_GetConnections_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
+)
+
+func request_Connections_GetConnections_0(ctx context.Context, marshaler runtime.Marshaler, client ConnectionsClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq messagesv1.GetConnectionsRequest
+	var metadata runtime.ServerMetadata
+
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Connections_GetConnections_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+
+	msg, err := client.GetConnections(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+
+}
+
+func local_request_Connections_GetConnections_0(ctx context.Context, marshaler runtime.Marshaler, server ConnectionsServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq messagesv1.GetConnectionsRequest
+	var metadata runtime.ServerMetadata
+
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Connections_GetConnections_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+
+	msg, err := server.GetConnections(ctx, &protoReq)
+	return msg, metadata, err
+
+}
+
+var (
+	filter_Connections_GetInfobaseConnections_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
+)
+
+func request_Connections_GetInfobaseConnections_0(ctx context.Context, marshaler runtime.Marshaler, client ConnectionsClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq messagesv1.GetInfobaseConnectionsRequest
+	var metadata runtime.ServerMetadata
+
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Connections_GetInfobaseConnections_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+
+	msg, err := client.GetInfobaseConnections(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+
+}
+
+func local_request_Connections_GetInfobaseConnections_0(ctx context.Context, marshaler runtime.Marshaler, server ConnectionsServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq messagesv1.GetInfobaseConnectionsRequest
+	var metadata runtime.ServerMetadata
+
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Connections_GetInfobaseConnections_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+
+	msg, err := server.GetInfobaseConnections(ctx, &protoReq)
+	return msg, metadata, err
+
+}
+
+var (
+	filter_Connections_DisconnectConnection_0 = &utilities.DoubleArray{Encoding: map[string]int{"connection_id": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
+)
+
+func request_Connections_DisconnectConnection_0(ctx context.Context, marshaler runtime.Marshaler, client ConnectionsClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq messagesv1.DisconnectConnectionRequest
+	var metadata runtime.ServerMetadata
+
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["connection_id"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "connection_id")
+	}
+
+	protoReq.ConnectionId, err = runtime.String(val)
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "connection_id", err)
+	}
+
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Connections_DisconnectConnection_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+
+	msg, err := client.DisconnectConnection(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+
+}
+
+func local_request_Connections_DisconnectConnection_0(ctx context.Context, marshaler runtime.Marshaler, server ConnectionsServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq messagesv1.DisconnectConnectionRequest
+	var metadata runtime.ServerMetadata
+
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["connection_id"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "connection_id")
+	}
+
+	protoReq.ConnectionId, err = runtime.String(val)
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "connection_id", err)
+	}
+
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Connections_DisconnectConnection_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+
+	msg, err := server.DisconnectConnection(ctx, &protoReq)
+	return msg, metadata, err
+
+}
+
+var (
+	filter_Locks_GetLocks_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
+)
+
+func request_Locks_GetLocks_0(ctx context.Context, marshaler runtime.Marshaler, client LocksClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq messagesv1.GetLocksRequest
+	var metadata runtime.ServerMetadata
+
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Locks_GetLocks_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+
+	msg, err := client.GetLocks(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+
+}
+
+func local_request_Locks_GetLocks_0(ctx context.Context, marshaler runtime.Marshaler, server LocksServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq messagesv1.GetLocksRequest
+	var metadata runtime.ServerMetadata
+
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Locks_GetLocks_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+
+	msg, err := server.GetLocks(ctx, &protoReq)
+	return msg, metadata, err
+
+}
+
+var (
+	filter_Locks_GetInfobaseLocks_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
+)
+
+func request_Locks_GetInfobaseLocks_0(ctx context.Context, marshaler runtime.Marshaler, client LocksClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq messagesv1.GetInfobaseLocksRequest
+	var metadata runtime.ServerMetadata
+
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Locks_GetInfobaseLocks_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+
+	msg, err := client.GetInfobaseLocks(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+
+}
+
+func local_request_Locks_GetInfobaseLocks_0(ctx context.Context, marshaler runtime.Marshaler, server LocksServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq messagesv1.GetInfobaseLocksRequest
+	var metadata runtime.ServerMetadata
+
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Locks_GetInfobaseLocks_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+
+	msg, err := server.GetInfobaseLocks(ctx, &protoReq)
+	return msg, metadata, err
+
+}
+
+var (
+	filter_Locks_GetSessionLocks_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
+)
+
+func request_Locks_GetSessionLocks_0(ctx context.Context, marshaler runtime.Marshaler, client LocksClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq messagesv1.GetSessionLocksRequest
+	var metadata runtime.ServerMetadata
+
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Locks_GetSessionLocks_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+
+	msg, err := client.GetSessionLocks(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+
+}
+
+func local_request_Locks_GetSessionLocks_0(ctx context.Context, marshaler runtime.Marshaler, server LocksServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq messagesv1.GetSessionLocksRequest
+	var metadata runtime.ServerMetadata
+
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Locks_GetSessionLocks_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+
+	msg, err := server.GetSessionLocks(ctx, &protoReq)
+	return msg, metadata, err
+
+}
+
+var (
+	filter_Locks_GetConnectionLocks_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
+)
+
+func request_Locks_GetConnectionLocks_0(ctx context.Context, marshaler runtime.Marshaler, client LocksClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq messagesv1.GetConnectionLocksRequest
+	var metadata runtime.ServerMetadata
+
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Locks_GetConnectionLocks_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+
+	msg, err := client.GetConnectionLocks(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+
+}
+
+func local_request_Locks_GetConnectionLocks_0(ctx context.Context, marshaler runtime.Marshaler, server LocksServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq messagesv1.GetConnectionLocksRequest
+	var metadata runtime.ServerMetadata
+
+	if err := req.ParseForm(); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Locks_GetConnectionLocks_0); err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+
+	msg, err := server.GetConnectionLocks(ctx, &protoReq)
+	return msg, metadata, err
+
+}
+
+// RegisterAuthorizationsHandlerServer registers the http handlers for service Authorizations to "mux".
+// UnaryRPC     :call AuthorizationsServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
-// Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterAuthServiceHandlerFromEndpoint instead.
-func RegisterAuthServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server AuthServiceServer) error {
+// Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterAuthorizationsHandlerFromEndpoint instead.
+func RegisterAuthorizationsHandlerServer(ctx context.Context, mux *runtime.ServeMux, server AuthorizationsServer) error {
 
-	mux.Handle("POST", pattern_AuthService_AuthenticateCluster_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Authorizations_AuthenticateCluster_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.AuthService/AuthenticateCluster", runtime.WithHTTPPathPattern("/api/v1/clusters/auth"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Authorizations/AuthenticateCluster", runtime.WithHTTPPathPattern("/api/v1/clusters/auth"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_AuthService_AuthenticateCluster_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Authorizations_AuthenticateCluster_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -1471,22 +1757,22 @@ func RegisterAuthServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 			return
 		}
 
-		forward_AuthService_AuthenticateCluster_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Authorizations_AuthenticateCluster_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_AuthService_AuthenticateCluster_1, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Authorizations_AuthenticateCluster_1, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.AuthService/AuthenticateCluster", runtime.WithHTTPPathPattern("/api/v1/clusters/{cluster_id}/auth"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Authorizations/AuthenticateCluster", runtime.WithHTTPPathPattern("/api/v1/clusters/{cluster_id}/auth"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_AuthService_AuthenticateCluster_1(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Authorizations_AuthenticateCluster_1(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -1494,22 +1780,22 @@ func RegisterAuthServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 			return
 		}
 
-		forward_AuthService_AuthenticateCluster_1(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Authorizations_AuthenticateCluster_1(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_AuthService_AuthenticateInfobase_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Authorizations_AuthenticateInfobase_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.AuthService/AuthenticateInfobase", runtime.WithHTTPPathPattern("/api/v1/infobases/auth"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Authorizations/AuthenticateInfobase", runtime.WithHTTPPathPattern("/api/v1/infobases/auth"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_AuthService_AuthenticateInfobase_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Authorizations_AuthenticateInfobase_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -1517,22 +1803,22 @@ func RegisterAuthServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 			return
 		}
 
-		forward_AuthService_AuthenticateInfobase_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Authorizations_AuthenticateInfobase_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_AuthService_AuthenticateAgent_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Authorizations_AuthenticateAgent_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.AuthService/AuthenticateAgent", runtime.WithHTTPPathPattern("/api/v1/agent:auth"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Authorizations/AuthenticateAgent", runtime.WithHTTPPathPattern("/api/v1/agent:auth"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_AuthService_AuthenticateAgent_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Authorizations_AuthenticateAgent_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -1540,31 +1826,31 @@ func RegisterAuthServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 			return
 		}
 
-		forward_AuthService_AuthenticateAgent_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Authorizations_AuthenticateAgent_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
 	return nil
 }
 
-// RegisterSessionsServiceHandlerServer registers the http handlers for service SessionsService to "mux".
-// UnaryRPC     :call SessionsServiceServer directly.
+// RegisterSessionsHandlerServer registers the http handlers for service Sessions to "mux".
+// UnaryRPC     :call SessionsServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
-// Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterSessionsServiceHandlerFromEndpoint instead.
-func RegisterSessionsServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server SessionsServiceServer) error {
+// Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterSessionsHandlerFromEndpoint instead.
+func RegisterSessionsHandlerServer(ctx context.Context, mux *runtime.ServeMux, server SessionsServer) error {
 
-	mux.Handle("GET", pattern_SessionsService_GetSessions_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Sessions_GetSessions_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.SessionsService/GetSessions", runtime.WithHTTPPathPattern("/api/v1/sessions"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Sessions/GetSessions", runtime.WithHTTPPathPattern("/api/v1/sessions"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_SessionsService_GetSessions_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Sessions_GetSessions_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -1572,22 +1858,22 @@ func RegisterSessionsServiceHandlerServer(ctx context.Context, mux *runtime.Serv
 			return
 		}
 
-		forward_SessionsService_GetSessions_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Sessions_GetSessions_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_SessionsService_GetInfobaseSessions_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Sessions_GetInfobaseSessions_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.SessionsService/GetInfobaseSessions", runtime.WithHTTPPathPattern("/api/v1/sessions:infobase"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Sessions/GetInfobaseSessions", runtime.WithHTTPPathPattern("/api/v1/sessions:infobase"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_SessionsService_GetInfobaseSessions_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Sessions_GetInfobaseSessions_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -1595,22 +1881,22 @@ func RegisterSessionsServiceHandlerServer(ctx context.Context, mux *runtime.Serv
 			return
 		}
 
-		forward_SessionsService_GetInfobaseSessions_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Sessions_GetInfobaseSessions_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("DELETE", pattern_SessionsService_TerminateSession_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("DELETE", pattern_Sessions_TerminateSession_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.SessionsService/TerminateSession", runtime.WithHTTPPathPattern("/api/v1/sessions/{session_id}"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Sessions/TerminateSession", runtime.WithHTTPPathPattern("/api/v1/sessions/{session_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_SessionsService_TerminateSession_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Sessions_TerminateSession_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -1618,31 +1904,31 @@ func RegisterSessionsServiceHandlerServer(ctx context.Context, mux *runtime.Serv
 			return
 		}
 
-		forward_SessionsService_TerminateSession_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Sessions_TerminateSession_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
 	return nil
 }
 
-// RegisterInfobasesServiceHandlerServer registers the http handlers for service InfobasesService to "mux".
-// UnaryRPC     :call InfobasesServiceServer directly.
+// RegisterInfobasesHandlerServer registers the http handlers for service Infobases to "mux".
+// UnaryRPC     :call InfobasesServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
-// Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterInfobasesServiceHandlerFromEndpoint instead.
-func RegisterInfobasesServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server InfobasesServiceServer) error {
+// Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterInfobasesHandlerFromEndpoint instead.
+func RegisterInfobasesHandlerServer(ctx context.Context, mux *runtime.ServeMux, server InfobasesServer) error {
 
-	mux.Handle("GET", pattern_InfobasesService_GetInfobases_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Infobases_GetInfobases_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.InfobasesService/GetInfobases", runtime.WithHTTPPathPattern("/api/v1/infobases"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Infobases/GetInfobases", runtime.WithHTTPPathPattern("/api/v1/infobases"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_InfobasesService_GetInfobases_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Infobases_GetInfobases_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -1650,22 +1936,22 @@ func RegisterInfobasesServiceHandlerServer(ctx context.Context, mux *runtime.Ser
 			return
 		}
 
-		forward_InfobasesService_GetInfobases_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Infobases_GetInfobases_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_InfobasesService_GetInfobasesSummary_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Infobases_GetInfobasesSummary_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.InfobasesService/GetInfobasesSummary", runtime.WithHTTPPathPattern("/api/v1/infobases:summary"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Infobases/GetInfobasesSummary", runtime.WithHTTPPathPattern("/api/v1/infobases:summary"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_InfobasesService_GetInfobasesSummary_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Infobases_GetInfobasesSummary_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -1673,22 +1959,22 @@ func RegisterInfobasesServiceHandlerServer(ctx context.Context, mux *runtime.Ser
 			return
 		}
 
-		forward_InfobasesService_GetInfobasesSummary_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Infobases_GetInfobasesSummary_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_InfobasesService_GetInfobase_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Infobases_GetInfobase_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.InfobasesService/GetInfobase", runtime.WithHTTPPathPattern("/api/v1/infobases/{infobase_id}"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Infobases/GetInfobase", runtime.WithHTTPPathPattern("/api/v1/infobases/{infobase_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_InfobasesService_GetInfobase_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Infobases_GetInfobase_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -1696,22 +1982,22 @@ func RegisterInfobasesServiceHandlerServer(ctx context.Context, mux *runtime.Ser
 			return
 		}
 
-		forward_InfobasesService_GetInfobase_0(ctx, mux, outboundMarshaler, w, req, response_InfobasesService_GetInfobase_0{resp}, mux.GetForwardResponseOptions()...)
+		forward_Infobases_GetInfobase_0(ctx, mux, outboundMarshaler, w, req, response_Infobases_GetInfobase_0{resp}, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_InfobasesService_CreateInfobase_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Infobases_CreateInfobase_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.InfobasesService/CreateInfobase", runtime.WithHTTPPathPattern("/api/v1/infobases"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Infobases/CreateInfobase", runtime.WithHTTPPathPattern("/api/v1/infobases"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_InfobasesService_CreateInfobase_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Infobases_CreateInfobase_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -1719,22 +2005,22 @@ func RegisterInfobasesServiceHandlerServer(ctx context.Context, mux *runtime.Ser
 			return
 		}
 
-		forward_InfobasesService_CreateInfobase_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Infobases_CreateInfobase_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_InfobasesService_UpdateInfobase_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Infobases_UpdateInfobase_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.InfobasesService/UpdateInfobase", runtime.WithHTTPPathPattern("/api/v1/infobases/{info.uuid}"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Infobases/UpdateInfobase", runtime.WithHTTPPathPattern("/api/v1/infobases/{info.uuid}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_InfobasesService_UpdateInfobase_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Infobases_UpdateInfobase_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -1742,22 +2028,22 @@ func RegisterInfobasesServiceHandlerServer(ctx context.Context, mux *runtime.Ser
 			return
 		}
 
-		forward_InfobasesService_UpdateInfobase_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Infobases_UpdateInfobase_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("DELETE", pattern_InfobasesService_DeleteInfobase_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("DELETE", pattern_Infobases_DeleteInfobase_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.InfobasesService/DeleteInfobase", runtime.WithHTTPPathPattern("/api/v1/infobases/{infobase_id}"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Infobases/DeleteInfobase", runtime.WithHTTPPathPattern("/api/v1/infobases/{infobase_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_InfobasesService_DeleteInfobase_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Infobases_DeleteInfobase_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -1765,22 +2051,22 @@ func RegisterInfobasesServiceHandlerServer(ctx context.Context, mux *runtime.Ser
 			return
 		}
 
-		forward_InfobasesService_DeleteInfobase_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Infobases_DeleteInfobase_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_InfobasesService_UpdateInfobaseSummary_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Infobases_UpdateInfobaseSummary_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.InfobasesService/UpdateInfobaseSummary", runtime.WithHTTPPathPattern("/api/v1/infobases:summary/{summary.uuid}"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Infobases/UpdateInfobaseSummary", runtime.WithHTTPPathPattern("/api/v1/infobases:summary/{summary.uuid}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_InfobasesService_UpdateInfobaseSummary_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Infobases_UpdateInfobaseSummary_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -1788,31 +2074,31 @@ func RegisterInfobasesServiceHandlerServer(ctx context.Context, mux *runtime.Ser
 			return
 		}
 
-		forward_InfobasesService_UpdateInfobaseSummary_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Infobases_UpdateInfobaseSummary_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
 	return nil
 }
 
-// RegisterClustersServiceHandlerServer registers the http handlers for service ClustersService to "mux".
-// UnaryRPC     :call ClustersServiceServer directly.
+// RegisterClustersHandlerServer registers the http handlers for service Clusters to "mux".
+// UnaryRPC     :call ClustersServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
-// Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterClustersServiceHandlerFromEndpoint instead.
-func RegisterClustersServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server ClustersServiceServer) error {
+// Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterClustersHandlerFromEndpoint instead.
+func RegisterClustersHandlerServer(ctx context.Context, mux *runtime.ServeMux, server ClustersServer) error {
 
-	mux.Handle("GET", pattern_ClustersService_GetClusters_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Clusters_GetClusters_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.ClustersService/GetClusters", runtime.WithHTTPPathPattern("/api/v1/clusters"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Clusters/GetClusters", runtime.WithHTTPPathPattern("/api/v1/clusters"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_ClustersService_GetClusters_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Clusters_GetClusters_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -1820,22 +2106,22 @@ func RegisterClustersServiceHandlerServer(ctx context.Context, mux *runtime.Serv
 			return
 		}
 
-		forward_ClustersService_GetClusters_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Clusters_GetClusters_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_ClustersService_GetClusterInfo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Clusters_GetClusterInfo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.ClustersService/GetClusterInfo", runtime.WithHTTPPathPattern("/api/v1/clusters/{cluster_id}"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Clusters/GetClusterInfo", runtime.WithHTTPPathPattern("/api/v1/clusters/{cluster_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_ClustersService_GetClusterInfo_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Clusters_GetClusterInfo_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -1843,22 +2129,22 @@ func RegisterClustersServiceHandlerServer(ctx context.Context, mux *runtime.Serv
 			return
 		}
 
-		forward_ClustersService_GetClusterInfo_0(ctx, mux, outboundMarshaler, w, req, response_ClustersService_GetClusterInfo_0{resp}, mux.GetForwardResponseOptions()...)
+		forward_Clusters_GetClusterInfo_0(ctx, mux, outboundMarshaler, w, req, response_Clusters_GetClusterInfo_0{resp}, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_ClustersService_RegCluster_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Clusters_RegCluster_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.ClustersService/RegCluster", runtime.WithHTTPPathPattern("/api/v1/clusters"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Clusters/RegCluster", runtime.WithHTTPPathPattern("/api/v1/clusters"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_ClustersService_RegCluster_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Clusters_RegCluster_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -1866,22 +2152,22 @@ func RegisterClustersServiceHandlerServer(ctx context.Context, mux *runtime.Serv
 			return
 		}
 
-		forward_ClustersService_RegCluster_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Clusters_RegCluster_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("DELETE", pattern_ClustersService_UnregCluster_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("DELETE", pattern_Clusters_UnregCluster_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.ClustersService/UnregCluster", runtime.WithHTTPPathPattern("/api/v1/clusters/{cluster_id}"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Clusters/UnregCluster", runtime.WithHTTPPathPattern("/api/v1/clusters/{cluster_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_ClustersService_UnregCluster_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Clusters_UnregCluster_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -1889,31 +2175,31 @@ func RegisterClustersServiceHandlerServer(ctx context.Context, mux *runtime.Serv
 			return
 		}
 
-		forward_ClustersService_UnregCluster_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Clusters_UnregCluster_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
 	return nil
 }
 
-// RegisterManagersServiceHandlerServer registers the http handlers for service ManagersService to "mux".
-// UnaryRPC     :call ManagersServiceServer directly.
+// RegisterManagersHandlerServer registers the http handlers for service Managers to "mux".
+// UnaryRPC     :call ManagersServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
-// Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterManagersServiceHandlerFromEndpoint instead.
-func RegisterManagersServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server ManagersServiceServer) error {
+// Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterManagersHandlerFromEndpoint instead.
+func RegisterManagersHandlerServer(ctx context.Context, mux *runtime.ServeMux, server ManagersServer) error {
 
-	mux.Handle("GET", pattern_ManagersService_GetClusterManagers_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Managers_GetClusterManagers_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.ManagersService/GetClusterManagers", runtime.WithHTTPPathPattern("/api/v1/managers"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Managers/GetClusterManagers", runtime.WithHTTPPathPattern("/api/v1/managers"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_ManagersService_GetClusterManagers_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Managers_GetClusterManagers_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -1921,22 +2207,22 @@ func RegisterManagersServiceHandlerServer(ctx context.Context, mux *runtime.Serv
 			return
 		}
 
-		forward_ManagersService_GetClusterManagers_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Managers_GetClusterManagers_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_ManagersService_GetClusterManagerInfo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Managers_GetClusterManagerInfo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.ManagersService/GetClusterManagerInfo", runtime.WithHTTPPathPattern("/api/v1/managers/{manager_id}"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Managers/GetClusterManagerInfo", runtime.WithHTTPPathPattern("/api/v1/managers/{manager_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_ManagersService_GetClusterManagerInfo_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Managers_GetClusterManagerInfo_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -1944,31 +2230,31 @@ func RegisterManagersServiceHandlerServer(ctx context.Context, mux *runtime.Serv
 			return
 		}
 
-		forward_ManagersService_GetClusterManagerInfo_0(ctx, mux, outboundMarshaler, w, req, response_ManagersService_GetClusterManagerInfo_0{resp}, mux.GetForwardResponseOptions()...)
+		forward_Managers_GetClusterManagerInfo_0(ctx, mux, outboundMarshaler, w, req, response_Managers_GetClusterManagerInfo_0{resp}, mux.GetForwardResponseOptions()...)
 
 	})
 
 	return nil
 }
 
-// RegisterProcessesServiceHandlerServer registers the http handlers for service ProcessesService to "mux".
-// UnaryRPC     :call ProcessesServiceServer directly.
+// RegisterProcessesHandlerServer registers the http handlers for service Processes to "mux".
+// UnaryRPC     :call ProcessesServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
-// Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterProcessesServiceHandlerFromEndpoint instead.
-func RegisterProcessesServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server ProcessesServiceServer) error {
+// Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterProcessesHandlerFromEndpoint instead.
+func RegisterProcessesHandlerServer(ctx context.Context, mux *runtime.ServeMux, server ProcessesServer) error {
 
-	mux.Handle("GET", pattern_ProcessesService_GetWorkingProcesses_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Processes_GetWorkingProcesses_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.ProcessesService/GetWorkingProcesses", runtime.WithHTTPPathPattern("/api/v1/processes"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Processes/GetWorkingProcesses", runtime.WithHTTPPathPattern("/api/v1/processes"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_ProcessesService_GetWorkingProcesses_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Processes_GetWorkingProcesses_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -1976,22 +2262,22 @@ func RegisterProcessesServiceHandlerServer(ctx context.Context, mux *runtime.Ser
 			return
 		}
 
-		forward_ProcessesService_GetWorkingProcesses_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Processes_GetWorkingProcesses_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_ProcessesService_GetServerWorkingProcesses_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Processes_GetServerWorkingProcesses_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.ProcessesService/GetServerWorkingProcesses", runtime.WithHTTPPathPattern("/api/v1/processes:server/{server_id}"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Processes/GetServerWorkingProcesses", runtime.WithHTTPPathPattern("/api/v1/processes:server/{server_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_ProcessesService_GetServerWorkingProcesses_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Processes_GetServerWorkingProcesses_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -1999,22 +2285,22 @@ func RegisterProcessesServiceHandlerServer(ctx context.Context, mux *runtime.Ser
 			return
 		}
 
-		forward_ProcessesService_GetServerWorkingProcesses_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Processes_GetServerWorkingProcesses_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_ProcessesService_GetWorkingProcessInfo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Processes_GetWorkingProcessInfo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.ProcessesService/GetWorkingProcessInfo", runtime.WithHTTPPathPattern("/api/v1/processes/{process_id}"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Processes/GetWorkingProcessInfo", runtime.WithHTTPPathPattern("/api/v1/processes/{process_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_ProcessesService_GetWorkingProcessInfo_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Processes_GetWorkingProcessInfo_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -2022,31 +2308,31 @@ func RegisterProcessesServiceHandlerServer(ctx context.Context, mux *runtime.Ser
 			return
 		}
 
-		forward_ProcessesService_GetWorkingProcessInfo_0(ctx, mux, outboundMarshaler, w, req, response_ProcessesService_GetWorkingProcessInfo_0{resp}, mux.GetForwardResponseOptions()...)
+		forward_Processes_GetWorkingProcessInfo_0(ctx, mux, outboundMarshaler, w, req, response_Processes_GetWorkingProcessInfo_0{resp}, mux.GetForwardResponseOptions()...)
 
 	})
 
 	return nil
 }
 
-// RegisterServersServiceHandlerServer registers the http handlers for service ServersService to "mux".
-// UnaryRPC     :call ServersServiceServer directly.
+// RegisterServersHandlerServer registers the http handlers for service Servers to "mux".
+// UnaryRPC     :call ServersServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
-// Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterServersServiceHandlerFromEndpoint instead.
-func RegisterServersServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server ServersServiceServer) error {
+// Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterServersHandlerFromEndpoint instead.
+func RegisterServersHandlerServer(ctx context.Context, mux *runtime.ServeMux, server ServersServer) error {
 
-	mux.Handle("GET", pattern_ServersService_GetWorkingServers_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Servers_GetWorkingServers_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.ServersService/GetWorkingServers", runtime.WithHTTPPathPattern("/api/v1/servers"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Servers/GetWorkingServers", runtime.WithHTTPPathPattern("/api/v1/servers"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_ServersService_GetWorkingServers_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Servers_GetWorkingServers_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -2054,22 +2340,22 @@ func RegisterServersServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 			return
 		}
 
-		forward_ServersService_GetWorkingServers_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Servers_GetWorkingServers_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_ServersService_GetWorkingServerInfo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Servers_GetWorkingServerInfo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.ServersService/GetWorkingServerInfo", runtime.WithHTTPPathPattern("/api/v1/servers/{server_id}"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Servers/GetWorkingServerInfo", runtime.WithHTTPPathPattern("/api/v1/servers/{server_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_ServersService_GetWorkingServerInfo_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Servers_GetWorkingServerInfo_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -2077,22 +2363,22 @@ func RegisterServersServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 			return
 		}
 
-		forward_ServersService_GetWorkingServerInfo_0(ctx, mux, outboundMarshaler, w, req, response_ServersService_GetWorkingServerInfo_0{resp}, mux.GetForwardResponseOptions()...)
+		forward_Servers_GetWorkingServerInfo_0(ctx, mux, outboundMarshaler, w, req, response_Servers_GetWorkingServerInfo_0{resp}, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_ServersService_AddWorkingServer_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Servers_AddWorkingServer_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.ServersService/AddWorkingServer", runtime.WithHTTPPathPattern("/api/v1/servers"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Servers/AddWorkingServer", runtime.WithHTTPPathPattern("/api/v1/servers"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_ServersService_AddWorkingServer_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Servers_AddWorkingServer_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -2100,22 +2386,22 @@ func RegisterServersServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 			return
 		}
 
-		forward_ServersService_AddWorkingServer_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Servers_AddWorkingServer_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("DELETE", pattern_ServersService_DeleteWorkingServer_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("DELETE", pattern_Servers_DeleteWorkingServer_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.ServersService/DeleteWorkingServer", runtime.WithHTTPPathPattern("/api/v1/servers/{server_id}"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Servers/DeleteWorkingServer", runtime.WithHTTPPathPattern("/api/v1/servers/{server_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_ServersService_DeleteWorkingServer_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Servers_DeleteWorkingServer_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -2123,16 +2409,195 @@ func RegisterServersServiceHandlerServer(ctx context.Context, mux *runtime.Serve
 			return
 		}
 
-		forward_ServersService_DeleteWorkingServer_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Servers_DeleteWorkingServer_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
 	return nil
 }
 
-// RegisterAuthServiceHandlerFromEndpoint is same as RegisterAuthServiceHandler but
+// RegisterConnectionsHandlerServer registers the http handlers for service Connections to "mux".
+// UnaryRPC     :call ConnectionsServer directly.
+// StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
+// Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterConnectionsHandlerFromEndpoint instead.
+func RegisterConnectionsHandlerServer(ctx context.Context, mux *runtime.ServeMux, server ConnectionsServer) error {
+
+	mux.Handle("GET", pattern_Connections_GetConnections_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Connections/GetConnections", runtime.WithHTTPPathPattern("/api/v1/connections"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_Connections_GetConnections_0(rctx, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_Connections_GetConnections_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	mux.Handle("GET", pattern_Connections_GetInfobaseConnections_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Connections/GetInfobaseConnections", runtime.WithHTTPPathPattern("/api/v1/connections:infobase"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_Connections_GetInfobaseConnections_0(rctx, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_Connections_GetInfobaseConnections_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	mux.Handle("DELETE", pattern_Connections_DisconnectConnection_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Connections/DisconnectConnection", runtime.WithHTTPPathPattern("/api/v1/connections/{connection_id}"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_Connections_DisconnectConnection_0(rctx, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_Connections_DisconnectConnection_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	return nil
+}
+
+// RegisterLocksHandlerServer registers the http handlers for service Locks to "mux".
+// UnaryRPC     :call LocksServer directly.
+// StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
+// Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterLocksHandlerFromEndpoint instead.
+func RegisterLocksHandlerServer(ctx context.Context, mux *runtime.ServeMux, server LocksServer) error {
+
+	mux.Handle("GET", pattern_Locks_GetLocks_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Locks/GetLocks", runtime.WithHTTPPathPattern("/api/v1/locks"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_Locks_GetLocks_0(rctx, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_Locks_GetLocks_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	mux.Handle("GET", pattern_Locks_GetInfobaseLocks_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Locks/GetInfobaseLocks", runtime.WithHTTPPathPattern("/api/v1/locks:infobase"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_Locks_GetInfobaseLocks_0(rctx, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_Locks_GetInfobaseLocks_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	mux.Handle("GET", pattern_Locks_GetSessionLocks_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Locks/GetSessionLocks", runtime.WithHTTPPathPattern("/api/v1/locks:session"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_Locks_GetSessionLocks_0(rctx, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_Locks_GetSessionLocks_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	mux.Handle("GET", pattern_Locks_GetConnectionLocks_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Locks/GetConnectionLocks", runtime.WithHTTPPathPattern("/api/v1/locks:connection"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_Locks_GetConnectionLocks_0(rctx, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_Locks_GetConnectionLocks_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	return nil
+}
+
+// RegisterAuthorizationsHandlerFromEndpoint is same as RegisterAuthorizationsHandler but
 // automatically dials to "endpoint" and closes the connection when "ctx" gets done.
-func RegisterAuthServiceHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
+func RegisterAuthorizationsHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
 	conn, err := grpc.Dial(endpoint, opts...)
 	if err != nil {
 		return err
@@ -2152,99 +2617,99 @@ func RegisterAuthServiceHandlerFromEndpoint(ctx context.Context, mux *runtime.Se
 		}()
 	}()
 
-	return RegisterAuthServiceHandler(ctx, mux, conn)
+	return RegisterAuthorizationsHandler(ctx, mux, conn)
 }
 
-// RegisterAuthServiceHandler registers the http handlers for service AuthService to "mux".
+// RegisterAuthorizationsHandler registers the http handlers for service Authorizations to "mux".
 // The handlers forward requests to the grpc endpoint over "conn".
-func RegisterAuthServiceHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
-	return RegisterAuthServiceHandlerClient(ctx, mux, NewAuthServiceClient(conn))
+func RegisterAuthorizationsHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
+	return RegisterAuthorizationsHandlerClient(ctx, mux, NewAuthorizationsClient(conn))
 }
 
-// RegisterAuthServiceHandlerClient registers the http handlers for service AuthService
-// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "AuthServiceClient".
-// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "AuthServiceClient"
+// RegisterAuthorizationsHandlerClient registers the http handlers for service Authorizations
+// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "AuthorizationsClient".
+// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "AuthorizationsClient"
 // doesn't go through the normal gRPC flow (creating a gRPC client etc.) then it will be up to the passed in
-// "AuthServiceClient" to call the correct interceptors.
-func RegisterAuthServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client AuthServiceClient) error {
+// "AuthorizationsClient" to call the correct interceptors.
+func RegisterAuthorizationsHandlerClient(ctx context.Context, mux *runtime.ServeMux, client AuthorizationsClient) error {
 
-	mux.Handle("POST", pattern_AuthService_AuthenticateCluster_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Authorizations_AuthenticateCluster_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.AuthService/AuthenticateCluster", runtime.WithHTTPPathPattern("/api/v1/clusters/auth"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Authorizations/AuthenticateCluster", runtime.WithHTTPPathPattern("/api/v1/clusters/auth"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_AuthService_AuthenticateCluster_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Authorizations_AuthenticateCluster_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_AuthService_AuthenticateCluster_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Authorizations_AuthenticateCluster_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_AuthService_AuthenticateCluster_1, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Authorizations_AuthenticateCluster_1, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.AuthService/AuthenticateCluster", runtime.WithHTTPPathPattern("/api/v1/clusters/{cluster_id}/auth"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Authorizations/AuthenticateCluster", runtime.WithHTTPPathPattern("/api/v1/clusters/{cluster_id}/auth"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_AuthService_AuthenticateCluster_1(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Authorizations_AuthenticateCluster_1(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_AuthService_AuthenticateCluster_1(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Authorizations_AuthenticateCluster_1(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_AuthService_AuthenticateInfobase_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Authorizations_AuthenticateInfobase_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.AuthService/AuthenticateInfobase", runtime.WithHTTPPathPattern("/api/v1/infobases/auth"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Authorizations/AuthenticateInfobase", runtime.WithHTTPPathPattern("/api/v1/infobases/auth"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_AuthService_AuthenticateInfobase_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Authorizations_AuthenticateInfobase_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_AuthService_AuthenticateInfobase_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Authorizations_AuthenticateInfobase_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_AuthService_AuthenticateAgent_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Authorizations_AuthenticateAgent_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.AuthService/AuthenticateAgent", runtime.WithHTTPPathPattern("/api/v1/agent:auth"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Authorizations/AuthenticateAgent", runtime.WithHTTPPathPattern("/api/v1/agent:auth"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_AuthService_AuthenticateAgent_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Authorizations_AuthenticateAgent_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_AuthService_AuthenticateAgent_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Authorizations_AuthenticateAgent_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -2252,28 +2717,28 @@ func RegisterAuthServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 }
 
 var (
-	pattern_AuthService_AuthenticateCluster_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"api", "v1", "clusters", "auth"}, ""))
+	pattern_Authorizations_AuthenticateCluster_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"api", "v1", "clusters", "auth"}, ""))
 
-	pattern_AuthService_AuthenticateCluster_1 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 2, 4}, []string{"api", "v1", "clusters", "cluster_id", "auth"}, ""))
+	pattern_Authorizations_AuthenticateCluster_1 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 2, 4}, []string{"api", "v1", "clusters", "cluster_id", "auth"}, ""))
 
-	pattern_AuthService_AuthenticateInfobase_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"api", "v1", "infobases", "auth"}, ""))
+	pattern_Authorizations_AuthenticateInfobase_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"api", "v1", "infobases", "auth"}, ""))
 
-	pattern_AuthService_AuthenticateAgent_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "agent"}, "auth"))
+	pattern_Authorizations_AuthenticateAgent_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "agent"}, "auth"))
 )
 
 var (
-	forward_AuthService_AuthenticateCluster_0 = runtime.ForwardResponseMessage
+	forward_Authorizations_AuthenticateCluster_0 = runtime.ForwardResponseMessage
 
-	forward_AuthService_AuthenticateCluster_1 = runtime.ForwardResponseMessage
+	forward_Authorizations_AuthenticateCluster_1 = runtime.ForwardResponseMessage
 
-	forward_AuthService_AuthenticateInfobase_0 = runtime.ForwardResponseMessage
+	forward_Authorizations_AuthenticateInfobase_0 = runtime.ForwardResponseMessage
 
-	forward_AuthService_AuthenticateAgent_0 = runtime.ForwardResponseMessage
+	forward_Authorizations_AuthenticateAgent_0 = runtime.ForwardResponseMessage
 )
 
-// RegisterSessionsServiceHandlerFromEndpoint is same as RegisterSessionsServiceHandler but
+// RegisterSessionsHandlerFromEndpoint is same as RegisterSessionsHandler but
 // automatically dials to "endpoint" and closes the connection when "ctx" gets done.
-func RegisterSessionsServiceHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
+func RegisterSessionsHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
 	conn, err := grpc.Dial(endpoint, opts...)
 	if err != nil {
 		return err
@@ -2293,79 +2758,79 @@ func RegisterSessionsServiceHandlerFromEndpoint(ctx context.Context, mux *runtim
 		}()
 	}()
 
-	return RegisterSessionsServiceHandler(ctx, mux, conn)
+	return RegisterSessionsHandler(ctx, mux, conn)
 }
 
-// RegisterSessionsServiceHandler registers the http handlers for service SessionsService to "mux".
+// RegisterSessionsHandler registers the http handlers for service Sessions to "mux".
 // The handlers forward requests to the grpc endpoint over "conn".
-func RegisterSessionsServiceHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
-	return RegisterSessionsServiceHandlerClient(ctx, mux, NewSessionsServiceClient(conn))
+func RegisterSessionsHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
+	return RegisterSessionsHandlerClient(ctx, mux, NewSessionsClient(conn))
 }
 
-// RegisterSessionsServiceHandlerClient registers the http handlers for service SessionsService
-// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "SessionsServiceClient".
-// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "SessionsServiceClient"
+// RegisterSessionsHandlerClient registers the http handlers for service Sessions
+// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "SessionsClient".
+// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "SessionsClient"
 // doesn't go through the normal gRPC flow (creating a gRPC client etc.) then it will be up to the passed in
-// "SessionsServiceClient" to call the correct interceptors.
-func RegisterSessionsServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client SessionsServiceClient) error {
+// "SessionsClient" to call the correct interceptors.
+func RegisterSessionsHandlerClient(ctx context.Context, mux *runtime.ServeMux, client SessionsClient) error {
 
-	mux.Handle("GET", pattern_SessionsService_GetSessions_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Sessions_GetSessions_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.SessionsService/GetSessions", runtime.WithHTTPPathPattern("/api/v1/sessions"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Sessions/GetSessions", runtime.WithHTTPPathPattern("/api/v1/sessions"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_SessionsService_GetSessions_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Sessions_GetSessions_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_SessionsService_GetSessions_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Sessions_GetSessions_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_SessionsService_GetInfobaseSessions_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Sessions_GetInfobaseSessions_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.SessionsService/GetInfobaseSessions", runtime.WithHTTPPathPattern("/api/v1/sessions:infobase"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Sessions/GetInfobaseSessions", runtime.WithHTTPPathPattern("/api/v1/sessions:infobase"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_SessionsService_GetInfobaseSessions_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Sessions_GetInfobaseSessions_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_SessionsService_GetInfobaseSessions_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Sessions_GetInfobaseSessions_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("DELETE", pattern_SessionsService_TerminateSession_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("DELETE", pattern_Sessions_TerminateSession_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.SessionsService/TerminateSession", runtime.WithHTTPPathPattern("/api/v1/sessions/{session_id}"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Sessions/TerminateSession", runtime.WithHTTPPathPattern("/api/v1/sessions/{session_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_SessionsService_TerminateSession_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Sessions_TerminateSession_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_SessionsService_TerminateSession_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Sessions_TerminateSession_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -2373,24 +2838,24 @@ func RegisterSessionsServiceHandlerClient(ctx context.Context, mux *runtime.Serv
 }
 
 var (
-	pattern_SessionsService_GetSessions_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "sessions"}, ""))
+	pattern_Sessions_GetSessions_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "sessions"}, ""))
 
-	pattern_SessionsService_GetInfobaseSessions_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "sessions"}, "infobase"))
+	pattern_Sessions_GetInfobaseSessions_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "sessions"}, "infobase"))
 
-	pattern_SessionsService_TerminateSession_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v1", "sessions", "session_id"}, ""))
+	pattern_Sessions_TerminateSession_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v1", "sessions", "session_id"}, ""))
 )
 
 var (
-	forward_SessionsService_GetSessions_0 = runtime.ForwardResponseMessage
+	forward_Sessions_GetSessions_0 = runtime.ForwardResponseMessage
 
-	forward_SessionsService_GetInfobaseSessions_0 = runtime.ForwardResponseMessage
+	forward_Sessions_GetInfobaseSessions_0 = runtime.ForwardResponseMessage
 
-	forward_SessionsService_TerminateSession_0 = runtime.ForwardResponseMessage
+	forward_Sessions_TerminateSession_0 = runtime.ForwardResponseMessage
 )
 
-// RegisterInfobasesServiceHandlerFromEndpoint is same as RegisterInfobasesServiceHandler but
+// RegisterInfobasesHandlerFromEndpoint is same as RegisterInfobasesHandler but
 // automatically dials to "endpoint" and closes the connection when "ctx" gets done.
-func RegisterInfobasesServiceHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
+func RegisterInfobasesHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
 	conn, err := grpc.Dial(endpoint, opts...)
 	if err != nil {
 		return err
@@ -2410,209 +2875,209 @@ func RegisterInfobasesServiceHandlerFromEndpoint(ctx context.Context, mux *runti
 		}()
 	}()
 
-	return RegisterInfobasesServiceHandler(ctx, mux, conn)
+	return RegisterInfobasesHandler(ctx, mux, conn)
 }
 
-// RegisterInfobasesServiceHandler registers the http handlers for service InfobasesService to "mux".
+// RegisterInfobasesHandler registers the http handlers for service Infobases to "mux".
 // The handlers forward requests to the grpc endpoint over "conn".
-func RegisterInfobasesServiceHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
-	return RegisterInfobasesServiceHandlerClient(ctx, mux, NewInfobasesServiceClient(conn))
+func RegisterInfobasesHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
+	return RegisterInfobasesHandlerClient(ctx, mux, NewInfobasesClient(conn))
 }
 
-// RegisterInfobasesServiceHandlerClient registers the http handlers for service InfobasesService
-// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "InfobasesServiceClient".
-// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "InfobasesServiceClient"
+// RegisterInfobasesHandlerClient registers the http handlers for service Infobases
+// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "InfobasesClient".
+// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "InfobasesClient"
 // doesn't go through the normal gRPC flow (creating a gRPC client etc.) then it will be up to the passed in
-// "InfobasesServiceClient" to call the correct interceptors.
-func RegisterInfobasesServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client InfobasesServiceClient) error {
+// "InfobasesClient" to call the correct interceptors.
+func RegisterInfobasesHandlerClient(ctx context.Context, mux *runtime.ServeMux, client InfobasesClient) error {
 
-	mux.Handle("GET", pattern_InfobasesService_GetInfobases_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Infobases_GetInfobases_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.InfobasesService/GetInfobases", runtime.WithHTTPPathPattern("/api/v1/infobases"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Infobases/GetInfobases", runtime.WithHTTPPathPattern("/api/v1/infobases"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_InfobasesService_GetInfobases_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Infobases_GetInfobases_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_InfobasesService_GetInfobases_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Infobases_GetInfobases_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_InfobasesService_GetInfobasesSummary_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Infobases_GetInfobasesSummary_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.InfobasesService/GetInfobasesSummary", runtime.WithHTTPPathPattern("/api/v1/infobases:summary"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Infobases/GetInfobasesSummary", runtime.WithHTTPPathPattern("/api/v1/infobases:summary"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_InfobasesService_GetInfobasesSummary_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Infobases_GetInfobasesSummary_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_InfobasesService_GetInfobasesSummary_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Infobases_GetInfobasesSummary_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_InfobasesService_GetInfobase_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Infobases_GetInfobase_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.InfobasesService/GetInfobase", runtime.WithHTTPPathPattern("/api/v1/infobases/{infobase_id}"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Infobases/GetInfobase", runtime.WithHTTPPathPattern("/api/v1/infobases/{infobase_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_InfobasesService_GetInfobase_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Infobases_GetInfobase_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_InfobasesService_GetInfobase_0(ctx, mux, outboundMarshaler, w, req, response_InfobasesService_GetInfobase_0{resp}, mux.GetForwardResponseOptions()...)
+		forward_Infobases_GetInfobase_0(ctx, mux, outboundMarshaler, w, req, response_Infobases_GetInfobase_0{resp}, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_InfobasesService_CreateInfobase_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Infobases_CreateInfobase_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.InfobasesService/CreateInfobase", runtime.WithHTTPPathPattern("/api/v1/infobases"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Infobases/CreateInfobase", runtime.WithHTTPPathPattern("/api/v1/infobases"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_InfobasesService_CreateInfobase_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Infobases_CreateInfobase_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_InfobasesService_CreateInfobase_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Infobases_CreateInfobase_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_InfobasesService_UpdateInfobase_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Infobases_UpdateInfobase_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.InfobasesService/UpdateInfobase", runtime.WithHTTPPathPattern("/api/v1/infobases/{info.uuid}"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Infobases/UpdateInfobase", runtime.WithHTTPPathPattern("/api/v1/infobases/{info.uuid}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_InfobasesService_UpdateInfobase_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Infobases_UpdateInfobase_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_InfobasesService_UpdateInfobase_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Infobases_UpdateInfobase_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("DELETE", pattern_InfobasesService_DeleteInfobase_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("DELETE", pattern_Infobases_DeleteInfobase_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.InfobasesService/DeleteInfobase", runtime.WithHTTPPathPattern("/api/v1/infobases/{infobase_id}"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Infobases/DeleteInfobase", runtime.WithHTTPPathPattern("/api/v1/infobases/{infobase_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_InfobasesService_DeleteInfobase_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Infobases_DeleteInfobase_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_InfobasesService_DeleteInfobase_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Infobases_DeleteInfobase_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_InfobasesService_UpdateInfobaseSummary_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Infobases_UpdateInfobaseSummary_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.InfobasesService/UpdateInfobaseSummary", runtime.WithHTTPPathPattern("/api/v1/infobases:summary/{summary.uuid}"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Infobases/UpdateInfobaseSummary", runtime.WithHTTPPathPattern("/api/v1/infobases:summary/{summary.uuid}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_InfobasesService_UpdateInfobaseSummary_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Infobases_UpdateInfobaseSummary_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_InfobasesService_UpdateInfobaseSummary_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Infobases_UpdateInfobaseSummary_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
 	return nil
 }
 
-type response_InfobasesService_GetInfobase_0 struct {
+type response_Infobases_GetInfobase_0 struct {
 	proto.Message
 }
 
-func (m response_InfobasesService_GetInfobase_0) XXX_ResponseBody() interface{} {
+func (m response_Infobases_GetInfobase_0) XXX_ResponseBody() interface{} {
 	response := m.Message.(*messagesv1.GetInfobaseInfoResponse)
 	return response.Info
 }
 
 var (
-	pattern_InfobasesService_GetInfobases_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "infobases"}, ""))
+	pattern_Infobases_GetInfobases_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "infobases"}, ""))
 
-	pattern_InfobasesService_GetInfobasesSummary_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "infobases"}, "summary"))
+	pattern_Infobases_GetInfobasesSummary_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "infobases"}, "summary"))
 
-	pattern_InfobasesService_GetInfobase_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v1", "infobases", "infobase_id"}, ""))
+	pattern_Infobases_GetInfobase_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v1", "infobases", "infobase_id"}, ""))
 
-	pattern_InfobasesService_CreateInfobase_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "infobases"}, ""))
+	pattern_Infobases_CreateInfobase_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "infobases"}, ""))
 
-	pattern_InfobasesService_UpdateInfobase_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v1", "infobases", "info.uuid"}, ""))
+	pattern_Infobases_UpdateInfobase_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v1", "infobases", "info.uuid"}, ""))
 
-	pattern_InfobasesService_DeleteInfobase_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v1", "infobases", "infobase_id"}, ""))
+	pattern_Infobases_DeleteInfobase_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v1", "infobases", "infobase_id"}, ""))
 
-	pattern_InfobasesService_UpdateInfobaseSummary_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v1", "infobases:summary", "summary.uuid"}, ""))
+	pattern_Infobases_UpdateInfobaseSummary_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v1", "infobases:summary", "summary.uuid"}, ""))
 )
 
 var (
-	forward_InfobasesService_GetInfobases_0 = runtime.ForwardResponseMessage
+	forward_Infobases_GetInfobases_0 = runtime.ForwardResponseMessage
 
-	forward_InfobasesService_GetInfobasesSummary_0 = runtime.ForwardResponseMessage
+	forward_Infobases_GetInfobasesSummary_0 = runtime.ForwardResponseMessage
 
-	forward_InfobasesService_GetInfobase_0 = runtime.ForwardResponseMessage
+	forward_Infobases_GetInfobase_0 = runtime.ForwardResponseMessage
 
-	forward_InfobasesService_CreateInfobase_0 = runtime.ForwardResponseMessage
+	forward_Infobases_CreateInfobase_0 = runtime.ForwardResponseMessage
 
-	forward_InfobasesService_UpdateInfobase_0 = runtime.ForwardResponseMessage
+	forward_Infobases_UpdateInfobase_0 = runtime.ForwardResponseMessage
 
-	forward_InfobasesService_DeleteInfobase_0 = runtime.ForwardResponseMessage
+	forward_Infobases_DeleteInfobase_0 = runtime.ForwardResponseMessage
 
-	forward_InfobasesService_UpdateInfobaseSummary_0 = runtime.ForwardResponseMessage
+	forward_Infobases_UpdateInfobaseSummary_0 = runtime.ForwardResponseMessage
 )
 
-// RegisterClustersServiceHandlerFromEndpoint is same as RegisterClustersServiceHandler but
+// RegisterClustersHandlerFromEndpoint is same as RegisterClustersHandler but
 // automatically dials to "endpoint" and closes the connection when "ctx" gets done.
-func RegisterClustersServiceHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
+func RegisterClustersHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
 	conn, err := grpc.Dial(endpoint, opts...)
 	if err != nil {
 		return err
@@ -2632,137 +3097,137 @@ func RegisterClustersServiceHandlerFromEndpoint(ctx context.Context, mux *runtim
 		}()
 	}()
 
-	return RegisterClustersServiceHandler(ctx, mux, conn)
+	return RegisterClustersHandler(ctx, mux, conn)
 }
 
-// RegisterClustersServiceHandler registers the http handlers for service ClustersService to "mux".
+// RegisterClustersHandler registers the http handlers for service Clusters to "mux".
 // The handlers forward requests to the grpc endpoint over "conn".
-func RegisterClustersServiceHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
-	return RegisterClustersServiceHandlerClient(ctx, mux, NewClustersServiceClient(conn))
+func RegisterClustersHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
+	return RegisterClustersHandlerClient(ctx, mux, NewClustersClient(conn))
 }
 
-// RegisterClustersServiceHandlerClient registers the http handlers for service ClustersService
-// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "ClustersServiceClient".
-// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "ClustersServiceClient"
+// RegisterClustersHandlerClient registers the http handlers for service Clusters
+// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "ClustersClient".
+// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "ClustersClient"
 // doesn't go through the normal gRPC flow (creating a gRPC client etc.) then it will be up to the passed in
-// "ClustersServiceClient" to call the correct interceptors.
-func RegisterClustersServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client ClustersServiceClient) error {
+// "ClustersClient" to call the correct interceptors.
+func RegisterClustersHandlerClient(ctx context.Context, mux *runtime.ServeMux, client ClustersClient) error {
 
-	mux.Handle("GET", pattern_ClustersService_GetClusters_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Clusters_GetClusters_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.ClustersService/GetClusters", runtime.WithHTTPPathPattern("/api/v1/clusters"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Clusters/GetClusters", runtime.WithHTTPPathPattern("/api/v1/clusters"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_ClustersService_GetClusters_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Clusters_GetClusters_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_ClustersService_GetClusters_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Clusters_GetClusters_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_ClustersService_GetClusterInfo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Clusters_GetClusterInfo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.ClustersService/GetClusterInfo", runtime.WithHTTPPathPattern("/api/v1/clusters/{cluster_id}"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Clusters/GetClusterInfo", runtime.WithHTTPPathPattern("/api/v1/clusters/{cluster_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_ClustersService_GetClusterInfo_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Clusters_GetClusterInfo_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_ClustersService_GetClusterInfo_0(ctx, mux, outboundMarshaler, w, req, response_ClustersService_GetClusterInfo_0{resp}, mux.GetForwardResponseOptions()...)
+		forward_Clusters_GetClusterInfo_0(ctx, mux, outboundMarshaler, w, req, response_Clusters_GetClusterInfo_0{resp}, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_ClustersService_RegCluster_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Clusters_RegCluster_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.ClustersService/RegCluster", runtime.WithHTTPPathPattern("/api/v1/clusters"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Clusters/RegCluster", runtime.WithHTTPPathPattern("/api/v1/clusters"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_ClustersService_RegCluster_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Clusters_RegCluster_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_ClustersService_RegCluster_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Clusters_RegCluster_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("DELETE", pattern_ClustersService_UnregCluster_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("DELETE", pattern_Clusters_UnregCluster_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.ClustersService/UnregCluster", runtime.WithHTTPPathPattern("/api/v1/clusters/{cluster_id}"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Clusters/UnregCluster", runtime.WithHTTPPathPattern("/api/v1/clusters/{cluster_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_ClustersService_UnregCluster_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Clusters_UnregCluster_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_ClustersService_UnregCluster_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Clusters_UnregCluster_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
 	return nil
 }
 
-type response_ClustersService_GetClusterInfo_0 struct {
+type response_Clusters_GetClusterInfo_0 struct {
 	proto.Message
 }
 
-func (m response_ClustersService_GetClusterInfo_0) XXX_ResponseBody() interface{} {
+func (m response_Clusters_GetClusterInfo_0) XXX_ResponseBody() interface{} {
 	response := m.Message.(*messagesv1.GetClusterInfoResponse)
 	return response.Info
 }
 
 var (
-	pattern_ClustersService_GetClusters_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "clusters"}, ""))
+	pattern_Clusters_GetClusters_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "clusters"}, ""))
 
-	pattern_ClustersService_GetClusterInfo_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v1", "clusters", "cluster_id"}, ""))
+	pattern_Clusters_GetClusterInfo_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v1", "clusters", "cluster_id"}, ""))
 
-	pattern_ClustersService_RegCluster_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "clusters"}, ""))
+	pattern_Clusters_RegCluster_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "clusters"}, ""))
 
-	pattern_ClustersService_UnregCluster_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v1", "clusters", "cluster_id"}, ""))
+	pattern_Clusters_UnregCluster_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v1", "clusters", "cluster_id"}, ""))
 )
 
 var (
-	forward_ClustersService_GetClusters_0 = runtime.ForwardResponseMessage
+	forward_Clusters_GetClusters_0 = runtime.ForwardResponseMessage
 
-	forward_ClustersService_GetClusterInfo_0 = runtime.ForwardResponseMessage
+	forward_Clusters_GetClusterInfo_0 = runtime.ForwardResponseMessage
 
-	forward_ClustersService_RegCluster_0 = runtime.ForwardResponseMessage
+	forward_Clusters_RegCluster_0 = runtime.ForwardResponseMessage
 
-	forward_ClustersService_UnregCluster_0 = runtime.ForwardResponseMessage
+	forward_Clusters_UnregCluster_0 = runtime.ForwardResponseMessage
 )
 
-// RegisterManagersServiceHandlerFromEndpoint is same as RegisterManagersServiceHandler but
+// RegisterManagersHandlerFromEndpoint is same as RegisterManagersHandler but
 // automatically dials to "endpoint" and closes the connection when "ctx" gets done.
-func RegisterManagersServiceHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
+func RegisterManagersHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
 	conn, err := grpc.Dial(endpoint, opts...)
 	if err != nil {
 		return err
@@ -2782,89 +3247,89 @@ func RegisterManagersServiceHandlerFromEndpoint(ctx context.Context, mux *runtim
 		}()
 	}()
 
-	return RegisterManagersServiceHandler(ctx, mux, conn)
+	return RegisterManagersHandler(ctx, mux, conn)
 }
 
-// RegisterManagersServiceHandler registers the http handlers for service ManagersService to "mux".
+// RegisterManagersHandler registers the http handlers for service Managers to "mux".
 // The handlers forward requests to the grpc endpoint over "conn".
-func RegisterManagersServiceHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
-	return RegisterManagersServiceHandlerClient(ctx, mux, NewManagersServiceClient(conn))
+func RegisterManagersHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
+	return RegisterManagersHandlerClient(ctx, mux, NewManagersClient(conn))
 }
 
-// RegisterManagersServiceHandlerClient registers the http handlers for service ManagersService
-// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "ManagersServiceClient".
-// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "ManagersServiceClient"
+// RegisterManagersHandlerClient registers the http handlers for service Managers
+// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "ManagersClient".
+// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "ManagersClient"
 // doesn't go through the normal gRPC flow (creating a gRPC client etc.) then it will be up to the passed in
-// "ManagersServiceClient" to call the correct interceptors.
-func RegisterManagersServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client ManagersServiceClient) error {
+// "ManagersClient" to call the correct interceptors.
+func RegisterManagersHandlerClient(ctx context.Context, mux *runtime.ServeMux, client ManagersClient) error {
 
-	mux.Handle("GET", pattern_ManagersService_GetClusterManagers_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Managers_GetClusterManagers_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.ManagersService/GetClusterManagers", runtime.WithHTTPPathPattern("/api/v1/managers"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Managers/GetClusterManagers", runtime.WithHTTPPathPattern("/api/v1/managers"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_ManagersService_GetClusterManagers_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Managers_GetClusterManagers_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_ManagersService_GetClusterManagers_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Managers_GetClusterManagers_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_ManagersService_GetClusterManagerInfo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Managers_GetClusterManagerInfo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.ManagersService/GetClusterManagerInfo", runtime.WithHTTPPathPattern("/api/v1/managers/{manager_id}"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Managers/GetClusterManagerInfo", runtime.WithHTTPPathPattern("/api/v1/managers/{manager_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_ManagersService_GetClusterManagerInfo_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Managers_GetClusterManagerInfo_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_ManagersService_GetClusterManagerInfo_0(ctx, mux, outboundMarshaler, w, req, response_ManagersService_GetClusterManagerInfo_0{resp}, mux.GetForwardResponseOptions()...)
+		forward_Managers_GetClusterManagerInfo_0(ctx, mux, outboundMarshaler, w, req, response_Managers_GetClusterManagerInfo_0{resp}, mux.GetForwardResponseOptions()...)
 
 	})
 
 	return nil
 }
 
-type response_ManagersService_GetClusterManagerInfo_0 struct {
+type response_Managers_GetClusterManagerInfo_0 struct {
 	proto.Message
 }
 
-func (m response_ManagersService_GetClusterManagerInfo_0) XXX_ResponseBody() interface{} {
+func (m response_Managers_GetClusterManagerInfo_0) XXX_ResponseBody() interface{} {
 	response := m.Message.(*messagesv1.GetClusterManagerInfoResponse)
 	return response.Info
 }
 
 var (
-	pattern_ManagersService_GetClusterManagers_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "managers"}, ""))
+	pattern_Managers_GetClusterManagers_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "managers"}, ""))
 
-	pattern_ManagersService_GetClusterManagerInfo_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v1", "managers", "manager_id"}, ""))
+	pattern_Managers_GetClusterManagerInfo_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v1", "managers", "manager_id"}, ""))
 )
 
 var (
-	forward_ManagersService_GetClusterManagers_0 = runtime.ForwardResponseMessage
+	forward_Managers_GetClusterManagers_0 = runtime.ForwardResponseMessage
 
-	forward_ManagersService_GetClusterManagerInfo_0 = runtime.ForwardResponseMessage
+	forward_Managers_GetClusterManagerInfo_0 = runtime.ForwardResponseMessage
 )
 
-// RegisterProcessesServiceHandlerFromEndpoint is same as RegisterProcessesServiceHandler but
+// RegisterProcessesHandlerFromEndpoint is same as RegisterProcessesHandler but
 // automatically dials to "endpoint" and closes the connection when "ctx" gets done.
-func RegisterProcessesServiceHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
+func RegisterProcessesHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
 	conn, err := grpc.Dial(endpoint, opts...)
 	if err != nil {
 		return err
@@ -2884,113 +3349,113 @@ func RegisterProcessesServiceHandlerFromEndpoint(ctx context.Context, mux *runti
 		}()
 	}()
 
-	return RegisterProcessesServiceHandler(ctx, mux, conn)
+	return RegisterProcessesHandler(ctx, mux, conn)
 }
 
-// RegisterProcessesServiceHandler registers the http handlers for service ProcessesService to "mux".
+// RegisterProcessesHandler registers the http handlers for service Processes to "mux".
 // The handlers forward requests to the grpc endpoint over "conn".
-func RegisterProcessesServiceHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
-	return RegisterProcessesServiceHandlerClient(ctx, mux, NewProcessesServiceClient(conn))
+func RegisterProcessesHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
+	return RegisterProcessesHandlerClient(ctx, mux, NewProcessesClient(conn))
 }
 
-// RegisterProcessesServiceHandlerClient registers the http handlers for service ProcessesService
-// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "ProcessesServiceClient".
-// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "ProcessesServiceClient"
+// RegisterProcessesHandlerClient registers the http handlers for service Processes
+// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "ProcessesClient".
+// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "ProcessesClient"
 // doesn't go through the normal gRPC flow (creating a gRPC client etc.) then it will be up to the passed in
-// "ProcessesServiceClient" to call the correct interceptors.
-func RegisterProcessesServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client ProcessesServiceClient) error {
+// "ProcessesClient" to call the correct interceptors.
+func RegisterProcessesHandlerClient(ctx context.Context, mux *runtime.ServeMux, client ProcessesClient) error {
 
-	mux.Handle("GET", pattern_ProcessesService_GetWorkingProcesses_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Processes_GetWorkingProcesses_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.ProcessesService/GetWorkingProcesses", runtime.WithHTTPPathPattern("/api/v1/processes"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Processes/GetWorkingProcesses", runtime.WithHTTPPathPattern("/api/v1/processes"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_ProcessesService_GetWorkingProcesses_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Processes_GetWorkingProcesses_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_ProcessesService_GetWorkingProcesses_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Processes_GetWorkingProcesses_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_ProcessesService_GetServerWorkingProcesses_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Processes_GetServerWorkingProcesses_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.ProcessesService/GetServerWorkingProcesses", runtime.WithHTTPPathPattern("/api/v1/processes:server/{server_id}"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Processes/GetServerWorkingProcesses", runtime.WithHTTPPathPattern("/api/v1/processes:server/{server_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_ProcessesService_GetServerWorkingProcesses_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Processes_GetServerWorkingProcesses_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_ProcessesService_GetServerWorkingProcesses_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Processes_GetServerWorkingProcesses_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_ProcessesService_GetWorkingProcessInfo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Processes_GetWorkingProcessInfo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.ProcessesService/GetWorkingProcessInfo", runtime.WithHTTPPathPattern("/api/v1/processes/{process_id}"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Processes/GetWorkingProcessInfo", runtime.WithHTTPPathPattern("/api/v1/processes/{process_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_ProcessesService_GetWorkingProcessInfo_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Processes_GetWorkingProcessInfo_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_ProcessesService_GetWorkingProcessInfo_0(ctx, mux, outboundMarshaler, w, req, response_ProcessesService_GetWorkingProcessInfo_0{resp}, mux.GetForwardResponseOptions()...)
+		forward_Processes_GetWorkingProcessInfo_0(ctx, mux, outboundMarshaler, w, req, response_Processes_GetWorkingProcessInfo_0{resp}, mux.GetForwardResponseOptions()...)
 
 	})
 
 	return nil
 }
 
-type response_ProcessesService_GetWorkingProcessInfo_0 struct {
+type response_Processes_GetWorkingProcessInfo_0 struct {
 	proto.Message
 }
 
-func (m response_ProcessesService_GetWorkingProcessInfo_0) XXX_ResponseBody() interface{} {
+func (m response_Processes_GetWorkingProcessInfo_0) XXX_ResponseBody() interface{} {
 	response := m.Message.(*messagesv1.GetWorkingProcessInfoResponse)
 	return response.Info
 }
 
 var (
-	pattern_ProcessesService_GetWorkingProcesses_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "processes"}, ""))
+	pattern_Processes_GetWorkingProcesses_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "processes"}, ""))
 
-	pattern_ProcessesService_GetServerWorkingProcesses_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v1", "processes:server", "server_id"}, ""))
+	pattern_Processes_GetServerWorkingProcesses_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v1", "processes:server", "server_id"}, ""))
 
-	pattern_ProcessesService_GetWorkingProcessInfo_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v1", "processes", "process_id"}, ""))
+	pattern_Processes_GetWorkingProcessInfo_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v1", "processes", "process_id"}, ""))
 )
 
 var (
-	forward_ProcessesService_GetWorkingProcesses_0 = runtime.ForwardResponseMessage
+	forward_Processes_GetWorkingProcesses_0 = runtime.ForwardResponseMessage
 
-	forward_ProcessesService_GetServerWorkingProcesses_0 = runtime.ForwardResponseMessage
+	forward_Processes_GetServerWorkingProcesses_0 = runtime.ForwardResponseMessage
 
-	forward_ProcessesService_GetWorkingProcessInfo_0 = runtime.ForwardResponseMessage
+	forward_Processes_GetWorkingProcessInfo_0 = runtime.ForwardResponseMessage
 )
 
-// RegisterServersServiceHandlerFromEndpoint is same as RegisterServersServiceHandler but
+// RegisterServersHandlerFromEndpoint is same as RegisterServersHandler but
 // automatically dials to "endpoint" and closes the connection when "ctx" gets done.
-func RegisterServersServiceHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
+func RegisterServersHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
 	conn, err := grpc.Dial(endpoint, opts...)
 	if err != nil {
 		return err
@@ -3010,130 +3475,388 @@ func RegisterServersServiceHandlerFromEndpoint(ctx context.Context, mux *runtime
 		}()
 	}()
 
-	return RegisterServersServiceHandler(ctx, mux, conn)
+	return RegisterServersHandler(ctx, mux, conn)
 }
 
-// RegisterServersServiceHandler registers the http handlers for service ServersService to "mux".
+// RegisterServersHandler registers the http handlers for service Servers to "mux".
 // The handlers forward requests to the grpc endpoint over "conn".
-func RegisterServersServiceHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
-	return RegisterServersServiceHandlerClient(ctx, mux, NewServersServiceClient(conn))
+func RegisterServersHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
+	return RegisterServersHandlerClient(ctx, mux, NewServersClient(conn))
 }
 
-// RegisterServersServiceHandlerClient registers the http handlers for service ServersService
-// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "ServersServiceClient".
-// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "ServersServiceClient"
+// RegisterServersHandlerClient registers the http handlers for service Servers
+// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "ServersClient".
+// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "ServersClient"
 // doesn't go through the normal gRPC flow (creating a gRPC client etc.) then it will be up to the passed in
-// "ServersServiceClient" to call the correct interceptors.
-func RegisterServersServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client ServersServiceClient) error {
+// "ServersClient" to call the correct interceptors.
+func RegisterServersHandlerClient(ctx context.Context, mux *runtime.ServeMux, client ServersClient) error {
 
-	mux.Handle("GET", pattern_ServersService_GetWorkingServers_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Servers_GetWorkingServers_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.ServersService/GetWorkingServers", runtime.WithHTTPPathPattern("/api/v1/servers"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Servers/GetWorkingServers", runtime.WithHTTPPathPattern("/api/v1/servers"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_ServersService_GetWorkingServers_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Servers_GetWorkingServers_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_ServersService_GetWorkingServers_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Servers_GetWorkingServers_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_ServersService_GetWorkingServerInfo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Servers_GetWorkingServerInfo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.ServersService/GetWorkingServerInfo", runtime.WithHTTPPathPattern("/api/v1/servers/{server_id}"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Servers/GetWorkingServerInfo", runtime.WithHTTPPathPattern("/api/v1/servers/{server_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_ServersService_GetWorkingServerInfo_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Servers_GetWorkingServerInfo_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_ServersService_GetWorkingServerInfo_0(ctx, mux, outboundMarshaler, w, req, response_ServersService_GetWorkingServerInfo_0{resp}, mux.GetForwardResponseOptions()...)
+		forward_Servers_GetWorkingServerInfo_0(ctx, mux, outboundMarshaler, w, req, response_Servers_GetWorkingServerInfo_0{resp}, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_ServersService_AddWorkingServer_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Servers_AddWorkingServer_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.ServersService/AddWorkingServer", runtime.WithHTTPPathPattern("/api/v1/servers"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Servers/AddWorkingServer", runtime.WithHTTPPathPattern("/api/v1/servers"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_ServersService_AddWorkingServer_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Servers_AddWorkingServer_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_ServersService_AddWorkingServer_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Servers_AddWorkingServer_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("DELETE", pattern_ServersService_DeleteWorkingServer_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("DELETE", pattern_Servers_DeleteWorkingServer_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.ServersService/DeleteWorkingServer", runtime.WithHTTPPathPattern("/api/v1/servers/{server_id}"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Servers/DeleteWorkingServer", runtime.WithHTTPPathPattern("/api/v1/servers/{server_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_ServersService_DeleteWorkingServer_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Servers_DeleteWorkingServer_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_ServersService_DeleteWorkingServer_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Servers_DeleteWorkingServer_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
 	return nil
 }
 
-type response_ServersService_GetWorkingServerInfo_0 struct {
+type response_Servers_GetWorkingServerInfo_0 struct {
 	proto.Message
 }
 
-func (m response_ServersService_GetWorkingServerInfo_0) XXX_ResponseBody() interface{} {
+func (m response_Servers_GetWorkingServerInfo_0) XXX_ResponseBody() interface{} {
 	response := m.Message.(*messagesv1.GetWorkingServerInfoResponse)
 	return response.Info
 }
 
 var (
-	pattern_ServersService_GetWorkingServers_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "servers"}, ""))
+	pattern_Servers_GetWorkingServers_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "servers"}, ""))
 
-	pattern_ServersService_GetWorkingServerInfo_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v1", "servers", "server_id"}, ""))
+	pattern_Servers_GetWorkingServerInfo_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v1", "servers", "server_id"}, ""))
 
-	pattern_ServersService_AddWorkingServer_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "servers"}, ""))
+	pattern_Servers_AddWorkingServer_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "servers"}, ""))
 
-	pattern_ServersService_DeleteWorkingServer_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v1", "servers", "server_id"}, ""))
+	pattern_Servers_DeleteWorkingServer_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v1", "servers", "server_id"}, ""))
 )
 
 var (
-	forward_ServersService_GetWorkingServers_0 = runtime.ForwardResponseMessage
+	forward_Servers_GetWorkingServers_0 = runtime.ForwardResponseMessage
 
-	forward_ServersService_GetWorkingServerInfo_0 = runtime.ForwardResponseMessage
+	forward_Servers_GetWorkingServerInfo_0 = runtime.ForwardResponseMessage
 
-	forward_ServersService_AddWorkingServer_0 = runtime.ForwardResponseMessage
+	forward_Servers_AddWorkingServer_0 = runtime.ForwardResponseMessage
 
-	forward_ServersService_DeleteWorkingServer_0 = runtime.ForwardResponseMessage
+	forward_Servers_DeleteWorkingServer_0 = runtime.ForwardResponseMessage
+)
+
+// RegisterConnectionsHandlerFromEndpoint is same as RegisterConnectionsHandler but
+// automatically dials to "endpoint" and closes the connection when "ctx" gets done.
+func RegisterConnectionsHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
+	conn, err := grpc.Dial(endpoint, opts...)
+	if err != nil {
+		return err
+	}
+	defer func() {
+		if err != nil {
+			if cerr := conn.Close(); cerr != nil {
+				grpclog.Infof("Failed to close conn to %s: %v", endpoint, cerr)
+			}
+			return
+		}
+		go func() {
+			<-ctx.Done()
+			if cerr := conn.Close(); cerr != nil {
+				grpclog.Infof("Failed to close conn to %s: %v", endpoint, cerr)
+			}
+		}()
+	}()
+
+	return RegisterConnectionsHandler(ctx, mux, conn)
+}
+
+// RegisterConnectionsHandler registers the http handlers for service Connections to "mux".
+// The handlers forward requests to the grpc endpoint over "conn".
+func RegisterConnectionsHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
+	return RegisterConnectionsHandlerClient(ctx, mux, NewConnectionsClient(conn))
+}
+
+// RegisterConnectionsHandlerClient registers the http handlers for service Connections
+// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "ConnectionsClient".
+// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "ConnectionsClient"
+// doesn't go through the normal gRPC flow (creating a gRPC client etc.) then it will be up to the passed in
+// "ConnectionsClient" to call the correct interceptors.
+func RegisterConnectionsHandlerClient(ctx context.Context, mux *runtime.ServeMux, client ConnectionsClient) error {
+
+	mux.Handle("GET", pattern_Connections_GetConnections_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Connections/GetConnections", runtime.WithHTTPPathPattern("/api/v1/connections"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_Connections_GetConnections_0(rctx, inboundMarshaler, client, req, pathParams)
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_Connections_GetConnections_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	mux.Handle("GET", pattern_Connections_GetInfobaseConnections_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Connections/GetInfobaseConnections", runtime.WithHTTPPathPattern("/api/v1/connections:infobase"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_Connections_GetInfobaseConnections_0(rctx, inboundMarshaler, client, req, pathParams)
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_Connections_GetInfobaseConnections_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	mux.Handle("DELETE", pattern_Connections_DisconnectConnection_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Connections/DisconnectConnection", runtime.WithHTTPPathPattern("/api/v1/connections/{connection_id}"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_Connections_DisconnectConnection_0(rctx, inboundMarshaler, client, req, pathParams)
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_Connections_DisconnectConnection_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	return nil
+}
+
+var (
+	pattern_Connections_GetConnections_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "connections"}, ""))
+
+	pattern_Connections_GetInfobaseConnections_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "connections"}, "infobase"))
+
+	pattern_Connections_DisconnectConnection_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"api", "v1", "connections", "connection_id"}, ""))
+)
+
+var (
+	forward_Connections_GetConnections_0 = runtime.ForwardResponseMessage
+
+	forward_Connections_GetInfobaseConnections_0 = runtime.ForwardResponseMessage
+
+	forward_Connections_DisconnectConnection_0 = runtime.ForwardResponseMessage
+)
+
+// RegisterLocksHandlerFromEndpoint is same as RegisterLocksHandler but
+// automatically dials to "endpoint" and closes the connection when "ctx" gets done.
+func RegisterLocksHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
+	conn, err := grpc.Dial(endpoint, opts...)
+	if err != nil {
+		return err
+	}
+	defer func() {
+		if err != nil {
+			if cerr := conn.Close(); cerr != nil {
+				grpclog.Infof("Failed to close conn to %s: %v", endpoint, cerr)
+			}
+			return
+		}
+		go func() {
+			<-ctx.Done()
+			if cerr := conn.Close(); cerr != nil {
+				grpclog.Infof("Failed to close conn to %s: %v", endpoint, cerr)
+			}
+		}()
+	}()
+
+	return RegisterLocksHandler(ctx, mux, conn)
+}
+
+// RegisterLocksHandler registers the http handlers for service Locks to "mux".
+// The handlers forward requests to the grpc endpoint over "conn".
+func RegisterLocksHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
+	return RegisterLocksHandlerClient(ctx, mux, NewLocksClient(conn))
+}
+
+// RegisterLocksHandlerClient registers the http handlers for service Locks
+// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "LocksClient".
+// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "LocksClient"
+// doesn't go through the normal gRPC flow (creating a gRPC client etc.) then it will be up to the passed in
+// "LocksClient" to call the correct interceptors.
+func RegisterLocksHandlerClient(ctx context.Context, mux *runtime.ServeMux, client LocksClient) error {
+
+	mux.Handle("GET", pattern_Locks_GetLocks_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Locks/GetLocks", runtime.WithHTTPPathPattern("/api/v1/locks"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_Locks_GetLocks_0(rctx, inboundMarshaler, client, req, pathParams)
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_Locks_GetLocks_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	mux.Handle("GET", pattern_Locks_GetInfobaseLocks_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Locks/GetInfobaseLocks", runtime.WithHTTPPathPattern("/api/v1/locks:infobase"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_Locks_GetInfobaseLocks_0(rctx, inboundMarshaler, client, req, pathParams)
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_Locks_GetInfobaseLocks_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	mux.Handle("GET", pattern_Locks_GetSessionLocks_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Locks/GetSessionLocks", runtime.WithHTTPPathPattern("/api/v1/locks:session"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_Locks_GetSessionLocks_0(rctx, inboundMarshaler, client, req, pathParams)
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_Locks_GetSessionLocks_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	mux.Handle("GET", pattern_Locks_GetConnectionLocks_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Locks/GetConnectionLocks", runtime.WithHTTPPathPattern("/api/v1/locks:connection"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_Locks_GetConnectionLocks_0(rctx, inboundMarshaler, client, req, pathParams)
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_Locks_GetConnectionLocks_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	return nil
+}
+
+var (
+	pattern_Locks_GetLocks_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "locks"}, ""))
+
+	pattern_Locks_GetInfobaseLocks_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "locks"}, "infobase"))
+
+	pattern_Locks_GetSessionLocks_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "locks"}, "session"))
+
+	pattern_Locks_GetConnectionLocks_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "locks"}, "connection"))
+)
+
+var (
+	forward_Locks_GetLocks_0 = runtime.ForwardResponseMessage
+
+	forward_Locks_GetInfobaseLocks_0 = runtime.ForwardResponseMessage
+
+	forward_Locks_GetSessionLocks_0 = runtime.ForwardResponseMessage
+
+	forward_Locks_GetConnectionLocks_0 = runtime.ForwardResponseMessage
 )

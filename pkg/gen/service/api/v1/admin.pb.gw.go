@@ -32,7 +32,7 @@ var _ = runtime.String
 var _ = utilities.NewDoubleArray
 var _ = metadata.Join
 
-func request_AccessService_Login_0(ctx context.Context, marshaler runtime.Marshaler, client AccessServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Access_Login_0(ctx context.Context, marshaler runtime.Marshaler, client AccessClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq LoginRequest
 	var metadata runtime.ServerMetadata
 
@@ -49,7 +49,7 @@ func request_AccessService_Login_0(ctx context.Context, marshaler runtime.Marsha
 
 }
 
-func local_request_AccessService_Login_0(ctx context.Context, marshaler runtime.Marshaler, server AccessServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Access_Login_0(ctx context.Context, marshaler runtime.Marshaler, server AccessServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq LoginRequest
 	var metadata runtime.ServerMetadata
 
@@ -66,7 +66,7 @@ func local_request_AccessService_Login_0(ctx context.Context, marshaler runtime.
 
 }
 
-func request_AccessService_Refresh_0(ctx context.Context, marshaler runtime.Marshaler, client AccessServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Access_Refresh_0(ctx context.Context, marshaler runtime.Marshaler, client AccessClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq RefreshRequest
 	var metadata runtime.ServerMetadata
 
@@ -83,7 +83,7 @@ func request_AccessService_Refresh_0(ctx context.Context, marshaler runtime.Mars
 
 }
 
-func local_request_AccessService_Refresh_0(ctx context.Context, marshaler runtime.Marshaler, server AccessServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Access_Refresh_0(ctx context.Context, marshaler runtime.Marshaler, server AccessServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq RefreshRequest
 	var metadata runtime.ServerMetadata
 
@@ -100,7 +100,7 @@ func local_request_AccessService_Refresh_0(ctx context.Context, marshaler runtim
 
 }
 
-func request_AdminService_GetConfig_0(ctx context.Context, marshaler runtime.Marshaler, client AdminServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Config_GetConfig_0(ctx context.Context, marshaler runtime.Marshaler, client ConfigClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq emptypb.Empty
 	var metadata runtime.ServerMetadata
 
@@ -109,7 +109,7 @@ func request_AdminService_GetConfig_0(ctx context.Context, marshaler runtime.Mar
 
 }
 
-func local_request_AdminService_GetConfig_0(ctx context.Context, marshaler runtime.Marshaler, server AdminServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Config_GetConfig_0(ctx context.Context, marshaler runtime.Marshaler, server ConfigServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq emptypb.Empty
 	var metadata runtime.ServerMetadata
 
@@ -118,7 +118,7 @@ func local_request_AdminService_GetConfig_0(ctx context.Context, marshaler runti
 
 }
 
-func request_AdminService_UpdateConfig_0(ctx context.Context, marshaler runtime.Marshaler, client AdminServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Config_UpdateConfig_0(ctx context.Context, marshaler runtime.Marshaler, client ConfigClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq ServerConfig
 	var metadata runtime.ServerMetadata
 
@@ -135,7 +135,7 @@ func request_AdminService_UpdateConfig_0(ctx context.Context, marshaler runtime.
 
 }
 
-func local_request_AdminService_UpdateConfig_0(ctx context.Context, marshaler runtime.Marshaler, server AdminServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Config_UpdateConfig_0(ctx context.Context, marshaler runtime.Marshaler, server ConfigServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq ServerConfig
 	var metadata runtime.ServerMetadata
 
@@ -152,7 +152,7 @@ func local_request_AdminService_UpdateConfig_0(ctx context.Context, marshaler ru
 
 }
 
-func request_AdminService_GetClientStatus_0(ctx context.Context, marshaler runtime.Marshaler, client AdminServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Config_GetClientStatus_0(ctx context.Context, marshaler runtime.Marshaler, client ConfigClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq emptypb.Empty
 	var metadata runtime.ServerMetadata
 
@@ -161,7 +161,7 @@ func request_AdminService_GetClientStatus_0(ctx context.Context, marshaler runti
 
 }
 
-func local_request_AdminService_GetClientStatus_0(ctx context.Context, marshaler runtime.Marshaler, server AdminServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Config_GetClientStatus_0(ctx context.Context, marshaler runtime.Marshaler, server ConfigServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq emptypb.Empty
 	var metadata runtime.ServerMetadata
 
@@ -170,7 +170,7 @@ func local_request_AdminService_GetClientStatus_0(ctx context.Context, marshaler
 
 }
 
-func request_AdminService_GetConnections_0(ctx context.Context, marshaler runtime.Marshaler, client AdminServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Config_GetConnections_0(ctx context.Context, marshaler runtime.Marshaler, client ConfigClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq emptypb.Empty
 	var metadata runtime.ServerMetadata
 
@@ -179,7 +179,7 @@ func request_AdminService_GetConnections_0(ctx context.Context, marshaler runtim
 
 }
 
-func local_request_AdminService_GetConnections_0(ctx context.Context, marshaler runtime.Marshaler, server AdminServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Config_GetConnections_0(ctx context.Context, marshaler runtime.Marshaler, server ConfigServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq emptypb.Empty
 	var metadata runtime.ServerMetadata
 
@@ -188,7 +188,7 @@ func local_request_AdminService_GetConnections_0(ctx context.Context, marshaler 
 
 }
 
-func request_AdminService_GetEndpoints_0(ctx context.Context, marshaler runtime.Marshaler, client AdminServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Config_GetEndpoints_0(ctx context.Context, marshaler runtime.Marshaler, client ConfigClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq emptypb.Empty
 	var metadata runtime.ServerMetadata
 
@@ -197,7 +197,7 @@ func request_AdminService_GetEndpoints_0(ctx context.Context, marshaler runtime.
 
 }
 
-func local_request_AdminService_GetEndpoints_0(ctx context.Context, marshaler runtime.Marshaler, server AdminServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Config_GetEndpoints_0(ctx context.Context, marshaler runtime.Marshaler, server ConfigServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq emptypb.Empty
 	var metadata runtime.ServerMetadata
 
@@ -206,7 +206,7 @@ func local_request_AdminService_GetEndpoints_0(ctx context.Context, marshaler ru
 
 }
 
-func request_AdminService_ConfigureEndpoint_0(ctx context.Context, marshaler runtime.Marshaler, client AdminServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Config_ConfigureEndpoint_0(ctx context.Context, marshaler runtime.Marshaler, client ConfigClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq ConfigureEndpointRequest
 	var metadata runtime.ServerMetadata
 
@@ -223,7 +223,7 @@ func request_AdminService_ConfigureEndpoint_0(ctx context.Context, marshaler run
 
 }
 
-func local_request_AdminService_ConfigureEndpoint_0(ctx context.Context, marshaler runtime.Marshaler, server AdminServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Config_ConfigureEndpoint_0(ctx context.Context, marshaler runtime.Marshaler, server ConfigServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq ConfigureEndpointRequest
 	var metadata runtime.ServerMetadata
 
@@ -240,7 +240,7 @@ func local_request_AdminService_ConfigureEndpoint_0(ctx context.Context, marshal
 
 }
 
-func request_AdminService_ConfigureEndpoint_1(ctx context.Context, marshaler runtime.Marshaler, client AdminServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Config_ConfigureEndpoint_1(ctx context.Context, marshaler runtime.Marshaler, client ConfigClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq ConfigureEndpointRequest
 	var metadata runtime.ServerMetadata
 
@@ -274,7 +274,7 @@ func request_AdminService_ConfigureEndpoint_1(ctx context.Context, marshaler run
 
 }
 
-func local_request_AdminService_ConfigureEndpoint_1(ctx context.Context, marshaler runtime.Marshaler, server AdminServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Config_ConfigureEndpoint_1(ctx context.Context, marshaler runtime.Marshaler, server ConfigServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq ConfigureEndpointRequest
 	var metadata runtime.ServerMetadata
 
@@ -308,24 +308,24 @@ func local_request_AdminService_ConfigureEndpoint_1(ctx context.Context, marshal
 
 }
 
-// RegisterAccessServiceHandlerServer registers the http handlers for service AccessService to "mux".
-// UnaryRPC     :call AccessServiceServer directly.
+// RegisterAccessHandlerServer registers the http handlers for service Access to "mux".
+// UnaryRPC     :call AccessServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
-// Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterAccessServiceHandlerFromEndpoint instead.
-func RegisterAccessServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server AccessServiceServer) error {
+// Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterAccessHandlerFromEndpoint instead.
+func RegisterAccessHandlerServer(ctx context.Context, mux *runtime.ServeMux, server AccessServer) error {
 
-	mux.Handle("POST", pattern_AccessService_Login_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Access_Login_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.AccessService/Login", runtime.WithHTTPPathPattern("/api/v1/login"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Access/Login", runtime.WithHTTPPathPattern("/api/v1/login"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_AccessService_Login_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Access_Login_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -333,22 +333,22 @@ func RegisterAccessServiceHandlerServer(ctx context.Context, mux *runtime.ServeM
 			return
 		}
 
-		forward_AccessService_Login_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Access_Login_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_AccessService_Refresh_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Access_Refresh_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.AccessService/Refresh", runtime.WithHTTPPathPattern("/api/v1/refresh"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Access/Refresh", runtime.WithHTTPPathPattern("/api/v1/refresh"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_AccessService_Refresh_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Access_Refresh_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -356,31 +356,31 @@ func RegisterAccessServiceHandlerServer(ctx context.Context, mux *runtime.ServeM
 			return
 		}
 
-		forward_AccessService_Refresh_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Access_Refresh_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
 	return nil
 }
 
-// RegisterAdminServiceHandlerServer registers the http handlers for service AdminService to "mux".
-// UnaryRPC     :call AdminServiceServer directly.
+// RegisterConfigHandlerServer registers the http handlers for service Config to "mux".
+// UnaryRPC     :call ConfigServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
-// Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterAdminServiceHandlerFromEndpoint instead.
-func RegisterAdminServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server AdminServiceServer) error {
+// Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterConfigHandlerFromEndpoint instead.
+func RegisterConfigHandlerServer(ctx context.Context, mux *runtime.ServeMux, server ConfigServer) error {
 
-	mux.Handle("GET", pattern_AdminService_GetConfig_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Config_GetConfig_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.AdminService/GetConfig", runtime.WithHTTPPathPattern("/api/v1/admin/config"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Config/GetConfig", runtime.WithHTTPPathPattern("/api/v1/config"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_AdminService_GetConfig_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Config_GetConfig_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -388,22 +388,22 @@ func RegisterAdminServiceHandlerServer(ctx context.Context, mux *runtime.ServeMu
 			return
 		}
 
-		forward_AdminService_GetConfig_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Config_GetConfig_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_AdminService_UpdateConfig_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Config_UpdateConfig_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.AdminService/UpdateConfig", runtime.WithHTTPPathPattern("/api/v1/admin/config"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Config/UpdateConfig", runtime.WithHTTPPathPattern("/api/v1/config"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_AdminService_UpdateConfig_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Config_UpdateConfig_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -411,22 +411,22 @@ func RegisterAdminServiceHandlerServer(ctx context.Context, mux *runtime.ServeMu
 			return
 		}
 
-		forward_AdminService_UpdateConfig_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Config_UpdateConfig_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_AdminService_GetClientStatus_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Config_GetClientStatus_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.AdminService/GetClientStatus", runtime.WithHTTPPathPattern("/api/v1/admin/client"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Config/GetClientStatus", runtime.WithHTTPPathPattern("/api/v1/config/client"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_AdminService_GetClientStatus_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Config_GetClientStatus_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -434,22 +434,22 @@ func RegisterAdminServiceHandlerServer(ctx context.Context, mux *runtime.ServeMu
 			return
 		}
 
-		forward_AdminService_GetClientStatus_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Config_GetClientStatus_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_AdminService_GetConnections_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Config_GetConnections_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.AdminService/GetConnections", runtime.WithHTTPPathPattern("/api/v1/admin/connections"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Config/GetConnections", runtime.WithHTTPPathPattern("/api/v1/config/connections"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_AdminService_GetConnections_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Config_GetConnections_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -457,22 +457,22 @@ func RegisterAdminServiceHandlerServer(ctx context.Context, mux *runtime.ServeMu
 			return
 		}
 
-		forward_AdminService_GetConnections_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Config_GetConnections_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_AdminService_GetEndpoints_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Config_GetEndpoints_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.AdminService/GetEndpoints", runtime.WithHTTPPathPattern("/api/v1/admin/endpoints"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Config/GetEndpoints", runtime.WithHTTPPathPattern("/api/v1/config/endpoints"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_AdminService_GetEndpoints_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Config_GetEndpoints_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -480,22 +480,22 @@ func RegisterAdminServiceHandlerServer(ctx context.Context, mux *runtime.ServeMu
 			return
 		}
 
-		forward_AdminService_GetEndpoints_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Config_GetEndpoints_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_AdminService_ConfigureEndpoint_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Config_ConfigureEndpoint_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.AdminService/ConfigureEndpoint", runtime.WithHTTPPathPattern("/api/v1/admin/endpoints"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Config/ConfigureEndpoint", runtime.WithHTTPPathPattern("/api/v1/config/endpoints"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_AdminService_ConfigureEndpoint_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Config_ConfigureEndpoint_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -503,22 +503,22 @@ func RegisterAdminServiceHandlerServer(ctx context.Context, mux *runtime.ServeMu
 			return
 		}
 
-		forward_AdminService_ConfigureEndpoint_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Config_ConfigureEndpoint_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_AdminService_ConfigureEndpoint_1, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Config_ConfigureEndpoint_1, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.AdminService/ConfigureEndpoint", runtime.WithHTTPPathPattern("/api/v1/admin/endpoints/{endpoint_id}"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/service.api.v1.Config/ConfigureEndpoint", runtime.WithHTTPPathPattern("/api/v1/admin/endpoints/{endpoint_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_AdminService_ConfigureEndpoint_1(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Config_ConfigureEndpoint_1(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -526,16 +526,16 @@ func RegisterAdminServiceHandlerServer(ctx context.Context, mux *runtime.ServeMu
 			return
 		}
 
-		forward_AdminService_ConfigureEndpoint_1(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Config_ConfigureEndpoint_1(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
 	return nil
 }
 
-// RegisterAccessServiceHandlerFromEndpoint is same as RegisterAccessServiceHandler but
+// RegisterAccessHandlerFromEndpoint is same as RegisterAccessHandler but
 // automatically dials to "endpoint" and closes the connection when "ctx" gets done.
-func RegisterAccessServiceHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
+func RegisterAccessHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
 	conn, err := grpc.Dial(endpoint, opts...)
 	if err != nil {
 		return err
@@ -555,59 +555,59 @@ func RegisterAccessServiceHandlerFromEndpoint(ctx context.Context, mux *runtime.
 		}()
 	}()
 
-	return RegisterAccessServiceHandler(ctx, mux, conn)
+	return RegisterAccessHandler(ctx, mux, conn)
 }
 
-// RegisterAccessServiceHandler registers the http handlers for service AccessService to "mux".
+// RegisterAccessHandler registers the http handlers for service Access to "mux".
 // The handlers forward requests to the grpc endpoint over "conn".
-func RegisterAccessServiceHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
-	return RegisterAccessServiceHandlerClient(ctx, mux, NewAccessServiceClient(conn))
+func RegisterAccessHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
+	return RegisterAccessHandlerClient(ctx, mux, NewAccessClient(conn))
 }
 
-// RegisterAccessServiceHandlerClient registers the http handlers for service AccessService
-// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "AccessServiceClient".
-// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "AccessServiceClient"
+// RegisterAccessHandlerClient registers the http handlers for service Access
+// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "AccessClient".
+// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "AccessClient"
 // doesn't go through the normal gRPC flow (creating a gRPC client etc.) then it will be up to the passed in
-// "AccessServiceClient" to call the correct interceptors.
-func RegisterAccessServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client AccessServiceClient) error {
+// "AccessClient" to call the correct interceptors.
+func RegisterAccessHandlerClient(ctx context.Context, mux *runtime.ServeMux, client AccessClient) error {
 
-	mux.Handle("POST", pattern_AccessService_Login_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Access_Login_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.AccessService/Login", runtime.WithHTTPPathPattern("/api/v1/login"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Access/Login", runtime.WithHTTPPathPattern("/api/v1/login"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_AccessService_Login_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Access_Login_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_AccessService_Login_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Access_Login_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_AccessService_Refresh_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Access_Refresh_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.AccessService/Refresh", runtime.WithHTTPPathPattern("/api/v1/refresh"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Access/Refresh", runtime.WithHTTPPathPattern("/api/v1/refresh"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_AccessService_Refresh_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Access_Refresh_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_AccessService_Refresh_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Access_Refresh_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -615,20 +615,20 @@ func RegisterAccessServiceHandlerClient(ctx context.Context, mux *runtime.ServeM
 }
 
 var (
-	pattern_AccessService_Login_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "login"}, ""))
+	pattern_Access_Login_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "login"}, ""))
 
-	pattern_AccessService_Refresh_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "refresh"}, ""))
+	pattern_Access_Refresh_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "refresh"}, ""))
 )
 
 var (
-	forward_AccessService_Login_0 = runtime.ForwardResponseMessage
+	forward_Access_Login_0 = runtime.ForwardResponseMessage
 
-	forward_AccessService_Refresh_0 = runtime.ForwardResponseMessage
+	forward_Access_Refresh_0 = runtime.ForwardResponseMessage
 )
 
-// RegisterAdminServiceHandlerFromEndpoint is same as RegisterAdminServiceHandler but
+// RegisterConfigHandlerFromEndpoint is same as RegisterConfigHandler but
 // automatically dials to "endpoint" and closes the connection when "ctx" gets done.
-func RegisterAdminServiceHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
+func RegisterConfigHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
 	conn, err := grpc.Dial(endpoint, opts...)
 	if err != nil {
 		return err
@@ -648,159 +648,159 @@ func RegisterAdminServiceHandlerFromEndpoint(ctx context.Context, mux *runtime.S
 		}()
 	}()
 
-	return RegisterAdminServiceHandler(ctx, mux, conn)
+	return RegisterConfigHandler(ctx, mux, conn)
 }
 
-// RegisterAdminServiceHandler registers the http handlers for service AdminService to "mux".
+// RegisterConfigHandler registers the http handlers for service Config to "mux".
 // The handlers forward requests to the grpc endpoint over "conn".
-func RegisterAdminServiceHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
-	return RegisterAdminServiceHandlerClient(ctx, mux, NewAdminServiceClient(conn))
+func RegisterConfigHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
+	return RegisterConfigHandlerClient(ctx, mux, NewConfigClient(conn))
 }
 
-// RegisterAdminServiceHandlerClient registers the http handlers for service AdminService
-// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "AdminServiceClient".
-// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "AdminServiceClient"
+// RegisterConfigHandlerClient registers the http handlers for service Config
+// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "ConfigClient".
+// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "ConfigClient"
 // doesn't go through the normal gRPC flow (creating a gRPC client etc.) then it will be up to the passed in
-// "AdminServiceClient" to call the correct interceptors.
-func RegisterAdminServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client AdminServiceClient) error {
+// "ConfigClient" to call the correct interceptors.
+func RegisterConfigHandlerClient(ctx context.Context, mux *runtime.ServeMux, client ConfigClient) error {
 
-	mux.Handle("GET", pattern_AdminService_GetConfig_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Config_GetConfig_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.AdminService/GetConfig", runtime.WithHTTPPathPattern("/api/v1/admin/config"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Config/GetConfig", runtime.WithHTTPPathPattern("/api/v1/config"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_AdminService_GetConfig_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Config_GetConfig_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_AdminService_GetConfig_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Config_GetConfig_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_AdminService_UpdateConfig_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Config_UpdateConfig_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.AdminService/UpdateConfig", runtime.WithHTTPPathPattern("/api/v1/admin/config"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Config/UpdateConfig", runtime.WithHTTPPathPattern("/api/v1/config"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_AdminService_UpdateConfig_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Config_UpdateConfig_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_AdminService_UpdateConfig_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Config_UpdateConfig_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_AdminService_GetClientStatus_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Config_GetClientStatus_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.AdminService/GetClientStatus", runtime.WithHTTPPathPattern("/api/v1/admin/client"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Config/GetClientStatus", runtime.WithHTTPPathPattern("/api/v1/config/client"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_AdminService_GetClientStatus_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Config_GetClientStatus_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_AdminService_GetClientStatus_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Config_GetClientStatus_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_AdminService_GetConnections_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Config_GetConnections_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.AdminService/GetConnections", runtime.WithHTTPPathPattern("/api/v1/admin/connections"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Config/GetConnections", runtime.WithHTTPPathPattern("/api/v1/config/connections"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_AdminService_GetConnections_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Config_GetConnections_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_AdminService_GetConnections_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Config_GetConnections_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_AdminService_GetEndpoints_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Config_GetEndpoints_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.AdminService/GetEndpoints", runtime.WithHTTPPathPattern("/api/v1/admin/endpoints"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Config/GetEndpoints", runtime.WithHTTPPathPattern("/api/v1/config/endpoints"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_AdminService_GetEndpoints_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Config_GetEndpoints_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_AdminService_GetEndpoints_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Config_GetEndpoints_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_AdminService_ConfigureEndpoint_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Config_ConfigureEndpoint_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.AdminService/ConfigureEndpoint", runtime.WithHTTPPathPattern("/api/v1/admin/endpoints"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Config/ConfigureEndpoint", runtime.WithHTTPPathPattern("/api/v1/config/endpoints"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_AdminService_ConfigureEndpoint_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Config_ConfigureEndpoint_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_AdminService_ConfigureEndpoint_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Config_ConfigureEndpoint_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_AdminService_ConfigureEndpoint_1, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Config_ConfigureEndpoint_1, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.AdminService/ConfigureEndpoint", runtime.WithHTTPPathPattern("/api/v1/admin/endpoints/{endpoint_id}"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/service.api.v1.Config/ConfigureEndpoint", runtime.WithHTTPPathPattern("/api/v1/admin/endpoints/{endpoint_id}"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_AdminService_ConfigureEndpoint_1(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Config_ConfigureEndpoint_1(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_AdminService_ConfigureEndpoint_1(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Config_ConfigureEndpoint_1(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -808,33 +808,33 @@ func RegisterAdminServiceHandlerClient(ctx context.Context, mux *runtime.ServeMu
 }
 
 var (
-	pattern_AdminService_GetConfig_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"api", "v1", "admin", "config"}, ""))
+	pattern_Config_GetConfig_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "config"}, ""))
 
-	pattern_AdminService_UpdateConfig_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"api", "v1", "admin", "config"}, ""))
+	pattern_Config_UpdateConfig_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"api", "v1", "config"}, ""))
 
-	pattern_AdminService_GetClientStatus_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"api", "v1", "admin", "client"}, ""))
+	pattern_Config_GetClientStatus_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"api", "v1", "config", "client"}, ""))
 
-	pattern_AdminService_GetConnections_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"api", "v1", "admin", "connections"}, ""))
+	pattern_Config_GetConnections_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"api", "v1", "config", "connections"}, ""))
 
-	pattern_AdminService_GetEndpoints_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"api", "v1", "admin", "endpoints"}, ""))
+	pattern_Config_GetEndpoints_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"api", "v1", "config", "endpoints"}, ""))
 
-	pattern_AdminService_ConfigureEndpoint_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"api", "v1", "admin", "endpoints"}, ""))
+	pattern_Config_ConfigureEndpoint_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"api", "v1", "config", "endpoints"}, ""))
 
-	pattern_AdminService_ConfigureEndpoint_1 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"api", "v1", "admin", "endpoints", "endpoint_id"}, ""))
+	pattern_Config_ConfigureEndpoint_1 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"api", "v1", "admin", "endpoints", "endpoint_id"}, ""))
 )
 
 var (
-	forward_AdminService_GetConfig_0 = runtime.ForwardResponseMessage
+	forward_Config_GetConfig_0 = runtime.ForwardResponseMessage
 
-	forward_AdminService_UpdateConfig_0 = runtime.ForwardResponseMessage
+	forward_Config_UpdateConfig_0 = runtime.ForwardResponseMessage
 
-	forward_AdminService_GetClientStatus_0 = runtime.ForwardResponseMessage
+	forward_Config_GetClientStatus_0 = runtime.ForwardResponseMessage
 
-	forward_AdminService_GetConnections_0 = runtime.ForwardResponseMessage
+	forward_Config_GetConnections_0 = runtime.ForwardResponseMessage
 
-	forward_AdminService_GetEndpoints_0 = runtime.ForwardResponseMessage
+	forward_Config_GetEndpoints_0 = runtime.ForwardResponseMessage
 
-	forward_AdminService_ConfigureEndpoint_0 = runtime.ForwardResponseMessage
+	forward_Config_ConfigureEndpoint_0 = runtime.ForwardResponseMessage
 
-	forward_AdminService_ConfigureEndpoint_1 = runtime.ForwardResponseMessage
+	forward_Config_ConfigureEndpoint_1 = runtime.ForwardResponseMessage
 )

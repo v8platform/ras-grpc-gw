@@ -15,132 +15,132 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// AccessServiceClient is the client API for AccessService service.
+// AccessClient is the client API for Access service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type AccessServiceClient interface {
+type AccessClient interface {
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*Tokens, error)
 	Refresh(ctx context.Context, in *RefreshRequest, opts ...grpc.CallOption) (*Tokens, error)
 }
 
-type accessServiceClient struct {
+type accessClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewAccessServiceClient(cc grpc.ClientConnInterface) AccessServiceClient {
-	return &accessServiceClient{cc}
+func NewAccessClient(cc grpc.ClientConnInterface) AccessClient {
+	return &accessClient{cc}
 }
 
-func (c *accessServiceClient) Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*Tokens, error) {
+func (c *accessClient) Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*Tokens, error) {
 	out := new(Tokens)
-	err := c.cc.Invoke(ctx, "/service.api.v1.AccessService/Login", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/service.api.v1.Access/Login", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *accessServiceClient) Refresh(ctx context.Context, in *RefreshRequest, opts ...grpc.CallOption) (*Tokens, error) {
+func (c *accessClient) Refresh(ctx context.Context, in *RefreshRequest, opts ...grpc.CallOption) (*Tokens, error) {
 	out := new(Tokens)
-	err := c.cc.Invoke(ctx, "/service.api.v1.AccessService/Refresh", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/service.api.v1.Access/Refresh", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// AccessServiceServer is the server API for AccessService service.
-// All implementations must embed UnimplementedAccessServiceServer
+// AccessServer is the server API for Access service.
+// All implementations must embed UnimplementedAccessServer
 // for forward compatibility
-type AccessServiceServer interface {
+type AccessServer interface {
 	Login(context.Context, *LoginRequest) (*Tokens, error)
 	Refresh(context.Context, *RefreshRequest) (*Tokens, error)
-	mustEmbedUnimplementedAccessServiceServer()
+	mustEmbedUnimplementedAccessServer()
 }
 
-// UnimplementedAccessServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedAccessServiceServer struct {
+// UnimplementedAccessServer must be embedded to have forward compatible implementations.
+type UnimplementedAccessServer struct {
 }
 
-func (UnimplementedAccessServiceServer) Login(context.Context, *LoginRequest) (*Tokens, error) {
+func (UnimplementedAccessServer) Login(context.Context, *LoginRequest) (*Tokens, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
 }
-func (UnimplementedAccessServiceServer) Refresh(context.Context, *RefreshRequest) (*Tokens, error) {
+func (UnimplementedAccessServer) Refresh(context.Context, *RefreshRequest) (*Tokens, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Refresh not implemented")
 }
-func (UnimplementedAccessServiceServer) mustEmbedUnimplementedAccessServiceServer() {}
+func (UnimplementedAccessServer) mustEmbedUnimplementedAccessServer() {}
 
-// UnsafeAccessServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to AccessServiceServer will
+// UnsafeAccessServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to AccessServer will
 // result in compilation errors.
-type UnsafeAccessServiceServer interface {
-	mustEmbedUnimplementedAccessServiceServer()
+type UnsafeAccessServer interface {
+	mustEmbedUnimplementedAccessServer()
 }
 
-func RegisterAccessServiceServer(s grpc.ServiceRegistrar, srv AccessServiceServer) {
-	s.RegisterService(&AccessService_ServiceDesc, srv)
+func RegisterAccessServer(s grpc.ServiceRegistrar, srv AccessServer) {
+	s.RegisterService(&Access_ServiceDesc, srv)
 }
 
-func _AccessService_Login_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Access_Login_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(LoginRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AccessServiceServer).Login(ctx, in)
+		return srv.(AccessServer).Login(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.api.v1.AccessService/Login",
+		FullMethod: "/service.api.v1.Access/Login",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AccessServiceServer).Login(ctx, req.(*LoginRequest))
+		return srv.(AccessServer).Login(ctx, req.(*LoginRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AccessService_Refresh_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Access_Refresh_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RefreshRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AccessServiceServer).Refresh(ctx, in)
+		return srv.(AccessServer).Refresh(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.api.v1.AccessService/Refresh",
+		FullMethod: "/service.api.v1.Access/Refresh",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AccessServiceServer).Refresh(ctx, req.(*RefreshRequest))
+		return srv.(AccessServer).Refresh(ctx, req.(*RefreshRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// AccessService_ServiceDesc is the grpc.ServiceDesc for AccessService service.
+// Access_ServiceDesc is the grpc.ServiceDesc for Access service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var AccessService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "service.api.v1.AccessService",
-	HandlerType: (*AccessServiceServer)(nil),
+var Access_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "service.api.v1.Access",
+	HandlerType: (*AccessServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "Login",
-			Handler:    _AccessService_Login_Handler,
+			Handler:    _Access_Login_Handler,
 		},
 		{
 			MethodName: "Refresh",
-			Handler:    _AccessService_Refresh_Handler,
+			Handler:    _Access_Refresh_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "service/api/v1/admin.proto",
 }
 
-// AdminServiceClient is the client API for AdminService service.
+// ConfigClient is the client API for Config service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type AdminServiceClient interface {
+type ConfigClient interface {
 	GetConfig(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ServerConfig, error)
 	UpdateConfig(ctx context.Context, in *ServerConfig, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	GetClientStatus(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ClientStatus, error)
@@ -149,254 +149,254 @@ type AdminServiceClient interface {
 	ConfigureEndpoint(ctx context.Context, in *ConfigureEndpointRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
-type adminServiceClient struct {
+type configClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewAdminServiceClient(cc grpc.ClientConnInterface) AdminServiceClient {
-	return &adminServiceClient{cc}
+func NewConfigClient(cc grpc.ClientConnInterface) ConfigClient {
+	return &configClient{cc}
 }
 
-func (c *adminServiceClient) GetConfig(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ServerConfig, error) {
+func (c *configClient) GetConfig(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ServerConfig, error) {
 	out := new(ServerConfig)
-	err := c.cc.Invoke(ctx, "/service.api.v1.AdminService/GetConfig", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/service.api.v1.Config/GetConfig", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *adminServiceClient) UpdateConfig(ctx context.Context, in *ServerConfig, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *configClient) UpdateConfig(ctx context.Context, in *ServerConfig, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/service.api.v1.AdminService/UpdateConfig", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/service.api.v1.Config/UpdateConfig", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *adminServiceClient) GetClientStatus(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ClientStatus, error) {
+func (c *configClient) GetClientStatus(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ClientStatus, error) {
 	out := new(ClientStatus)
-	err := c.cc.Invoke(ctx, "/service.api.v1.AdminService/GetClientStatus", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/service.api.v1.Config/GetClientStatus", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *adminServiceClient) GetConnections(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetConnectionsResponse, error) {
+func (c *configClient) GetConnections(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetConnectionsResponse, error) {
 	out := new(GetConnectionsResponse)
-	err := c.cc.Invoke(ctx, "/service.api.v1.AdminService/GetConnections", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/service.api.v1.Config/GetConnections", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *adminServiceClient) GetEndpoints(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetEndpointsResponse, error) {
+func (c *configClient) GetEndpoints(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetEndpointsResponse, error) {
 	out := new(GetEndpointsResponse)
-	err := c.cc.Invoke(ctx, "/service.api.v1.AdminService/GetEndpoints", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/service.api.v1.Config/GetEndpoints", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *adminServiceClient) ConfigureEndpoint(ctx context.Context, in *ConfigureEndpointRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *configClient) ConfigureEndpoint(ctx context.Context, in *ConfigureEndpointRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, "/service.api.v1.AdminService/ConfigureEndpoint", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/service.api.v1.Config/ConfigureEndpoint", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// AdminServiceServer is the server API for AdminService service.
-// All implementations must embed UnimplementedAdminServiceServer
+// ConfigServer is the server API for Config service.
+// All implementations must embed UnimplementedConfigServer
 // for forward compatibility
-type AdminServiceServer interface {
+type ConfigServer interface {
 	GetConfig(context.Context, *emptypb.Empty) (*ServerConfig, error)
 	UpdateConfig(context.Context, *ServerConfig) (*emptypb.Empty, error)
 	GetClientStatus(context.Context, *emptypb.Empty) (*ClientStatus, error)
 	GetConnections(context.Context, *emptypb.Empty) (*GetConnectionsResponse, error)
 	GetEndpoints(context.Context, *emptypb.Empty) (*GetEndpointsResponse, error)
 	ConfigureEndpoint(context.Context, *ConfigureEndpointRequest) (*emptypb.Empty, error)
-	mustEmbedUnimplementedAdminServiceServer()
+	mustEmbedUnimplementedConfigServer()
 }
 
-// UnimplementedAdminServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedAdminServiceServer struct {
+// UnimplementedConfigServer must be embedded to have forward compatible implementations.
+type UnimplementedConfigServer struct {
 }
 
-func (UnimplementedAdminServiceServer) GetConfig(context.Context, *emptypb.Empty) (*ServerConfig, error) {
+func (UnimplementedConfigServer) GetConfig(context.Context, *emptypb.Empty) (*ServerConfig, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetConfig not implemented")
 }
-func (UnimplementedAdminServiceServer) UpdateConfig(context.Context, *ServerConfig) (*emptypb.Empty, error) {
+func (UnimplementedConfigServer) UpdateConfig(context.Context, *ServerConfig) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateConfig not implemented")
 }
-func (UnimplementedAdminServiceServer) GetClientStatus(context.Context, *emptypb.Empty) (*ClientStatus, error) {
+func (UnimplementedConfigServer) GetClientStatus(context.Context, *emptypb.Empty) (*ClientStatus, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetClientStatus not implemented")
 }
-func (UnimplementedAdminServiceServer) GetConnections(context.Context, *emptypb.Empty) (*GetConnectionsResponse, error) {
+func (UnimplementedConfigServer) GetConnections(context.Context, *emptypb.Empty) (*GetConnectionsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetConnections not implemented")
 }
-func (UnimplementedAdminServiceServer) GetEndpoints(context.Context, *emptypb.Empty) (*GetEndpointsResponse, error) {
+func (UnimplementedConfigServer) GetEndpoints(context.Context, *emptypb.Empty) (*GetEndpointsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetEndpoints not implemented")
 }
-func (UnimplementedAdminServiceServer) ConfigureEndpoint(context.Context, *ConfigureEndpointRequest) (*emptypb.Empty, error) {
+func (UnimplementedConfigServer) ConfigureEndpoint(context.Context, *ConfigureEndpointRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ConfigureEndpoint not implemented")
 }
-func (UnimplementedAdminServiceServer) mustEmbedUnimplementedAdminServiceServer() {}
+func (UnimplementedConfigServer) mustEmbedUnimplementedConfigServer() {}
 
-// UnsafeAdminServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to AdminServiceServer will
+// UnsafeConfigServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to ConfigServer will
 // result in compilation errors.
-type UnsafeAdminServiceServer interface {
-	mustEmbedUnimplementedAdminServiceServer()
+type UnsafeConfigServer interface {
+	mustEmbedUnimplementedConfigServer()
 }
 
-func RegisterAdminServiceServer(s grpc.ServiceRegistrar, srv AdminServiceServer) {
-	s.RegisterService(&AdminService_ServiceDesc, srv)
+func RegisterConfigServer(s grpc.ServiceRegistrar, srv ConfigServer) {
+	s.RegisterService(&Config_ServiceDesc, srv)
 }
 
-func _AdminService_GetConfig_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Config_GetConfig_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AdminServiceServer).GetConfig(ctx, in)
+		return srv.(ConfigServer).GetConfig(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.api.v1.AdminService/GetConfig",
+		FullMethod: "/service.api.v1.Config/GetConfig",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AdminServiceServer).GetConfig(ctx, req.(*emptypb.Empty))
+		return srv.(ConfigServer).GetConfig(ctx, req.(*emptypb.Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AdminService_UpdateConfig_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Config_UpdateConfig_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ServerConfig)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AdminServiceServer).UpdateConfig(ctx, in)
+		return srv.(ConfigServer).UpdateConfig(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.api.v1.AdminService/UpdateConfig",
+		FullMethod: "/service.api.v1.Config/UpdateConfig",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AdminServiceServer).UpdateConfig(ctx, req.(*ServerConfig))
+		return srv.(ConfigServer).UpdateConfig(ctx, req.(*ServerConfig))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AdminService_GetClientStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Config_GetClientStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AdminServiceServer).GetClientStatus(ctx, in)
+		return srv.(ConfigServer).GetClientStatus(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.api.v1.AdminService/GetClientStatus",
+		FullMethod: "/service.api.v1.Config/GetClientStatus",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AdminServiceServer).GetClientStatus(ctx, req.(*emptypb.Empty))
+		return srv.(ConfigServer).GetClientStatus(ctx, req.(*emptypb.Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AdminService_GetConnections_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Config_GetConnections_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AdminServiceServer).GetConnections(ctx, in)
+		return srv.(ConfigServer).GetConnections(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.api.v1.AdminService/GetConnections",
+		FullMethod: "/service.api.v1.Config/GetConnections",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AdminServiceServer).GetConnections(ctx, req.(*emptypb.Empty))
+		return srv.(ConfigServer).GetConnections(ctx, req.(*emptypb.Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AdminService_GetEndpoints_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Config_GetEndpoints_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AdminServiceServer).GetEndpoints(ctx, in)
+		return srv.(ConfigServer).GetEndpoints(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.api.v1.AdminService/GetEndpoints",
+		FullMethod: "/service.api.v1.Config/GetEndpoints",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AdminServiceServer).GetEndpoints(ctx, req.(*emptypb.Empty))
+		return srv.(ConfigServer).GetEndpoints(ctx, req.(*emptypb.Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AdminService_ConfigureEndpoint_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Config_ConfigureEndpoint_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ConfigureEndpointRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AdminServiceServer).ConfigureEndpoint(ctx, in)
+		return srv.(ConfigServer).ConfigureEndpoint(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/service.api.v1.AdminService/ConfigureEndpoint",
+		FullMethod: "/service.api.v1.Config/ConfigureEndpoint",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AdminServiceServer).ConfigureEndpoint(ctx, req.(*ConfigureEndpointRequest))
+		return srv.(ConfigServer).ConfigureEndpoint(ctx, req.(*ConfigureEndpointRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// AdminService_ServiceDesc is the grpc.ServiceDesc for AdminService service.
+// Config_ServiceDesc is the grpc.ServiceDesc for Config service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var AdminService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "service.api.v1.AdminService",
-	HandlerType: (*AdminServiceServer)(nil),
+var Config_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "service.api.v1.Config",
+	HandlerType: (*ConfigServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "GetConfig",
-			Handler:    _AdminService_GetConfig_Handler,
+			Handler:    _Config_GetConfig_Handler,
 		},
 		{
 			MethodName: "UpdateConfig",
-			Handler:    _AdminService_UpdateConfig_Handler,
+			Handler:    _Config_UpdateConfig_Handler,
 		},
 		{
 			MethodName: "GetClientStatus",
-			Handler:    _AdminService_GetClientStatus_Handler,
+			Handler:    _Config_GetClientStatus_Handler,
 		},
 		{
 			MethodName: "GetConnections",
-			Handler:    _AdminService_GetConnections_Handler,
+			Handler:    _Config_GetConnections_Handler,
 		},
 		{
 			MethodName: "GetEndpoints",
-			Handler:    _AdminService_GetEndpoints_Handler,
+			Handler:    _Config_GetEndpoints_Handler,
 		},
 		{
 			MethodName: "ConfigureEndpoint",
-			Handler:    _AdminService_ConfigureEndpoint_Handler,
+			Handler:    _Config_ConfigureEndpoint_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

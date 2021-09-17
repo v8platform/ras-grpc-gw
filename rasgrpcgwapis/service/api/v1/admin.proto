@@ -9,7 +9,11 @@ import "protoc-gen-openapiv2/options/annotations.proto";
 
 option go_package = "github.com/v8platform/ras-grpc-gw/pkg/gen/service/api/v1;service_v1";
 
-service AccessService {
+service Access {
+
+  option(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
+    description: "Сервис управления доступом службы сервиса"
+  };
 
   rpc Login(LoginRequest) returns (Tokens) {
     option (google.api.http) = {
@@ -32,11 +36,6 @@ service AccessService {
       description: "Обновление токена доступа для пользователя";
       summary: "Выполняет обновление токена доступа";
       tags: "Access";
-      security: {
-        security_requirement:{
-          key: "UserAuth"
-        };
-      };
     };
   };
 }
@@ -64,16 +63,20 @@ message RefreshRequest {
   string refresh_token = 1;
 }
 
-service AdminService {
+service Config {
+
+  option(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
+    description: "Сервис управления конфигурацией службы сервиса"
+  };
 
   rpc GetConfig(google.protobuf.Empty) returns (ServerConfig) {
     option (google.api.http) = {
-      get: "/api/v1/admin/config";
+      get: "/api/v1/config";
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
       summary: "Получение конфигурации сервиса";
       description: "Получение текущей конфигурации сервиса";
-      tags: "Admin";
+      tags: "Config";
       security: {
         security_requirement: { key: "AdminAuth"}
       };
@@ -81,13 +84,13 @@ service AdminService {
   };
   rpc UpdateConfig(ServerConfig) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      post: "/api/v1/admin/config";
+      post: "/api/v1/config";
       body: "*";
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
       summary: "Обновление конфигурации сервиса";
       description: "Выполняет обновление конфигурации сервиса";
-      tags: "Admin";
+      tags: "Config";
       security: {
         security_requirement: { key: "AdminAuth"}
       };
@@ -96,12 +99,12 @@ service AdminService {
 
   rpc GetClientStatus(google.protobuf.Empty) returns (ClientStatus) {
     option (google.api.http) = {
-      get: "/api/v1/admin/client";
+      get: "/api/v1/config/client";
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
       summary: "Получение состояния клиента сервиса";
       description: "Получение состояния клиент сервиса";
-      tags: "Admin";
+      tags: "Config";
       security: {
         security_requirement: { key: "AdminAuth"}
       };
@@ -109,12 +112,12 @@ service AdminService {
   };
   rpc GetConnections(google.protobuf.Empty) returns (GetConnectionsResponse) {
     option (google.api.http) = {
-      get: "/api/v1/admin/connections";
+      get: "/api/v1/config/connections";
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
       summary: "Получение списка подключений клиента сервиса";
       description: "Получение списка подключений клиента сервиса";
-      tags: "Admin";
+      tags: "Config";
       security: {
         security_requirement: { key: "AdminAuth"}
       };
@@ -123,12 +126,12 @@ service AdminService {
 
   rpc GetEndpoints(google.protobuf.Empty) returns (GetEndpointsResponse) {
     option (google.api.http) = {
-      get: "/api/v1/admin/endpoints";
+      get: "/api/v1/config/endpoints";
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
       summary: "Получение точек обмена клиента сервиса";
       description: "Получение точек обмена клиента сервиса";
-      tags: "Admin";
+      tags: "Config";
       security: {
         security_requirement: { key: "AdminAuth"}
       };
@@ -137,7 +140,7 @@ service AdminService {
 
   rpc ConfigureEndpoint(ConfigureEndpointRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
-      post: "/api/v1/admin/endpoints";
+      post: "/api/v1/config/endpoints";
       body: "*"
       additional_bindings: {
         post: "/api/v1/admin/endpoints/{endpoint_id}"
@@ -147,7 +150,7 @@ service AdminService {
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
       summary: "Конфигурация точек обмена клиента сервиса";
       description: "Конфигурация точек обмена клиента сервиса";
-      tags: "Admin";
+      tags: "Config";
       security: {
         security_requirement: { key: "AdminAuth"}
       };

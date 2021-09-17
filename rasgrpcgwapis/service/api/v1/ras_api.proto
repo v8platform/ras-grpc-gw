@@ -9,13 +9,20 @@ import "ras/messages/v1/managers_messages.proto";
 import "ras/messages/v1/working_processes_messages.proto";
 import "ras/messages/v1/working_servers_messages.proto";
 import "ras/messages/v1/services_messages.proto";
+import "ras/messages/v1/connections_messages.proto";
+import "ras/messages/v1/locks_messages.proto";
+
 import "google/api/annotations.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
 option go_package = "github.com/v8platform/ras-grpc-gw/pkg/gen/service/api/v1;service_v1";
 
+service Authorizations {
 
-service AuthService {
+  option(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
+    description: "Сервис управления доступом на локальном кластере"
+  };
+
   rpc AuthenticateCluster(ras.messages.v1.ClusterAuthenticateRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       post: "/api/v1/clusters/auth"
@@ -52,13 +59,17 @@ service AuthService {
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
       summary: "Установка авторизации администратора сервера 1С";
       description: "Выполняет установку авторизации администратора сервера 1С";
-      tags: "Server";
       tags: "Authorizations";
     };
   };
 }
 
-service SessionsService {
+service Sessions {
+
+  option(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
+    description: "Сервис управления сессиями локального кластера"
+  };
+
   rpc GetSessions(ras.messages.v1.GetSessionsRequest) returns (ras.messages.v1.GetSessionsResponse) {
     option (google.api.http) = {
       get: "/api/v1/sessions"
@@ -92,10 +103,13 @@ service SessionsService {
     };
   };
 
-
 }
 
-service InfobasesService {
+service Infobases {
+
+  option(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
+    description: "Сервис управления информационными базами локального кластера"
+  };
 
   rpc GetInfobases(ras.messages.v1.GetInfobasesRequest) returns (ras.messages.v1.GetInfobasesResponse) {
     option (google.api.http) = {
@@ -185,7 +199,11 @@ service InfobasesService {
 
 }
 
-service ClustersService {
+service Clusters {
+
+  option(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
+    description: "Сервис управления локальными кластерами сервера 1С Предприятие"
+  };
 
   rpc GetClusters(ras.messages.v1.GetClustersRequest) returns (ras.messages.v1.GetClustersResponse) {
     option (google.api.http) = {
@@ -231,7 +249,10 @@ service ClustersService {
   };
 }
 
-service ManagersService {
+service Managers {
+  option(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
+    description: "Сервис получения менеджеров локального кластера"
+  };
 
   rpc GetClusterManagers(ras.messages.v1.GetClusterManagersRequest) returns (ras.messages.v1.GetClusterManagersResponse) {
     option (google.api.http) = {
@@ -257,7 +278,11 @@ service ManagersService {
   };
 }
 
-service ProcessesService {
+service Processes {
+
+  option(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
+    description: "Сервис получения рабочих процессов локального кластера"
+  };
 
   rpc GetWorkingProcesses(ras.messages.v1.GetWorkingProcessesRequest) returns (ras.messages.v1.GetWorkingProcessesResponse) {
     option (google.api.http) = {
@@ -294,7 +319,10 @@ service ProcessesService {
   };
 }
 
-service ServersService {
+service Servers {
+  option(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
+    description: "Сервис получения и изменения рабочих серверов локального кластера"
+  };
 
   rpc GetWorkingServers(ras.messages.v1.GetWorkingServersRequest) returns (ras.messages.v1.GetWorkingServersResponse) {
     option (google.api.http) = {
@@ -337,8 +365,99 @@ service ServersService {
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
       summary: "Удаление рабочего сервера локального кластера";
-      description: "Выполняет Удаление рабочего сервера локального кластера сервера 1С Предприятия";
+      description: "Выполняет удаление рабочего сервера локального кластера сервера 1С Предприятия";
       tags: "Servers";
     };
   };
+}
+
+service Connections {
+  option(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
+    description: "Сервис получения соединений локального кластера"
+  };
+
+  rpc GetConnections(ras.messages.v1.GetConnectionsRequest) returns (ras.messages.v1.GetConnectionsResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/connections"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Получение списка соединений локального кластера";
+      description: "Выполняет получение списка соединений локального кластера сервера 1С Предприятия";
+      tags: "Connections";
+    };
+  };
+
+  rpc GetInfobaseConnections(ras.messages.v1.GetInfobaseConnectionsRequest) returns (ras.messages.v1.GetInfobaseConnectionsResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/connections:infobase"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Получение списка соединений информационной базы локального кластера";
+      description: "Выполняет получение списка соединений информационной базы локального кластера сервера 1С Предприятия";
+      tags: "Connections";
+    };
+  };
+
+  rpc DisconnectConnection(ras.messages.v1.DisconnectConnectionRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/api/v1/connections/{connection_id}"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      summary: "Отключение соединения рабочего сервера локального кластера";
+      description: "Выполняет отключение соединения рабочего сервера локального кластера сервера 1С Предприятия";
+      tags: "Connections";
+    };
+  };
+}
+
+service Locks {
+
+    option(grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
+      description: "Сервис получения блокировок локального кластера"
+    };
+
+    rpc GetLocks(ras.messages.v1.GetLocksRequest) returns (ras.messages.v1.GetLocksResponse) {
+      option (google.api.http) = {
+        get: "/api/v1/locks"
+      };
+      option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+        summary: "Получение списка блокировок локального кластера";
+        description: "Выполняет получение списка блокировок локального кластера сервера 1С Предприятия";
+        tags: "Locks";
+      };
+    };
+
+    rpc GetInfobaseLocks(ras.messages.v1.GetInfobaseLocksRequest) returns (ras.messages.v1.GetInfobaseLocksResponse) {
+      option (google.api.http) = {
+        get: "/api/v1/locks:infobase"
+      };
+      option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+        summary: "Получение списка блокировок информационной базы локального кластера";
+        description: "Выполняет получение списка блокировок информационной базы локального кластера сервера 1С Предприятия";
+        tags: "Locks";
+      };
+    };
+
+    rpc GetSessionLocks(ras.messages.v1.GetSessionLocksRequest) returns (ras.messages.v1.GetSessionLocksResponse) {
+      option (google.api.http) = {
+        get: "/api/v1/locks:session"
+      };
+      option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+        summary: "Получение списка блокировок сессии информационной базы локального кластера";
+        description: "Выполняет получение списка блокировок сессии информационной базы локального кластера сервера 1С Предприятия";
+        tags: "Locks";
+      };
+    };
+
+    rpc GetConnectionLocks(ras.messages.v1.GetConnectionLocksRequest) returns (ras.messages.v1.GetConnectionLocksResponse) {
+      option (google.api.http) = {
+        get: "/api/v1/locks:connection"
+      };
+      option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+        summary: "Получение списка блокировок соединения локального кластера";
+        description: "Выполняет получение списка блокировок соединения локального кластера сервера 1С Предприятия";
+        tags: "Locks";
+      };
+    };
+
 }
