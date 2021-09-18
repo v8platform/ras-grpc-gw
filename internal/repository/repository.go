@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"github.com/v8platform/ras-grpc-gw/internal/config"
 	pudge "github.com/v8platform/ras-grpc-gw/internal/database/pudgedb"
 	"github.com/v8platform/ras-grpc-gw/internal/domain"
 	"github.com/v8platform/ras-grpc-gw/internal/repository/pudgedb"
@@ -38,6 +39,26 @@ func NewPudgeRepositories(db *pudge.Db) *Repositories {
 		pudgedb.NewClientsRepository(db),
 	)
 
+}
+
+func CreateRepository(config config.DatabaseConfig) (*Repositories, error) {
+
+	switch config.Engine.Name() {
+
+	case "pudge":
+
+		db, err := pudge.New(config.Engine.Config())
+		if err != nil {
+			return nil, err
+		}
+
+		return NewPudgeRepositories(db), nil
+
+	case "postgres":
+		panic("TODO Add support postgres")
+	}
+
+	return nil, nil
 }
 
 type Repositories struct {

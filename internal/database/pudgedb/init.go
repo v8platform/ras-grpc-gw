@@ -1,6 +1,7 @@
 package pudgedb
 
 import (
+	"github.com/elastic/go-ucfg"
 	"github.com/recoilme/pudge"
 	"path/filepath"
 	"sync"
@@ -8,10 +9,6 @@ import (
 
 type Table struct {
 	*pudge.Db
-}
-
-func (t *Table) FindOne() {
-
 }
 
 type Db struct {
@@ -62,14 +59,23 @@ func (d *Db) Table(name string) (*Table, error) {
 	return table, nil
 
 }
-
-func New(dir string) *Db {
+func newFromConfig(config *Config) *Db {
 	return &Db{
-		dir:          dir,
-		fileMode:     0666,
-		dirMode:      0777,
-		syncInterval: 60,
-		storeMode:    0,
+		dir:          config.Path,
+		fileMode:     config.FileMode,
+		dirMode:      config.DirMode,
+		syncInterval: config.SyncInterval,
+		storeMode:    config.StoreMode,
 		tables:       make(map[string]*Table),
 	}
+}
+
+func New(cfg *ucfg.Config) (*Db, error) {
+
+	config, err := Unpack(cfg)
+	if err != nil {
+		return nil, err
+	}
+
+	return newFromConfig(config), nil
 }

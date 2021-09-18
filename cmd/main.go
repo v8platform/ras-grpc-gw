@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/urfave/cli/v2"
-	"github.com/v8platform/ras-grpc-gw/internal/database/pudgedb"
+	"github.com/v8platform/ras-grpc-gw/internal/config"
 	grpc_v1 "github.com/v8platform/ras-grpc-gw/internal/delivery/grpc/v1"
 	"github.com/v8platform/ras-grpc-gw/internal/repository"
 	"github.com/v8platform/ras-grpc-gw/internal/server"
@@ -52,22 +52,37 @@ func main() {
 		},
 		Action: func(c *cli.Context) error {
 
-			// host := "localhost:1545"
-			// if c.Args().Present() {
-			// 	host = c.Args().First()
-			// }
-			manager, err := auth.NewTokenManager("sercet")
-			if err != nil {
+			var (
+				repositories *repository.Repositories
+				cacheEngine  cache.Cache
+				tokenManager auth.TokenManager
+				err          error
+			)
+
+			var cfg config.Config
+
+			if c, err := config.NewConfigFrom(config.DefaultConfig); err != nil {
+				return err
+			} else if err := c.Unpack(cfg); err != nil {
 				return err
 			}
 
-			db := pudgedb.New("./pudgedb")
+			if repositories, err = repository.CreateRepository(cfg.Database); err != nil {
+				return err
+			}
+			if cacheEngine, err = cache.New(cfg.Cache); err != nil {
+				return err
+			}
+
+			if tokenManager, err = auth.NewTokenManager(cfg.Secret); err != nil {
+				return err
+			}
 
 			services, err := service.NewServices(service.Options{
-				Repositories: repository.NewPudgeRepositories(db),
-				Cache:        cache.NewMemoryCache(),
-				Hasher:       hash.NewSHA1Hasher("salt"),
-				TokenManager: manager,
+				Repositories: repositories,
+				Cache:        cacheEngine,
+				Hasher:       hash.NewSHA1Hasher(cfg.SHA1Salt),
+				TokenManager: tokenManager,
 			})
 
 			if err != nil {
