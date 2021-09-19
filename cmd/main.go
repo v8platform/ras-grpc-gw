@@ -126,17 +126,6 @@ func main() {
 						DiscardUnknown: true,
 					},
 				})),
-				// server.MuxOption(runtime.WithMarshalerOption("application/json+pretty", &runtime.JSONPb{
-				// 	MarshalOptions: protojson.MarshalOptions{
-				// 		Indent: "",
-				// 		Multiline: false, // Optional, implied by presence of "Indent".
-				// 		UseProtoNames: true,
-				// 		EmitUnpopulated: true,
-				// 	},
-				// 	UnmarshalOptions: protojson.UnmarshalOptions{
-				// 		DiscardUnknown: true,
-				// 	},
-				// })),
 				server.Swagger(&server.SwaggerOpts{
 					Up:      true,
 					Path:    "/docs/**",
