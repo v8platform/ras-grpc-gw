@@ -178,7 +178,7 @@ message GetConnectionsResponse {
   repeated ConnectionInfo connections = 1;
 }
 
-// Состояние клиента и его подключений
+
 message ClientStatus {
 
   // Количество подключение в пуле
@@ -195,7 +195,7 @@ message ClientStatus {
   repeated ConnectionInfo connections = 4;
 
 }
-// Информация о подключении клиента
+
 message ConnectionInfo {
 
   // Уникальный идентификатор подключения
@@ -259,7 +259,6 @@ message Endpoint {
 
 }
 
-// Сообщение авторизации
 message EndpointServerAuth {
 
   // Имя пользователя
@@ -269,11 +268,12 @@ message EndpointServerAuth {
 
 }
 
-/* Сообщение авторизации на точке обмена
- Используется для установка
- * авторизации на локальном кластере
- * авторизации в информационной базе на локальном кластере */
+
 message EndpointCommonAuth {
+  /* Сообщение авторизации на точке обмена
+   Используется для установка
+   * авторизации на локальном кластере
+   * авторизации в информационной базе на локальном кластере */
 
   // Обязательное указание уникального идентификатора кластера
   string cluster_id = 1;
@@ -284,7 +284,6 @@ message EndpointCommonAuth {
 
 }
 
-// Конфигурация точки обмена
 message EndpointConfig {
 
   // Авторизация на сервере 1С

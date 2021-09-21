@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"fmt"
+	"github.com/v8platform/ras-grpc-gw/internal/repository/pudgedb"
 	"google.golang.org/grpc/grpclog"
 	"net"
 	"net/http"
@@ -22,6 +23,8 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/reflection"
+
+	"github.com/urfave/negroni"
 )
 
 // InterruptSignals are the default interrupt signals to catch
@@ -43,6 +46,7 @@ type Service struct {
 	staticDir          string
 	muxOptions         []runtime.ServeMuxOption
 	mux                *runtime.ServeMux
+	middleware         []negroni.Handler
 	routes             []Route
 	streamInterceptors []grpc.StreamServerInterceptor
 	unaryInterceptors  []grpc.UnaryServerInterceptor
@@ -70,7 +74,7 @@ type ReverseProxyFunc func(ctx context.Context, mux *runtime.ServeMux, grpcHostA
 // GRPCServiceRegisterFunc is the callback that the caller should implement to steps to reverse-proxy the HTTP/1 requests to gRPC
 type GRPCServiceRegisterFunc func(server *grpc.Server)
 
-// ReverseProxyFunc is the callback that the caller should implement to steps to reverse-proxy the HTTP/1 requests to gRPC
+// ReverseProxyRegisterFunc is the callback that the caller should implement to steps to reverse-proxy the HTTP/1 requests to gRPC
 type ReverseProxyRegisterFunc func(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error
 
 // HTTPHandlerFunc is the http middleware handler function
@@ -277,8 +281,16 @@ func (s *Service) startGRPCGateway(httpPort uint, grpcPort uint) error {
 		}
 	}
 
+	// create common middleware to be shared across routes
+	common := negroni.New(
+		s.middleware...,
+	)
+
 	s.HTTPServer.Addr = fmt.Sprintf(":%d", httpPort)
-	s.HTTPServer.Handler = s.httpHandler(s.mux)
+	s.HTTPServer.Handler = common.With(
+		negroni.Wrap(s.mux),
+	)
+
 	s.HTTPServer.RegisterOnShutdown(s.shutdownFunc)
 
 	return s.HTTPServer.ListenAndServe()
@@ -325,21 +337,4 @@ func (s *Service) HasRoute(route Route) bool {
 	}
 
 	return false
-}
-
-// ServeFile serves a file
-func (s *Service) ServeFile(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
-	dir := s.staticDir
-	if s.staticDir == "" {
-		dir, _ = os.Getwd()
-	}
-
-	// check if the file exists and fobid showing directory
-	path := filepath.Join(dir, r.URL.Path)
-	if fileInfo, err := os.Stat(path); os.IsNotExist(err) || fileInfo.IsDir() {
-		http.NotFound(w, r)
-		return
-	}
-
-	http.ServeFile(w, r, path)
 }

@@ -13,6 +13,31 @@ import (
 	"time"
 )
 
+/*
+Описание работы клиента
+1. Получаем точку обмена
+ - Есть ID
+ - Нет ID
+
+
+
+Состав клиента
+1. Пул соединений - варианты: размерный или одиночный
+2. Индекс точек работы и соединений - map[string]*conn
+
+Состав Endpoint
++ ID     string
++ Config EndpointConfig
++ usedAt uint32 // atomic
+
+Состав conn
+... поля пула
++ idxEndpoints [string]*protocolv1.Endpoint
+
+
+
+*/
+
 var defaultVersion = "10.0"
 
 var _ clientv1.ClientImpl = (*ClientConn)(nil)
@@ -37,6 +62,23 @@ func NewClientConn(host string, opts ...Options) *ClientConn {
 	client.ClientServiceImpl = clientv1.NewClientService(client)
 
 	return client
+}
+
+type connPool struct {
+	opt           *Options
+	dialErrorsNum uint32 // atomic
+	_closed       uint32 // atomic
+
+	lastDialErrorMu sync.RWMutex
+	lastDialError   error
+
+	queue        chan struct{}
+	poolSize     int
+	idleConnsLen int
+
+	connsMu   sync.Mutex
+	conns     []*Conn
+	idleConns IdleConns
 }
 
 type ClientConn struct {

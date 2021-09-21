@@ -4,9 +4,12 @@ import (
 	"crypto"
 	"crypto/ed25519"
 	"crypto/sha256"
+	"errors"
 	"fmt"
 	"github.com/lestrrat-go/jwx/jwa"
 	"github.com/lestrrat-go/jwx/jwt"
+	"net/http"
+	"strings"
 	"time"
 )
 
@@ -61,4 +64,17 @@ func (m *tokenManager) Generate(issuer, subject string, ttl time.Duration) (stri
 	}
 
 	return string(payload), nil
+}
+
+// BearerExtractor gets the jwt token from the `Authorization` header
+func BearerExtractor(r *http.Request) (string, error) {
+	token := r.Header.Get("Authorization")
+	if token == "" {
+		return "", errors.New("mdw: empty token")
+	}
+	parts := strings.Split(token, " ")
+	if len(parts) != 2 || strings.ToLower(parts[0]) != "bearer" || parts[1] == "" {
+		return "", errors.New("mdw: invalid token format")
+	}
+	return parts[1], nil
 }

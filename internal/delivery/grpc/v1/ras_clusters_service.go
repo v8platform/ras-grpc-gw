@@ -11,10 +11,10 @@ import (
 type rasClustersServiceServer struct {
 	apiv1.UnimplementedClustersServiceServer
 	services *service.Services
-	clients  ClientsStorage
+	clients  Client
 }
 
-func NewClustersServiceServer(services *service.Services, clients ClientsStorage) apiv1.ClustersServiceServer {
+func NewClustersServiceServer(services *service.Services, clients Client) apiv1.ClustersServiceServer {
 	return &rasClustersServiceServer{
 		services: services,
 		clients:  clients,

@@ -4,6 +4,7 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/urfave/cli/v2"
 	"github.com/v8platform/ras-grpc-gw/internal/config"
+	appCtx "github.com/v8platform/ras-grpc-gw/internal/context"
 	grpc_v1 "github.com/v8platform/ras-grpc-gw/internal/delivery/grpc/v1"
 	"github.com/v8platform/ras-grpc-gw/internal/repository"
 	"github.com/v8platform/ras-grpc-gw/internal/server"
@@ -12,8 +13,11 @@ import (
 	"github.com/v8platform/ras-grpc-gw/pkg/cache"
 	"github.com/v8platform/ras-grpc-gw/pkg/docs/rapidoc"
 	"github.com/v8platform/ras-grpc-gw/pkg/hash"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/encoding/protojson"
 	"log"
+	"net/http"
 	"os"
 )
 
@@ -94,6 +98,35 @@ func main() {
 			interceptors := grpc_v1.NewInterceptors(services)
 
 			svr := server.NewService(
+				server.HTTPHandler(func(mux *runtime.ServeMux) http.Handler {
+					return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+						token, err := auth.BearerExtractor(r)
+						if err != nil {
+							http.Error(w, status.Errorf(codes.Unauthenticated, "invalid auth token: %v", err).Error(), http.StatusUnauthorized)
+							return
+						}
+
+						tokenInfo, err := services.TokenManager.Validate(token, "access")
+						if err != nil {
+							http.Error(w, status.Errorf(codes.Unauthenticated, "invalid auth token: %v", err).Error(), http.StatusUnauthorized)
+							return
+						}
+
+						ctx := r.Context()
+
+						if len(tokenInfo) > 0 {
+
+							user, err := services.Users.GetByUUID(ctx, tokenInfo)
+							if err != nil {
+								http.Error(w, status.Errorf(codes.Unauthenticated, "invalid auth token: %v", err).Error(), http.StatusUnauthorized)
+								return
+							}
+							ctx = appCtx.UserToContext(ctx, user)
+
+						}
+						mux.ServeHTTP(w, r.WithContext(ctx))
+					})
+				}),
 				server.UnaryInterceptor(interceptors...),
 				server.GRPCServiceRegister(gRPCServiceRegisterFunc),
 				server.ReverseProxyRegister(reverseProxyRegisterFunc),

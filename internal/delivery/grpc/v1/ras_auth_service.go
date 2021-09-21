@@ -11,12 +11,12 @@ import (
 )
 
 type rasAuthServiceServer struct {
-	apiv1.UnimplementedAuthServiceServer
+	apiv1.UnimplementedAuthorizationsServer
 	services *service.Services
-	clients  ClientsStorage
+	clients  Client
 }
 
-func NewAuthServiceServer(services *service.Services, clients ClientsStorage) apiv1.AuthServiceServer {
+func NewAuthServiceServer(services *service.Services, clients Client) apiv1.AuthorizationsServer {
 	return &rasAuthServiceServer{
 		services: services,
 		clients:  clients,
@@ -47,12 +47,12 @@ func (s *rasAuthServiceServer) AuthenticateInfobase(ctx context.Context, request
 
 }
 
-func (s *rasAuthServiceServer) AuthenticateAgent(ctx context.Context, request *messagesv1.AuthenticateAgentRequest) (*emptypb.Empty, error) {
+func (s *rasAuthServiceServer) AuthenticateAgent(ctx context.Context, request *messagesv1.ServerAuthenticateRequest) (*emptypb.Empty, error) {
 	endpoint, err := s.clients.GetEndpoint(ctx)
 	if err != nil {
 		return nil, err
 	}
 	auth := clientv1.NewAuthService(endpoint)
 
-	return auth.AuthenticateAgent(ctx, request)
+	return auth.AuthenticateServer(ctx, request)
 }

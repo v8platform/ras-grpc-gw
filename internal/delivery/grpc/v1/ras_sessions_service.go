@@ -11,7 +11,7 @@ import (
 type rasSessionsServiceServer struct {
 	apiv1.UnimplementedSessionsServiceServer
 	services *service.Services
-	clients  ClientsStorage
+	clients  Client
 }
 
 func (r rasSessionsServiceServer) GetSessions(ctx context.Context, request *v1.GetSessionsRequest) (*v1.GetSessionsResponse, error) {
@@ -32,7 +32,7 @@ func (r rasSessionsServiceServer) GetInfobaseSessions(ctx context.Context, reque
 	return s.GetSessions(ctx, request)
 }
 
-func NewSessionsServiceServer(services *service.Services, clients ClientsStorage) apiv1.SessionsServiceServer {
+func NewSessionsServiceServer(services *service.Services, clients Client) apiv1.SessionsServiceServer {
 	return &rasSessionsServiceServer{
 		services: services,
 		clients:  clients,

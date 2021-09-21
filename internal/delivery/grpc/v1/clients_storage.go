@@ -16,8 +16,7 @@ import (
 
 var _ clientv1.EndpointServiceImpl = (*Endpoint)(nil)
 
-type ClientsStorage interface {
-	GetClient(ctx context.Context) (*ras_client.ClientConn, error)
+type Client interface {
 	GetEndpoint(ctx context.Context) (*Endpoint, error)
 }
 
@@ -131,7 +130,7 @@ func (c *clientsStorage) getEndpoint(endpointId string) *Endpoint {
 	return c.idxEndpoints[endpointId]
 }
 
-func NewRasClientsStorage() ClientsStorage {
+func NewRasClientsStorage() Client {
 	return &clientsStorage{
 		idxEndpoints: make(map[string]*Endpoint),
 		idxClients:   make(map[string]*ras_client.ClientConn),
