@@ -72,8 +72,13 @@ type endpointIdent struct{}
 func newRequestOption(n interface{}, v interface{}) RequestOption {
 	return &requestOption{option.New(n, v)}
 }
-func Endpoint(id, version, format int32) RequestOption {
+
+func EndpointData(id, version, format int32) RequestOption {
 	return newRequestOption(endpointIdent{}, endpointData{id, version, format})
+}
+
+func EndpointUUID(uuid string) RequestOption {
+	return newRequestOption(endpointIdent{}, uuid)
 }
 
 type endpointData struct {
@@ -194,11 +199,11 @@ func Conn(conn net.Conn) ClientOption {
 	return newClientOption(connIdent{}, conn)
 }
 
-type EndpointUUID string
-
-func (e EndpointUUID) endpointContext()   {}
-func (e EndpointUUID) UUID() EndpointUUID { return e }
-func (e EndpointUUID) String() string     { return string(e) }
+//type EndpointUUID string
+//
+//func (e EndpointUUID) endpointContext()   {}
+//func (e EndpointUUID) UUID() EndpointUUID { return e }
+//func (e EndpointUUID) String() string     { return string(e) }
 
 type Client interface {
 	Host() string
