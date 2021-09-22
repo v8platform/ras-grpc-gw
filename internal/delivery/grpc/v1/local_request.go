@@ -65,6 +65,20 @@ type requestOption struct {
 
 func (*requestOption) requestOption()  {}
 func (*requestOption) endpointOption() {}
+func (*requestOption) clientOption()   {}
+
+type endpointIdent struct{}
+
+func newRequestOption(n interface{}, v interface{}) RequestOption {
+	return &requestOption{option.New(n, v)}
+}
+func Endpoint(id, version, format int32) RequestOption {
+	return newRequestOption(endpointIdent{}, endpointData{id, version, format})
+}
+
+type endpointData struct {
+	id, version, format int32
+}
 
 type EndpointOption interface {
 	Option
@@ -224,7 +238,7 @@ type Client interface {
 	endpointClose(ctx context.Context, req *protocolv1.EndpointClose, opts ...RequestOption) error
 	endpointMessage(ctx context.Context, req *protocolv1.EndpointMessage, opts ...RequestOption) (*protocolv1.EndpointMessage, error)
 
-	Request(ctx context.Context, req protocolv1.PacketMessageFormatter, reply protocolv1.PacketMessageParser, opts ...RequestOption) error
+	Request(ctx context.Context, req interface{}, reply interface{}, opts ...RequestOption) error
 	EndpointRequest(ctx context.Context, endpoint EndpointContext, req protocolv1.EndpointMessageFormatter, reply protocolv1.EndpointMessageParser, opts ...RequestOption) error
 }
 
