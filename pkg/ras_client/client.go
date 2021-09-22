@@ -2,9 +2,13 @@ package ras_client
 
 import (
 	"context"
+	"fmt"
 	"github.com/spf13/cast"
 	clientv1 "github.com/v8platform/protos/gen/ras/client/v1"
 	protocolv1 "github.com/v8platform/protos/gen/ras/protocol/v1"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/anypb"
+	"google.golang.org/protobuf/types/known/emptypb"
 	"io"
 	"log"
 	"net"
@@ -25,14 +29,14 @@ import (
 1. Пул соединений - варианты: размерный или одиночный
 2. Индекс точек работы и соединений - map[string]*conn
 
-Состав Endpoint
+Состав Endpoint2
 + ID     string
 + Config EndpointConfig
 + usedAt uint32 // atomic
 
 Состав conn
 ... поля пула
-+ idxEndpoints [string]*protocolv1.Endpoint
++ idxEndpoints [string]*protocolv1.Endpoint2
 
 
 
@@ -42,6 +46,161 @@ var defaultVersion = "10.0"
 
 var _ clientv1.ClientImpl = (*ClientConn)(nil)
 var _ clientv1.ClientServiceImpl = (*ClientConn)(nil)
+
+type Poller interface {
+	Get() net.Conn
+	Put(conn net.Conn)
+}
+
+type Client struct {
+	pool Poller
+
+	idxEndpoints map[string]*Endpoint
+}
+
+type EndpointConfig struct {
+	negotiate *protocolv1.NegotiateMessage
+	connect   *protocolv1.ConnectMessage
+}
+
+type Endpoint struct {
+	UUID string
+
+	EndpointInfo
+
+	conn   net.Conn
+	config EndpointConfig
+}
+
+func (e *Endpoint) GetVersion() int32 {
+	panic("implement me")
+}
+
+func (e *Endpoint) GetId() int32 {
+	panic("implement me")
+}
+
+func (e *Endpoint) GetService() string {
+	panic("implement me")
+}
+
+func (e *Endpoint) GetFormat() int32 {
+	panic("implement me")
+}
+
+type EndpointInfo struct {
+	service string
+	version int32
+	id      int32
+	format  int32
+}
+
+func (e *Endpoint) stale() bool {
+	return e.conn == nil || e.conn.Closed()
+}
+
+func (e *Endpoint) init() error {
+	err := e.config.negotiate.Formatter(e.conn, 0)
+	if err != nil {
+		return
+	}
+
+	_, err = c.connect(ctx, c.ConnectMessage)
+	if err != nil {
+		return
+	}
+}
+
+func (e *Endpoint) setConn(conn net.Conn) error {
+	e.conn = conn
+
+	if err := e.init(); err != nil {
+		return err
+	}
+
+}
+
+func (x *Endpoint) NewMessage(data interface{}) (*protocolv1.EndpointMessage, error) {
+	switch typed := data.(type) {
+	case io.Reader:
+		packet, err := protocolv1.NewPacket(data)
+		if err != nil {
+			return nil, err
+		}
+		var message protocolv1.EndpointMessage
+		if err := packet.Unpack(&message); err != nil {
+			return nil, err
+		}
+		return &message, nil
+	case protocolv1.EndpointMessageFormatter:
+		return protocolv1.NewEndpointMessage(x, typed)
+	default:
+		return nil, fmt.Errorf("unknown type <%T> to create new message", typed)
+	}
+}
+
+func (x *Endpoint) UnpackMessage(data interface{}, into protocolv1.EndpointMessageParser) error {
+	switch typed := data.(type) {
+	case io.Reader:
+		packet, err := protocolv1.NewPacket(data)
+		if err != nil {
+			return err
+		}
+		var message protocolv1.EndpointMessage
+		if err := packet.Unpack(&message); err != nil {
+			return err
+		}
+		return message.Unpack(x, into)
+	case protocolv1.Packet:
+		var message protocolv1.EndpointMessage
+		if err := typed.Unpack(&message); err != nil {
+			return err
+		}
+		return message.Unpack(x, into)
+	case *protocolv1.EndpointMessage:
+		return typed.Unpack(x, into)
+	default:
+		return fmt.Errorf("unknown type <%T> to create unpack message", typed)
+	}
+}
+
+func (x *Endpoint) Request(ctx context.Context, req *EndpointRequest) (*anypb.Any, error) {
+	message, err := anypb.UnmarshalNew(req.GetRequest(), proto.UnmarshalOptions{})
+	if err != nil {
+		return nil, err
+	}
+
+	reqMessage, err := protocolv1.NewEndpointMessage(x, message)
+	if err != nil {
+		return nil, err
+	}
+
+	respMessage, err := x.client.EndpointMessage(ctx, reqMessage)
+	if err != nil {
+		return nil, err
+	}
+
+	respProtoMessage, err := anypb.UnmarshalNew(req.GetRespond(), proto.UnmarshalOptions{})
+	if err != nil {
+		return nil, err
+	}
+
+	if _, ok := respProtoMessage.(*emptypb.Empty); ok {
+		if err := x.UnpackMessage(respMessage, nil); err != nil {
+			return nil, err
+		}
+		return anypb.New(respProtoMessage)
+	}
+
+	messageParser, ok := respProtoMessage.(v1.EndpointMessageParser)
+	if !ok {
+		return nil, fmt.Errorf("not parser interface")
+	}
+	if err := x.UnpackMessage(respMessage, messageParser); err != nil {
+		return nil, err
+	}
+	return anypb.New(respProtoMessage)
+}
 
 func NewClientConn(host string, opts ...Options) *ClientConn {
 

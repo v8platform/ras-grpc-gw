@@ -30,7 +30,7 @@ func authTokenFunc(services *service.Services) grpc_auth.AuthFunc {
 
 		tokenInfo, err := services.TokenManager.Validate(token, "access")
 		if err != nil {
-			return nil, status.Errorf(codes.Unauthenticated, "invalid auth token: %v", err)
+			return nil, status.Errorf(codes.Unauthenticated, "invalid Auth token: %v", err)
 		}
 
 		if len(tokenInfo) > 0 {

@@ -14,20 +14,20 @@ import (
 	"sync"
 )
 
-var _ clientv1.EndpointServiceImpl = (*Endpoint)(nil)
+var _ clientv1.EndpointServiceImpl = (*Endpoint2)(nil)
 
-type Client interface {
-	GetEndpoint(ctx context.Context) (*Endpoint, error)
+type Client2 interface {
+	GetEndpoint(ctx context.Context) (*Endpoint2, error)
 }
 
 type clientsStorage struct {
 	idxClients   map[string]*ras_client.ClientConn
-	idxEndpoints map[string]*Endpoint
+	idxEndpoints map[string]*Endpoint2
 
 	mu sync.Mutex
 }
 
-type Endpoint struct {
+type Endpoint2 struct {
 	uuid   string
 	client *ras_client.ClientConn
 	impl   clientv1.EndpointServiceImpl
@@ -36,24 +36,26 @@ type Endpoint struct {
 	clientUuid string
 }
 
+func (e Endpoint2) endpointContext() {}
+
 type endpointContext = int
 
 const (
-	AgentAuth endpointContext = iota
-	ClusterAuth
-	InfobaseAuth
+// AgentAuth endpointContext = iota
+// ClusterAuth
+// InfobaseAuth
 )
 
-func (e *Endpoint) SetEndpointContext(t endpointContext, req interface{}) {
+func (e *Endpoint2) SetEndpointContext(t endpointContext, req interface{}) {
 	e.context[t] = req
 }
 
-func (e *Endpoint) Request(ctx context.Context, req *clientv1.EndpointRequest) (resp *anypb.Any, err error) {
+func (e *Endpoint2) Request(ctx context.Context, req *clientv1.EndpointRequest) (resp *anypb.Any, err error) {
 
 	defer func() {
 		header := metadata.New(map[string]string{
-			"X-Endpoint": cast.ToString(e.uuid),
-			"X-App":      cast.ToString(e.clientUuid),
+			"X-Endpoint2": cast.ToString(e.uuid),
+			"X-App":       cast.ToString(e.clientUuid),
 		})
 		_ = grpc.SendHeader(ctx, header)
 	}()
@@ -66,7 +68,7 @@ func (c *clientsStorage) GetClient(ctx context.Context) (*ras_client.ClientConn,
 	panic("implement me")
 }
 
-func (c *clientsStorage) GetEndpoint(ctx context.Context) (*Endpoint, error) {
+func (c *clientsStorage) GetEndpoint(ctx context.Context) (*Endpoint2, error) {
 
 	endpointId, ok := context2.EndpointFromContext(ctx)
 
@@ -83,7 +85,7 @@ func (c *clientsStorage) GetEndpoint(ctx context.Context) (*Endpoint, error) {
 	return endpoint, nil
 }
 
-func (c *clientsStorage) initEndpoint(ctx context.Context, endpointId string) (*Endpoint, error) {
+func (c *clientsStorage) initEndpoint(ctx context.Context, endpointId string) (*Endpoint2, error) {
 
 	client, ok := context2.ClientFromContext(ctx)
 	if !ok {
@@ -110,7 +112,7 @@ func (c *clientsStorage) initEndpoint(ctx context.Context, endpointId string) (*
 
 	// TODO init context
 
-	endpoint := &Endpoint{
+	endpoint := &Endpoint2{
 		uuid:       endpointId,
 		clientUuid: client.UUID,
 		client:     conn,
@@ -126,13 +128,13 @@ func (c *clientsStorage) initEndpoint(ctx context.Context, endpointId string) (*
 
 }
 
-func (c *clientsStorage) getEndpoint(endpointId string) *Endpoint {
+func (c *clientsStorage) getEndpoint(endpointId string) *Endpoint2 {
 	return c.idxEndpoints[endpointId]
 }
 
 func NewRasClientsStorage() Client {
 	return &clientsStorage{
-		idxEndpoints: make(map[string]*Endpoint),
+		idxEndpoints: make(map[string]*Endpoint2),
 		idxClients:   make(map[string]*ras_client.ClientConn),
 	}
 }

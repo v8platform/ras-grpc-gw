@@ -15,7 +15,7 @@ func RegisterServerServices(services *service.Services) (func(server *grpc.Serve
 
 	clientsStorage := NewRasClientsStorage()
 	accessServer := apiv1.NewAc
-	// auth := NewAuthServiceServer(services, clientsStorage)
+	// Auth := NewAuthServiceServer(services, clientsStorage)
 	// clusters := NewClustersServiceServer(services, clientsStorage)
 	return func(server *grpc.Server) {
 			// apiv1.RegisterUsersServiceServer(server, users)
@@ -41,7 +41,7 @@ func RegisterServerServices(services *service.Services) (func(server *grpc.Serve
 			// 	return err
 			// }
 
-			// if err := apiv1.RegisterAuthServiceHandlerServer(ctx, mux, auth); err != nil {
+			// if err := apiv1.RegisterAuthServiceHandlerServer(ctx, mux, Auth); err != nil {
 			// 	return err
 			// }
 

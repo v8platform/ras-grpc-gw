@@ -134,7 +134,7 @@ func main() {
 					switch key {
 					case "X-App":
 						return key, true
-					case "X-Endpoint":
+					case "X-Endpoint2":
 						return key, true
 					default:
 						return runtime.DefaultHeaderMatcher(key)
@@ -145,7 +145,7 @@ func main() {
 					case "x-app":
 						return "X-App", true
 					case "x-endpoint":
-						return "X-Endpoint", true
+						return "X-Endpoint2", true
 					default:
 						return runtime.DefaultHeaderMatcher(key)
 					}
