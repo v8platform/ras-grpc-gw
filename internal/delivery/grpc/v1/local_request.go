@@ -6,8 +6,10 @@ import (
 	"fmt"
 	"github.com/lestrrat-go/option"
 	clientv1 "github.com/v8platform/protos/gen/ras/client/v1"
+	messagesv1 "github.com/v8platform/protos/gen/ras/messages/v1"
 	protocolv1 "github.com/v8platform/protos/gen/ras/protocol/v1"
 	"github.com/v8platform/ras-grpc-gw/pkg/ras_client"
+	"google.golang.org/protobuf/types/known/emptypb"
 
 	"io"
 	"net"
@@ -222,7 +224,7 @@ type Client interface {
 
 	// Генерациия автоматическая
 
-	// GetClusters(ctx context.Context, endpoint EndpointContext, req *v1.GetClustersRequest) (*v1.GetClustersResponse, error)
+	GetClusters(ctx context.Context, req *v1.GetClustersRequest) (*v1.GetClustersResponse, error)
 	// GetClusterInfo(ctx context.Context, endpoint EndpointContext, req *v1.GetClusterInfoRequest) (*v1.GetClusterInfoResponse, error)
 	// RegCluster(ctx context.Context, endpoint EndpointContext, req *v1.RegClusterRequest) (*v1.RegClusterResponse, error)
 	// UnregCluster(ctx context.Context, endpoint EndpointContext, req *v1.UnregClusterRequest) (*emptypb.Empty, error)
@@ -243,8 +245,306 @@ type Client interface {
 	endpointClose(ctx context.Context, req *protocolv1.EndpointClose, opts ...RequestOption) error
 	endpointMessage(ctx context.Context, req *protocolv1.EndpointMessage, opts ...RequestOption) (*protocolv1.EndpointMessage, error)
 
-	Request(ctx context.Context, req interface{}, reply interface{}, opts ...RequestOption) error
-	EndpointRequest(ctx context.Context, endpoint EndpointContext, req protocolv1.EndpointMessageFormatter, reply protocolv1.EndpointMessageParser, opts ...RequestOption) error
+	Request(ctx context.Context, handler RequestHandler, opts ...interface{}) error
+	GetEndpoint(ctx context.Context, in *protocolv1.Endpoint) error
+}
+
+func request(ctx context.Context, rw io.ReadWriter, handler RequestHandler, opts ...RequestOption) error {
+
+	wr := bytes.Buffer{}
+
+	err := handler(ctx, rw)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+type RequestHandler func(ctx context.Context, wr io.ReadWriter) error
+
+type Stream interface {
+	SendMsg(m interface{}) error
+	RecvMsg(m interface{}) error
+}
+
+type StreamPacket struct {
+	readWriter io.ReadWriter
+}
+
+func RecvPacketMsg(reader io.Reader, packetMessage protocolv1.PacketMessageParser) error {
+
+	packet := getPacket()
+	defer putPacket(packet)
+
+	if err := packet.Parse(reader, 0); err != nil {
+		return err
+	}
+	if err := packet.Unpack(packetMessage); err != nil {
+		return err
+	}
+
+	return nil
+
+}
+
+func SendPacketMsg(writer io.Writer, packetMessage protocolv1.PacketMessageFormatter) error {
+
+	buf := &bytes.Buffer{}
+
+	if err := packetMessage.Formatter(buf, 0); err != nil {
+		return err
+	}
+
+	if packetMessage.GetPacketType() == protocolv1.PacketType_PACKET_TYPE_NEGOTIATE {
+		_, err := buf.WriteTo(writer)
+		if err != nil {
+			return err
+		}
+		return nil
+	}
+
+	packet := getPacket()
+	defer putPacket(packet)
+
+	packet.Type = packetMessage.GetPacketType()
+	packet.Data = buf.Bytes()
+	packet.Size = int32(len(packet.Data))
+
+	_, err := packet.WriteTo(writer)
+	if err != nil {
+		return err
+	}
+	return nil
+
+}
+
+func (s StreamPacket) SendMsg(m interface{}) error {
+
+	type PacketMessage interface {
+		GetPacketType() protocolv1.PacketType
+		Formatter(w io.Writer, version int32) error
+	}
+
+	packetMessage, ok := m.(PacketMessage)
+	if !ok {
+		return fmt.Errorf("unknown message type")
+	}
+
+	if packetMessage.GetPacketType() == protocolv1.PacketType_PACKET_TYPE_NEGOTIATE {
+		if err := packetMessage.Formatter(s.readWriter, 0); err != nil {
+			return err
+		}
+		return nil
+	}
+
+	packet := getPacket()
+	defer putPacket(packet)
+
+	buf := &bytes.Buffer{}
+
+	if err := packetMessage.Formatter(buf, 0); err != nil {
+		return err
+	}
+
+	packet.Type = packetMessage.GetPacketType()
+	packet.Data = buf.Bytes()
+	packet.Size = int32(len(packet.Data))
+
+	_, err := packet.WriteTo(s.readWriter)
+	if err != nil {
+		return err
+	}
+	return nil
+
+}
+
+func (s StreamPacket) RecvMsg(m interface{}) error {
+
+	type PacketMessage interface {
+		GetPacketType() protocolv1.PacketType
+		Parse(r io.Reader, version int32) error
+	}
+
+	packetMessage, ok := m.(PacketMessage)
+	if !ok {
+		return fmt.Errorf("unknown message type")
+	}
+
+	packet := getPacket()
+	defer putPacket(packet)
+
+	if err := packet.Parse(s.readWriter, 0); err != nil {
+		return err
+	}
+	if err := packet.Unpack(packetMessage); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+type EndpointStream struct {
+	packet  Stream
+	version int32
+	format  int32
+	id      int32
+}
+
+func (s EndpointStream) SendMsg(m interface{}) error {
+
+	type EndpointMessage interface {
+		GetMessageType() messagesv1.MessageType
+		Formatter(w io.Writer, version int32) error
+	}
+	endpointMessage, ok := m.(EndpointMessage)
+	if !ok {
+		return fmt.Errorf("unknown message type")
+	}
+	buf := &bytes.Buffer{}
+
+	if err := endpointMessage.Formatter(buf, s.version); err != nil {
+		return err
+	}
+
+	message := &protocolv1.EndpointMessage{
+		Type:       protocolv1.EndpointDataType_ENDPOINT_DATA_TYPE_MESSAGE,
+		Format:     s.format,
+		EndpointId: s.id,
+		Data: &protocolv1.EndpointMessage_Message{
+			Message: &protocolv1.EndpointDataMessage{
+				Bytes: buf.Bytes(),
+				Type:  endpointMessage.GetMessageType(),
+			},
+		},
+	}
+
+	return s.packet.SendMsg(message)
+
+}
+
+func (s EndpointStream) RecvMsg(m interface{}) error {
+
+	type EndpointMessage interface {
+		GetMessageType() messagesv1.MessageType
+		Parse(r io.Reader, version int32) error
+	}
+
+	endpointMessage, ok := m.(EndpointMessage)
+	if !ok {
+		return fmt.Errorf("unknown message type")
+	}
+
+	var message protocolv1.EndpointMessage
+	err := s.packet.RecvMsg(&message)
+	if err != nil {
+		return err
+	}
+
+	return message.Unpack(s.version, endpointMessage)
+}
+
+func packetRequest(req protocolv1.PacketMessageFormatter, reply protocolv1.PacketMessageParser) RequestHandler {
+	return func(ctx context.Context, rw io.ReadWriter) error {
+
+		if err := SendPacketMsg(rw, req); err != nil {
+			return err
+		}
+
+		if reply == nil {
+			return nil
+		}
+
+		if err := RecvPacketMsg(rw, reply); err != nil {
+			return err
+		}
+		return nil
+	}
+}
+
+func endpointRequest(endpoint *protocolv1.Endpoint, req, reply interface{}) RequestHandler {
+	return func(ctx context.Context, rw io.ReadWriter) error {
+
+		endpointStream := EndpointStream{
+			packet:  StreamPacket{rw},
+			version: endpoint.Version,
+			format:  endpoint.Format,
+			id:      endpoint.Id,
+		}
+
+		if err := endpointStream.SendMsg(req); err != nil {
+			return err
+		}
+
+		if err := endpointStream.RecvMsg(reply); err != nil {
+			return err
+		}
+		return nil
+	}
+}
+
+func newStreamPacket(ctx context.Context, wr io.ReadWriter) Stream {
+	return StreamPacket{readWriter: wr}
+}
+
+type EndpointService struct {
+	cc          Client
+	getEndpoint func(ctx context.Context, in *protocolv1.Endpoint) error
+}
+
+func (s EndpointService) GetClusters(ctx context.Context, req *messagesv1.GetClustersRequest, opts ...RequestOption) (*messagesv1.GetClustersResponse, error) {
+
+	var endpoint protocolv1.Endpoint
+
+	if err := s.getEndpoint(ctx, &endpoint); err != nil {
+		return nil, err
+	}
+
+	return GetClustersHandler(ctx, s.cc.Request, &endpoint, req, opts...)
+
+}
+
+type Request func(ctx context.Context, handler RequestHandler, opts ...interface{}) error
+
+// get_clusters_handler
+//goland:noinspection GoSnakeCaseUsage
+func GetClustersHandler(ctx context.Context, cc Request, endpoint *protocolv1.Endpoint, req *messagesv1.GetClustersRequest, opts ...interface{}) (*messagesv1.GetClustersResponse, error) {
+
+	reply := new(messagesv1.GetClustersResponse)
+
+	err := cc(ctx, endpointRequest(endpoint, req, reply), opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	return reply, nil
+
+}
+
+func NegotiateHandler(ctx context.Context, cc Request, req *protocolv1.ConnectMessage, opts ...interface{}) (*emptypb.Empty, error) {
+
+	reply := new(emptypb.Empty)
+
+	err := cc(ctx, packetRequest(req, nil), opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	return reply, nil
+
+}
+
+func ConnectHandler(ctx context.Context, cc Request, req *protocolv1.ConnectMessage, opts ...interface{}) (*protocolv1.ConnectMessageAck, error) {
+
+	reply := new(protocolv1.ConnectMessageAck)
+
+	err := cc(ctx, packetRequest(req, reply), opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	return reply, nil
+
 }
 
 func NewClient(addr string, opts ...ClientOption) Client {
@@ -522,7 +822,7 @@ func (c *client) Endpoints() []Endpoint {
 
 type Endpoint struct {
 	uuid string
-	id   string
+	id   int32
 }
 
 func (c *client) Request(ctx context.Context, req protocolv1.PacketMessageFormatter, reply protocolv1.PacketMessageParser, opts ...RequestOption) error {
@@ -686,58 +986,6 @@ func newClientStream() StreamPacket {
 type StreamOptions struct{}
 
 func (s *StreamOptions) applyOptions(opts ...RequestOption) {
-
-}
-
-type StreamPacket interface {
-	Options(opts StreamOptions)
-	SendMsg(ctx context.Context, conn net.Conn, m protocolv1.PacketMessageFormatter) error
-	RecvMsg(ctx context.Context, conn net.Conn, m protocolv1.PacketMessageParser) error
-}
-
-func (s streamPacket) SendMsg(ctx context.Context, conn net.Conn, m protocolv1.PacketMessageFormatter) error {
-
-	if m.GetPacketType() == protocolv1.PacketType_PACKET_TYPE_NEGOTIATE {
-		if err := m.Formatter(conn, 0); err != nil {
-			return err
-		}
-		return nil
-	}
-
-	packet := getPacket()
-	defer putPacket(packet)
-
-	buf := &bytes.Buffer{}
-
-	if err := m.Formatter(buf, 0); err != nil {
-		return err
-	}
-
-	packet.Type = m.GetPacketType()
-	packet.Data = buf.Bytes()
-	packet.Size = int32(len(packet.Data))
-
-	_, err := packet.WriteTo(conn)
-	if err != nil {
-		return err
-	}
-	return nil
-
-}
-
-func (s streamPacket) RecvMsg(ctx context.Context, conn net.Conn, m protocolv1.PacketMessageParser) error {
-
-	packet := getPacket()
-	defer putPacket(packet)
-
-	if err := packet.Parse(conn, 0); err != nil {
-		return err
-	}
-	if err := packet.Unpack(m); err != nil {
-		return err
-	}
-
-	return nil
 
 }
 
