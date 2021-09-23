@@ -1,537 +1,303 @@
-package ras_client
+package client
 
 import (
 	"context"
 	"fmt"
-	"github.com/spf13/cast"
 	clientv1 "github.com/v8platform/protos/gen/ras/client/v1"
-	protocolv1 "github.com/v8platform/protos/gen/ras/protocol/v1"
-	"google.golang.org/protobuf/proto"
-	"google.golang.org/protobuf/types/known/anypb"
-	"google.golang.org/protobuf/types/known/emptypb"
 	"io"
-	"log"
 	"net"
 	"sync"
 	"sync/atomic"
 	"time"
 )
+type DialFunc func(addr string) (net.Conn, error)
 
-/*
-Описание работы клиента
-1. Получаем точку обмена
- - Есть ID
- - Нет ID
+type Client interface {
+	Host() string
 
+	Connect(opts ...ConnectOption) error
+	SetConn(conn net.Conn, opts ...SetConnOption) error
+	GetConn() net.Conn
+	Close() error
+	Closed() bool
+	UsedAt() time.Time
+	SetUsedAt(tm time.Time)
 
+	NewEndpoint(opts ...EndpointOption) (Endpoint, error)
+	CloseEndpoint(endpoint Endpoint) error
+	Endpoints() []Endpoint
 
-Состав клиента
-1. Пул соединений - варианты: размерный или одиночный
-2. Индекс точек работы и соединений - map[string]*conn
+	clientv1.Client
+	clientv1.ClustersService
+	clientv1.AdminService
+	clientv1.AuthService
+	clientv1.ConnectionsService
+	clientv1.InfobasesService
+	clientv1.LocksService
+	clientv1.SessionsService
 
-Состав Endpoint2
-+ ID     string
-+ Config EndpointConfig
-+ usedAt uint32 // atomic
-
-Состав conn
-... поля пула
-+ idxEndpoints [string]*protocolv1.Endpoint2
-
-
-
-*/
-
-var defaultVersion = "10.0"
-
-var _ clientv1.ClientImpl = (*ClientConn)(nil)
-var _ clientv1.ClientServiceImpl = (*ClientConn)(nil)
-
-type Poller interface {
-	Get() net.Conn
-	Put(conn net.Conn)
 }
 
-type Client struct {
-	pool Poller
+func NewClient(addr string, opts ...ClientOption) Client {
+	c := newClient(addr, opts...)
 
-	idxEndpoints map[string]*Endpoint
+	return c
+}
+
+func NewClientConn(conn net.Conn, opts ...ClientOption) Client {
+
+	c := newClient(conn.RemoteAddr().String(), opts...)
+	err := c.setConn(conn)
+	if err != nil {
+		panic(err)
+	}
+
+	return c
 }
 
 type EndpointConfig struct {
-	negotiate *protocolv1.NegotiateMessage
-	connect   *protocolv1.ConnectMessage
+	Options []RequestOption
+
+	DefaultAgentAuth    Auth
+	DefaultClusterAuth  Auth
+	DefaultInfobaseAuth Auth
+
+	SaveAuthRequests bool
+	Auths            map[string]Auth
 }
 
-type Endpoint struct {
-	UUID string
+type client struct {
+	addr string
+	dial DialFunc
+	cc   net.Conn
 
-	EndpointInfo
-
-	conn   net.Conn
-	config EndpointConfig
-}
-
-func (e *Endpoint) GetVersion() int32 {
-	panic("implement me")
-}
-
-func (e *Endpoint) GetId() int32 {
-	panic("implement me")
-}
-
-func (e *Endpoint) GetService() string {
-	panic("implement me")
-}
-
-func (e *Endpoint) GetFormat() int32 {
-	panic("implement me")
-}
-
-type EndpointInfo struct {
-	service string
-	version int32
-	id      int32
-	format  int32
-}
-
-func (e *Endpoint) stale() bool {
-	return e.conn == nil || e.conn.Closed()
-}
-
-func (e *Endpoint) init() error {
-	err := e.config.negotiate.Formatter(e.conn, 0)
-	if err != nil {
-		return
-	}
-
-	_, err = c.connect(ctx, c.ConnectMessage)
-	if err != nil {
-		return
-	}
-}
-
-func (e *Endpoint) setConn(conn net.Conn) error {
-	e.conn = conn
-
-	if err := e.init(); err != nil {
-		return err
-	}
-
-}
-
-func (x *Endpoint) NewMessage(data interface{}) (*protocolv1.EndpointMessage, error) {
-	switch typed := data.(type) {
-	case io.Reader:
-		packet, err := protocolv1.NewPacket(data)
-		if err != nil {
-			return nil, err
-		}
-		var message protocolv1.EndpointMessage
-		if err := packet.Unpack(&message); err != nil {
-			return nil, err
-		}
-		return &message, nil
-	case protocolv1.EndpointMessageFormatter:
-		return protocolv1.NewEndpointMessage(x, typed)
-	default:
-		return nil, fmt.Errorf("unknown type <%T> to create new message", typed)
-	}
-}
-
-func (x *Endpoint) UnpackMessage(data interface{}, into protocolv1.EndpointMessageParser) error {
-	switch typed := data.(type) {
-	case io.Reader:
-		packet, err := protocolv1.NewPacket(data)
-		if err != nil {
-			return err
-		}
-		var message protocolv1.EndpointMessage
-		if err := packet.Unpack(&message); err != nil {
-			return err
-		}
-		return message.Unpack(x, into)
-	case protocolv1.Packet:
-		var message protocolv1.EndpointMessage
-		if err := typed.Unpack(&message); err != nil {
-			return err
-		}
-		return message.Unpack(x, into)
-	case *protocolv1.EndpointMessage:
-		return typed.Unpack(x, into)
-	default:
-		return fmt.Errorf("unknown type <%T> to create unpack message", typed)
-	}
-}
-
-func (x *Endpoint) Request(ctx context.Context, req *EndpointRequest) (*anypb.Any, error) {
-	message, err := anypb.UnmarshalNew(req.GetRequest(), proto.UnmarshalOptions{})
-	if err != nil {
-		return nil, err
-	}
-
-	reqMessage, err := protocolv1.NewEndpointMessage(x, message)
-	if err != nil {
-		return nil, err
-	}
-
-	respMessage, err := x.client.EndpointMessage(ctx, reqMessage)
-	if err != nil {
-		return nil, err
-	}
-
-	respProtoMessage, err := anypb.UnmarshalNew(req.GetRespond(), proto.UnmarshalOptions{})
-	if err != nil {
-		return nil, err
-	}
-
-	if _, ok := respProtoMessage.(*emptypb.Empty); ok {
-		if err := x.UnpackMessage(respMessage, nil); err != nil {
-			return nil, err
-		}
-		return anypb.New(respProtoMessage)
-	}
-
-	messageParser, ok := respProtoMessage.(v1.EndpointMessageParser)
-	if !ok {
-		return nil, fmt.Errorf("not parser interface")
-	}
-	if err := x.UnpackMessage(respMessage, messageParser); err != nil {
-		return nil, err
-	}
-	return anypb.New(respProtoMessage)
-}
-
-func NewClientConn(host string, opts ...Options) *ClientConn {
-
-	opt := defaultClientOptions
-	if len(opts) > 0 {
-		opt = opts[0]
-	}
-
-	client := &ClientConn{
-		host:      host,
-		Options:   opt,
-		mu:        &sync.Mutex{},
-		connMu:    &sync.Mutex{},
-		version:   defaultVersion,
-		endpoints: &sync.Map{},
-	}
-
-	client.ClientServiceImpl = clientv1.NewClientService(client)
-
-	return client
-}
-
-type connPool struct {
-	opt           *Options
-	dialErrorsNum uint32 // atomic
-	_closed       uint32 // atomic
-
-	lastDialErrorMu sync.RWMutex
-	lastDialError   error
-
-	queue        chan struct{}
-	poolSize     int
-	idleConnsLen int
-
-	connsMu   sync.Mutex
-	conns     []*Conn
-	idleConns IdleConns
-}
-
-type ClientConn struct {
-	Options
-
-	host       string
-	conn       net.Conn
-	usedAt     uint32 // atomic
+	_usedAt    uint32 // atomic
 	_closed    uint32 // atomic
 	_connected uint32 // atomic
-	_locked    uint32 // atomic
 
-	stats     Stats
-	mu        *sync.Mutex // Блокировка всего клиента
-	connMu    *sync.Mutex // Блокировка только соединения
-	endpoints *sync.Map
-	version   string
+	useAutoReconnect bool
 
-	clientv1.ClientServiceImpl
+	connectOptions  map[interface{}]ConnectOption
+	endpointOptions map[interface{}]EndpointOption
+
+	mu sync.Mutex
+
+	endpoints      map[string]Endpoint
+	endpointConfig map[string]EndpointConfig
+
+	clientService clientv1.ClientService
+
+	clientv1.ClustersService
+	clientv1.AdminService
+	clientv1.AuthService
+	clientv1.ConnectionsService
+	clientv1.InfobasesService
+	clientv1.LocksService
+	clientv1.SessionsService
 }
 
-type Stats struct {
-	Recv  uint32
-	Send  uint32
-	Wrong uint32
-	Ping  uint32
+
+type Endpoint struct {
+	uuid string
+	id   int32
 }
 
-type Options struct {
-	IdleTimeout        time.Duration
-	IdleCheckFrequency time.Duration
-	Timeout            time.Duration
-	NegotiateMessage   *protocolv1.NegotiateMessage
-	ConnectMessage     *protocolv1.ConnectMessage
-	OpenEndpoint       *protocolv1.EndpointOpen
+
+func (c *client) CloseEndpoint(endpoint Endpoint) error {
+	panic("implement me")
 }
 
-var defaultClientOptions = Options{
-	IdleTimeout:        30 * time.Minute,
-	IdleCheckFrequency: 5 * time.Minute,
-	Timeout:            3 * time.Second,
-	NegotiateMessage:   protocolv1.NewNegotiateMessage(),
-	ConnectMessage:     &protocolv1.ConnectMessage{},
-	OpenEndpoint: &protocolv1.EndpointOpen{
-		Service: "v8.service.Admin.Cluster",
-		Version: defaultVersion,
-	},
+func (c *client) GetEndpoint(ctx context.Context) (clientv1.Endpoint, error) {
+	panic("implement me")
 }
 
-func (c *ClientConn) GetEndpoint(ctx context.Context, endpointID string) (clientv1.EndpointServiceImpl, error) {
-
-	if endpoint, ok := c.getEndpoint(endpointID); ok {
-		return clientv1.NewEndpointService(c, endpoint), nil
-	}
-
-	endpoint, err := c.turnEndpoint(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	return clientv1.NewEndpointService(c, endpoint), nil
-
-}
-
-func (c *ClientConn) getEndpoint(id string) (*protocolv1.Endpoint, bool) {
-
-	if val, ok := c.endpoints.Load(id); ok {
-		return val.(*protocolv1.Endpoint), ok
-	}
-	return nil, false
-}
-
-func (c *ClientConn) addEndpoint(endpoint *protocolv1.Endpoint) {
-
-	id := cast.ToString(endpoint.GetId())
-	log.Println(id)
-	c.endpoints.Store(id, endpoint)
-
-}
-
-func (c *ClientConn) turnEndpoint(ctx context.Context) (*protocolv1.Endpoint, error) {
-
-	EndpointOpenAck, err := c.EndpointOpen(ctx, &protocolv1.EndpointOpen{
-		Service: "v8.service.Admin.Cluster",
-		Version: c.version,
-	})
-
-	if err != nil {
-		var version string
-
-		if version = clientv1.DetectSupportedVersion(err); len(version) == 0 {
-			return nil, err
-		}
-		if EndpointOpenAck, err = c.EndpointOpen(ctx, &protocolv1.EndpointOpen{
-			Service: "v8.service.Admin.Cluster",
-			Version: version,
-		}); err != nil {
-			return nil, err
-		}
-
-		c.version = version
-	}
-
-	end, err := c.NewEndpoint(ctx, EndpointOpenAck)
-	if err != nil {
-		return nil, err
-	}
-
-	c.addEndpoint(end)
-
-	return end, nil
-}
-
-func (c *ClientConn) EndpointMessage(ctx context.Context, req *protocolv1.EndpointMessage) (*protocolv1.EndpointMessage, error) {
-	defer func() {
-
-	}()
-
-	return c.ClientServiceImpl.EndpointMessage(ctx, req)
-
-}
-
-func (c *ClientConn) Read(p []byte) (n int, err error) {
+func (c *client) Request(ctx context.Context, handler clientv1.RequestHandler, opts ...interface{}) error {
+	c.mu.Lock()
+	defer c.mu.Unlock()
 
 	if c.closed() {
-		if err := c.reconnect(); err != nil {
-			return 0, err
-		}
+		return fmt.Errorf("client is closed")
 	}
-
-	err = c.conn.SetReadDeadline(time.Now().Add(c.Timeout))
+	err := handler(ctx, c.cc)
 	if err != nil {
-		return 0, err
+		return err
 	}
-	defer func() {
-		c.SetUsedAt(time.Now())
-	}()
-
-	return c.conn.Read(p)
-
+	return err
 }
 
-func (c *ClientConn) Write(p []byte) (n int, err error) {
-
-	if c.closed() {
-		if err := c.reconnect(); err != nil {
-			return 0, err
-		}
-	}
-
-	err = c.conn.SetWriteDeadline(time.Now().Add(c.Timeout))
-	if err != nil {
-		return 0, err
-	}
-	defer func() {
-		c.SetUsedAt(time.Now())
-	}()
-
-	return c.conn.Write(p)
-}
-
-func (c *ClientConn) UsedAt() time.Time {
-	unix := atomic.LoadUint32(&c.usedAt)
+func (c *client) UsedAt() time.Time {
+	unix := atomic.LoadUint32(&c._usedAt)
 	return time.Unix(int64(unix), 0)
 }
 
-func (c *ClientConn) SetUsedAt(tm time.Time) {
-	atomic.StoreUint32(&c.usedAt, uint32(tm.Unix()))
+func (c *client) SetUsedAt(tm time.Time) {
+	atomic.StoreUint32(&c._usedAt, uint32(tm.Unix()))
 }
 
-func (c *ClientConn) Close() error {
+func (c *client) Close() error {
 
 	if !atomic.CompareAndSwapUint32(&c._closed, 0, 1) {
 		return nil
 	}
 
-	ctx := context.Background()
-	var err error
-	// c.endpoints.Range(func(key, value interface{}) bool {
-	//
-	// 	// err = c.request(ctx, &protocolv1.EndpointClose{EndpointId: key.(int32)}, nil)
-	// 	// if err != nil {
-	// 	// 	return false
-	// 	// }
-	// 	//
-	// 	return true
-	// })
+	// ctx := context.Background()
+	// var err error
 
 	if atomic.CompareAndSwapUint32(&c._connected, 0, 1) {
-
-		_, err = c.Disconnect(ctx, &protocolv1.DisconnectMessage{})
-		if err != nil {
-			return err
-		}
-
+		// err = c.disconnect(ctx, &protocolv1.DisconnectMessage{})
+		// if err != nil {
+		// 	return err
+		// }
 	}
 
 	if c.closed() {
 		return nil
 	}
 
-	return c.conn.Close()
+	return c.cc.Close()
 }
 
-func (c *ClientConn) Lock() {
-	c.connMu.Lock()
+func (c *client) Host() string {
+	return c.addr
 }
 
-func (c *ClientConn) Unlock() {
-	c.connMu.Unlock()
-}
-
-func (c *ClientConn) reconnect() (err error) {
-
+func (c *client) Connect(opts ...ConnectOption) error {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
-	if c.connected() {
-		return nil
+	var options []Option
+	for _, opt := range opts {
+		options = append(options, opt)
 	}
 
-	c.endpoints = &sync.Map{}
-
-	ctx := context.Background()
-
-	err = c.populateConn()
-	if err != nil {
+	if err := c.initConnect(options...); err != nil {
 		return err
 	}
 
-	err = c.NegotiateMessage.Formatter(c.conn, 0)
-	if err != nil {
-		return
-	}
-
-	_, err = c.connect(ctx, c.ConnectMessage)
-	if err != nil {
-		return
-	}
-
-	atomic.StoreUint32(&c._connected, 1)
-
-	return err
-
-}
-
-func (x *ClientConn) connect(ctx context.Context, req *protocolv1.ConnectMessage) (*protocolv1.ConnectMessageAck, error) {
-
-	// Check context
-	select {
-	case <-ctx.Done():
-		return nil, ctx.Err()
-	default:
-	}
-
-	packet, err := protocolv1.NewPacket(req)
-	if err != nil {
-		return nil, err
-	}
-	if _, err := packet.WriteTo(x.conn); err != nil {
-		return nil, err
-	}
-	ackPacket, err := protocolv1.NewPacket(x.conn)
-	if err != nil {
-		return nil, err
-	}
-	resp := new(protocolv1.ConnectMessageAck)
-	return resp, ackPacket.Unpack(resp)
-}
-
-func (c *ClientConn) connected() bool {
-	return atomic.LoadUint32(&c._connected) == 1
-}
-
-func (c *ClientConn) populateConn() (err error) {
-
-	conn, err := net.Dial("tcp", c.host)
-	if err != nil {
-		return err
-	}
-
-	c.conn = conn
 	return nil
 }
 
-func (c *ClientConn) closed() bool {
+func (c *client) SetConn(conn net.Conn, opts ...SetConnOption) error {
+	c.mu.Lock()
+	defer c.mu.Unlock()
 
-	if atomic.LoadUint32(&c._closed) == 1 || c.conn == nil {
+	return c.setConn(conn, opts...)
+}
+
+func (c *client) GetConn() net.Conn {
+	panic("implement me")
+}
+
+func (c *client) Closed() bool {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	return c.closed()
+}
+
+func (c *client) NewEndpoint(opts ...EndpointOption) (Endpoint, error) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	return Endpoint{}, nil
+}
+
+func (c *client) Endpoints() []Endpoint {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	var endpoints []Endpoint
+	for _, endpoint := range c.endpoints {
+		endpoints = append(endpoints, endpoint)
+	}
+
+	return endpoints
+}
+
+func (c *client) applyOptions(opts ...ClientOption) {
+
+	for _, opt := range opts {
+		switch opt.Ident() {
+		case dialFuncIdent{}:
+			c.dial = opt.Value().(DialFunc)
+			continue
+		case connIdent{}:
+			c.cc = opt.Value().(net.Conn)
+			continue
+		case reconnectIdent{}:
+			c.useAutoReconnect = opt.Value().(bool)
+			continue
+		}
+		switch opt.(type) {
+		case EndpointOption:
+			c.endpointOptions[opt.Ident()] = opt.(EndpointOption)
+		case ConnectOption:
+			c.connectOptions[opt.Ident()] = opt.(ConnectOption)
+		}
+	}
+}
+
+func (c *client) setConn(conn net.Conn, opts ...SetConnOption) error {
+
+	var (
+		restoreEndpoints bool
+		restoreConnect   bool
+	)
+
+	for _, opt := range opts {
+		switch opt.Ident() {
+		case restoreConnectIdent{}:
+			restoreEndpoints = opt.Value().(bool)
+		case restoreEndpointsIdent{}:
+			restoreEndpoints = opt.Value().(bool)
+		}
+	}
+
+	_ = c.cc.Close()
+
+	atomic.StoreUint32(&c._connected, 0)
+	atomic.StoreUint32(&c._closed, 0)
+
+	c.cc = conn
+
+	if restoreConnect || restoreEndpoints {
+		if err := c.initConnect(); err != nil {
+			return err
+		}
+	}
+
+	if restoreEndpoints {
+		if err := c.restoreEndpoints(); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (c *client) restoreEndpoints(opts ...Option) error {
+
+	return nil
+}
+
+func (c *client) initConnect(opts ...Option) error {
+
+	return nil
+}
+
+func (c *client) connected() bool {
+	return atomic.LoadUint32(&c._connected) == 1
+}
+
+func (c *client) closed() bool {
+
+	if atomic.LoadUint32(&c._closed) == 1 || c.cc == nil {
 		return true
 	}
-	_ = c.conn.SetReadDeadline(time.Now())
-	_, err := c.conn.Read(make([]byte, 0))
+	_ = c.cc.SetReadDeadline(time.Now())
+	_, err := c.cc.Read(make([]byte, 0))
 	var zero time.Time
-	_ = c.conn.SetReadDeadline(zero)
+	_ = c.cc.SetReadDeadline(zero)
 
 	if err == nil {
 		return false
@@ -543,4 +309,34 @@ func (c *ClientConn) closed() bool {
 		return true
 	}
 	return false
+}
+
+func newClient(addr string, opts ...ClientOption) *client {
+	c := &client{
+		addr:            addr,
+		endpoints:       map[string]Endpoint{},
+		endpointConfig:  map[string]EndpointConfig{},
+		endpointOptions: map[interface{}]EndpointOption{},
+		connectOptions:  map[interface{}]ConnectOption{},
+		dial:            defaultDial,
+	}
+
+	c.clientService = clientv1.NewClientService(c)
+	c.ClustersService = clientv1.NewClustersService(c)
+	c.AdminService = clientv1.NewAdminService(c)
+	c.AuthService = clientv1.NewAuthService(c)
+	c.ConnectionsService = clientv1.NewConnectionsService(c)
+	c.InfobasesService = clientv1.NewInfobasesService(c)
+	c.LocksService = clientv1.NewLocksService(c)
+	c.SessionsService = clientv1.NewSessionsService(c)
+
+
+	c.applyOptions(opts...)
+	return c
+}
+
+func defaultDial(addr string) (net.Conn, error) {
+
+	return net.Dial("tcp", addr)
+
 }

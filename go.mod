@@ -26,6 +26,11 @@ require (
 	google.golang.org/protobuf v1.27.1
 )
 
+replace (
+	github.com/v8platform/protos latest => ../proto
+)
+
+
 require (
 	github.com/KyleBanks/depth v1.2.1 // indirect
 	github.com/PuerkitoBio/purell v1.1.1 // indirect
