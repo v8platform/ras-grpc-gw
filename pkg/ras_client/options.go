@@ -102,6 +102,7 @@ type agentAuthIdent struct{}
 type infobaseAuthIdent struct{}
 type endpointConfigIdent struct{}
 type saveAuthIdent struct{}
+type initConnIdent struct{}
 
 type Auth struct {
 	user     string
@@ -113,6 +114,9 @@ func Version(version int32) EndpointOption {
 }
 func AutosaveAuth(save bool) EndpointOption {
 	return newEndpointOption(saveAuthIdent{}, save)
+}
+func NewConn(init bool) EndpointOption {
+	return newEndpointOption(initConnIdent{}, init)
 }
 
 func Config(config EndpointConfig) EndpointOption {
@@ -151,7 +155,6 @@ type SetConnOption interface {
 type restoreConnectIdent struct{}
 type restoreEndpointsIdent struct{}
 
-
 type ClientOption interface {
 	Option
 	clientOption()
@@ -185,4 +188,3 @@ func Dial(dialFunc DialFunc) ClientOption {
 func Conn(conn net.Conn) ClientOption {
 	return newClientOption(connIdent{}, conn)
 }
-

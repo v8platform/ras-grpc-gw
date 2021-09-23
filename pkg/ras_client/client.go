@@ -4,12 +4,14 @@ import (
 	"context"
 	"fmt"
 	clientv1 "github.com/v8platform/protos/gen/ras/client/v1"
+	protocolv1 "github.com/v8platform/protos/gen/ras/protocol/v1"
 	"io"
 	"net"
 	"sync"
 	"sync/atomic"
 	"time"
 )
+
 type DialFunc func(addr string) (net.Conn, error)
 
 type Client interface {
@@ -23,9 +25,9 @@ type Client interface {
 	UsedAt() time.Time
 	SetUsedAt(tm time.Time)
 
-	NewEndpoint(opts ...EndpointOption) (Endpoint, error)
-	CloseEndpoint(endpoint Endpoint) error
-	Endpoints() []Endpoint
+	NewEndpoint(opts ...EndpointOption) (*Endpoint, error)
+	CloseEndpoint(endpoint *Endpoint) error
+	Endpoints() []*Endpoint
 
 	clientv1.Client
 	clientv1.ClustersService
@@ -35,7 +37,6 @@ type Client interface {
 	clientv1.InfobasesService
 	clientv1.LocksService
 	clientv1.SessionsService
-
 }
 
 func NewClient(addr string, opts ...ClientOption) Client {
@@ -82,8 +83,9 @@ type client struct {
 
 	mu sync.Mutex
 
-	endpoints      map[string]Endpoint
-	endpointConfig map[string]EndpointConfig
+	endpoints      map[string]*Endpoint
+	endpointConn   map[string]net.Conn
+	endpointConfig map[string]*EndpointConfig
 
 	clientService clientv1.ClientService
 
@@ -96,19 +98,26 @@ type client struct {
 	clientv1.SessionsService
 }
 
+func (c *client) CloseEndpoint(endpoint *Endpoint) error {
+	_, err := c.clientService.EndpointClose(
+		context.Background(),
+		&protocolv1.EndpointClose{EndpointId: endpoint.GetId()},
+	)
 
-type Endpoint struct {
-	uuid string
-	id   int32
-}
+	return err
 
-
-func (c *client) CloseEndpoint(endpoint Endpoint) error {
-	panic("implement me")
 }
 
 func (c *client) GetEndpoint(ctx context.Context) (clientv1.Endpoint, error) {
-	panic("implement me")
+	uuid := EndpointFromContext(ctx)
+	endpoint, ok := c.endpoints[uuid]
+
+	if ok {
+		return endpoint, nil
+	}
+
+	return c.NewEndpoint()
+
 }
 
 func (c *client) Request(ctx context.Context, handler clientv1.RequestHandler, opts ...interface{}) error {
@@ -185,7 +194,7 @@ func (c *client) SetConn(conn net.Conn, opts ...SetConnOption) error {
 }
 
 func (c *client) GetConn() net.Conn {
-	panic("implement me")
+	return c.cc
 }
 
 func (c *client) Closed() bool {
@@ -195,18 +204,18 @@ func (c *client) Closed() bool {
 	return c.closed()
 }
 
-func (c *client) NewEndpoint(opts ...EndpointOption) (Endpoint, error) {
+func (c *client) NewEndpoint(opts ...EndpointOption) (*Endpoint, error) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
-	return Endpoint{}, nil
+	return &Endpoint{}, nil
 }
 
-func (c *client) Endpoints() []Endpoint {
+func (c *client) Endpoints() []*Endpoint {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
-	var endpoints []Endpoint
+	var endpoints []*Endpoint
 	for _, endpoint := range c.endpoints {
 		endpoints = append(endpoints, endpoint)
 	}
@@ -314,10 +323,11 @@ func (c *client) closed() bool {
 func newClient(addr string, opts ...ClientOption) *client {
 	c := &client{
 		addr:            addr,
-		endpoints:       map[string]Endpoint{},
-		endpointConfig:  map[string]EndpointConfig{},
+		endpoints:       map[string]*Endpoint{},
+		endpointConfig:  map[string]*EndpointConfig{},
 		endpointOptions: map[interface{}]EndpointOption{},
 		connectOptions:  map[interface{}]ConnectOption{},
+		endpointConn:    map[string]net.Conn{},
 		dial:            defaultDial,
 	}
 
@@ -329,7 +339,6 @@ func newClient(addr string, opts ...ClientOption) *client {
 	c.InfobasesService = clientv1.NewInfobasesService(c)
 	c.LocksService = clientv1.NewLocksService(c)
 	c.SessionsService = clientv1.NewSessionsService(c)
-
 
 	c.applyOptions(opts...)
 	return c
