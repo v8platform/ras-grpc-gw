@@ -14,7 +14,7 @@ import (
 
 var _ clientv1.Channel = (*Channel)(nil)
 
-func NewChannel(conn net.Conn) *Channel {
+func newChannel(conn net.Conn) *Channel {
 	return &Channel{
 		id:          0, // TODO Сделать увеличение номеров
 		conn:        conn,

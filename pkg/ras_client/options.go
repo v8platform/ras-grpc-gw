@@ -3,7 +3,6 @@ package client
 import (
 	"github.com/lestrrat-go/option"
 	protocolv1 "github.com/v8platform/protos/gen/ras/protocol/v1"
-	"net"
 	"time"
 )
 
@@ -64,16 +63,8 @@ func newRequestOption(n interface{}, v interface{}) RequestOption {
 	return &requestOption{option.New(n, v)}
 }
 
-func EndpointData(id, version, format int32) RequestOption {
-	return newRequestOption(endpointIdent{}, endpointData{id, version, format})
-}
-
 func EndpointUUID(uuid string) RequestOption {
 	return newRequestOption(endpointIdent{}, uuid)
-}
-
-type endpointData struct {
-	id, version, format int32
 }
 
 type EndpointOption interface {
@@ -115,7 +106,7 @@ func Version(version int32) EndpointOption {
 func AutosaveAuth(save bool) EndpointOption {
 	return newEndpointOption(saveAuthIdent{}, save)
 }
-func NewConn(init bool) EndpointOption {
+func InitChannel(init bool) EndpointOption {
 	return newEndpointOption(initChannelIdent{}, init)
 }
 
@@ -147,11 +138,6 @@ func DefaultInfobaseAuth(user, password string) EndpointOption {
 	return newEndpointOption(infobaseAuthIdent{}, Auth{user, password})
 }
 
-type SetConnOption interface {
-	Option
-	setConnOption()
-}
-
 type restoreConnectIdent struct{}
 type restoreEndpointsIdent struct{}
 
@@ -170,21 +156,8 @@ func newClientOption(n interface{}, v interface{}) ClientOption {
 	return &clientOption{option.New(n, v)}
 }
 
-type reconnectIdent struct{}
 type dialFuncIdent struct{}
-type connIdent struct{}
-
-func AutoReconnect(disable ...bool) ClientOption {
-	if len(disable) > 0 {
-		return newClientOption(reconnectIdent{}, disable[0])
-	}
-	return newClientOption(reconnectIdent{}, true)
-}
 
 func Dial(dialFunc DialFunc) ClientOption {
 	return newClientOption(dialFuncIdent{}, dialFunc)
-}
-
-func Conn(conn net.Conn) ClientOption {
-	return newClientOption(connIdent{}, conn)
 }

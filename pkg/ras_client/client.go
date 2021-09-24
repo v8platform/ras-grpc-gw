@@ -19,7 +19,6 @@ type DialFunc func(addr string) (net.Conn, error)
 type Client interface {
 	Host() string
 
-	Connect(opts ...ConnectOption) error
 	Close() error
 	RemoveChannel(ctx context.Context, cn *Channel)
 	Stats() *Stats
@@ -682,7 +681,7 @@ func (c *client) dialChannel(pooled bool) (*Channel, error) {
 		return nil, err
 	}
 
-	cn := NewChannel(netConn)
+	cn := newChannel(netConn)
 	cn.pooled = pooled
 	return cn, nil
 }
@@ -747,13 +746,18 @@ func (c *client) isStaleChannel(cn *Channel) bool {
 
 func newClient(addr string, opts ...ClientOption) *client {
 	c := &client{
-		addr:            addr,
-		endpoints:       map[string]*Endpoint{},
-		endpointConfig:  map[string]*EndpointConfig{},
-		endpointOptions: map[interface{}]EndpointOption{},
-		connectOptions:  map[interface{}]ConnectOption{},
-		channels:        []*Channel{},
-		dial:            defaultDial,
+		addr:               addr,
+		endpoints:          map[string]*Endpoint{},
+		endpointConfig:     map[string]*EndpointConfig{},
+		endpointOptions:    map[interface{}]EndpointOption{},
+		connectOptions:     map[interface{}]ConnectOption{},
+		dial:               defaultDial,
+		poolSize:           10,
+		poolTimeout:        30 * time.Second,
+		idleTimeout:        time.Hour,
+		idleCheckFrequency: 5 * time.Minute,
+		maxChannelAge:      time.Hour,
+		minIdleChannels:    0,
 	}
 
 	c.clientService = clientv1.NewClientService(c)
@@ -766,6 +770,20 @@ func newClient(addr string, opts ...ClientOption) *client {
 	c.SessionsService = clientv1.NewSessionsService(c)
 
 	c.applyOptions(opts...)
+
+	c.queue = make(chan struct{}, c.poolSize)
+
+	c.idleChannels = make([]*Channel, c.poolSize)
+	c.channels = make([]*Channel, c.poolSize)
+
+	c.channelsMu.Lock()
+	c.checkMinIdleChannels()
+	c.channelsMu.Unlock()
+
+	if c.idleTimeout > 0 && c.idleCheckFrequency > 0 {
+		go c.reaper(c.idleCheckFrequency)
+	}
+
 	return c
 }
 
