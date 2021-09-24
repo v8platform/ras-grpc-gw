@@ -127,6 +127,7 @@ func (c *client) GetChannel(ctx context.Context, opts ...interface{}) (clientv1.
 
 	return c.initNewChannel(opts...)
 }
+
 func (c *client) PutChannel(ctx context.Context, cn interface{}) {
 
 	var (
