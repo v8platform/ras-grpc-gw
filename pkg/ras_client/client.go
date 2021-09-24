@@ -88,21 +88,10 @@ type Client interface {
 	clientv1.SessionsService
 }
 
-func NewClient(addr string, opts ...ClientOption) Client {
+func NewClient(addr string, opts ...GlobalOption) Client {
 	c := newClient(addr, opts...)
 
 	return c
-}
-
-type EndpointConfig struct {
-	Options []RequestOption
-
-	DefaultAgentAuth    Auth
-	DefaultClusterAuth  Auth
-	DefaultInfobaseAuth Auth
-
-	SaveAuthRequests bool
-	Auths            map[string]Auth
 }
 
 // Stats contains pool state information and accumulated stats.
@@ -499,7 +488,7 @@ func (c *client) checkMinIdleChannels() {
 	}
 }
 
-func (c *client) applyOptions(opts ...ClientOption) {
+func (c *client) applyOptions(opts ...GlobalOption) {
 
 	for _, opt := range opts {
 		switch opt.Ident() {
@@ -795,7 +784,7 @@ func (c *client) isStaleChannel(cn *Channel) bool {
 	return false
 }
 
-func newClient(addr string, opts ...ClientOption) *client {
+func newClient(addr string, opts ...GlobalOption) *client {
 	c := &client{
 		addr:               addr,
 		endpoints:          map[string]*Endpoint{},

@@ -1,6 +1,7 @@
 package client
 
 import (
+	"github.com/elastic/go-ucfg"
 	"github.com/lestrrat-go/option"
 	protocolv1 "github.com/v8platform/protos/gen/ras/protocol/v1"
 	"time"
@@ -12,7 +13,7 @@ type Option interface {
 
 type ConnectOption interface {
 	Option
-	ClientOption
+	GlobalOption
 	connectOption()
 }
 
@@ -21,7 +22,7 @@ type connectOption struct {
 }
 
 func (*connectOption) connectOption() {}
-func (*connectOption) clientOption()  {}
+func (*connectOption) globalOption()  {}
 
 func newConnectOption(n interface{}, v interface{}) ConnectOption {
 	return &connectOption{option.New(n, v)}
@@ -43,121 +44,35 @@ func Timeout(duration time.Duration) ConnectOption {
 	return newConnectOption(timeoutIdent{}, duration)
 }
 
-type RequestOption interface {
-	Option
-	EndpointOption
-	requestOption()
-}
-
-type requestOption struct {
-	Option
-}
-
-func (*requestOption) requestOption()  {}
-func (*requestOption) endpointOption() {}
-func (*requestOption) clientOption()   {}
-
-type endpointIdent struct{}
-
-func newRequestOption(n interface{}, v interface{}) RequestOption {
-	return &requestOption{option.New(n, v)}
-}
-
-func EndpointUUID(uuid string) RequestOption {
-	return newRequestOption(endpointIdent{}, uuid)
-}
-
-type EndpointOption interface {
-	Option
-	ClientOption
-	endpointOption()
-}
-
-type endpointOption struct {
-	Option
-}
-
-func (*endpointOption) endpointOption() {}
-func (*endpointOption) clientOption()   {}
-
-func newEndpointOption(n interface{}, v interface{}) EndpointOption {
-	return &endpointOption{option.New(n, v)}
-}
-
-type versionIdent struct{}
-type mustVersionIdent struct{}
-type serviceIdent struct{}
-type uuidIdent struct{}
-type clusterAuthIdent struct{}
-type agentAuthIdent struct{}
-type infobaseAuthIdent struct{}
-type endpointConfigIdent struct{}
-type saveAuthIdent struct{}
-type initChannelIdent struct{}
-
-type Auth struct {
-	user     string
-	password string
-}
-
-func Version(version int32) EndpointOption {
-	return newEndpointOption(versionIdent{}, version)
-}
-func AutosaveAuth(save bool) EndpointOption {
-	return newEndpointOption(saveAuthIdent{}, save)
-}
-func InitChannel(init bool) EndpointOption {
-	return newEndpointOption(initChannelIdent{}, init)
-}
-
-func Config(config EndpointConfig) EndpointOption {
-	return newEndpointOption(endpointConfigIdent{}, config)
-}
-
-func MustVersion(version int32) EndpointOption {
-	return newEndpointOption(mustVersionIdent{}, version)
-}
-
-func Service(service string) EndpointOption {
-	return newEndpointOption(serviceIdent{}, service)
-}
-
-func UUID(uuid string) EndpointOption {
-	return newEndpointOption(uuidIdent{}, uuid)
-}
-
-func DefaultClusterAuth(user, password string) EndpointOption {
-	return newEndpointOption(clusterAuthIdent{}, Auth{user, password})
-}
-
-func DefaultAgentAuth(user, password string) EndpointOption {
-	return newEndpointOption(agentAuthIdent{}, Auth{user, password})
-}
-
-func DefaultInfobaseAuth(user, password string) EndpointOption {
-	return newEndpointOption(infobaseAuthIdent{}, Auth{user, password})
-}
-
 type restoreConnectIdent struct{}
 type restoreEndpointsIdent struct{}
 
-type ClientOption interface {
+type GlobalOption interface {
 	Option
-	clientOption()
+	globalOption()
 }
 
-type clientOption struct {
+type globalOption struct {
 	Option
 }
 
-func (*clientOption) clientOption() {}
+func (*globalOption) globalOption() {}
 
-func newClientOption(n interface{}, v interface{}) ClientOption {
-	return &clientOption{option.New(n, v)}
+func newGlobalOption(n interface{}, v interface{}) GlobalOption {
+	return &globalOption{option.New(n, v)}
 }
 
 type dialFuncIdent struct{}
+type configIdent struct{}
+type configFromIdent struct{}
 
-func Dial(dialFunc DialFunc) ClientOption {
-	return newClientOption(dialFuncIdent{}, dialFunc)
+func Dial(dialFunc DialFunc) GlobalOption {
+	return newGlobalOption(dialFuncIdent{}, dialFunc)
+}
+
+func WithConfig(config Config) GlobalOption {
+	return newGlobalOption(configIdent{}, config)
+}
+func ConfigFrom(cfg *ucfg.Config) GlobalOption {
+	return newGlobalOption(configFromIdent{}, cfg)
 }
