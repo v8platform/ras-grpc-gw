@@ -34,6 +34,7 @@ type Channel struct {
 	_usedAt   uint32 // atomic
 	createdAt time.Time
 	pooled    bool
+	inited    bool
 
 	idxEndpoint map[string]int32
 }

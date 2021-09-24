@@ -4,18 +4,37 @@ import (
 	protocolv1 "github.com/v8platform/protos/gen/ras/protocol/v1"
 )
 
-var _ protocolv1.Endpoint = (*Endpoint)(nil)
+var _ protocolv1.Endpoint = (*channelEndpoint)(nil)
 
-type Endpoint struct {
-	UUID    string
+type channelEndpoint struct {
 	ID      int32
 	Version int32
 }
 
-func (e *Endpoint) GetVersion() int32 {
+func (e channelEndpoint) GetVersion() int32 {
 	return e.Version
 }
 
-func (e *Endpoint) GetId() int32 {
+func (e channelEndpoint) GetId() int32 {
 	return e.ID
+}
+
+func newChannelEndpoint(id, version int32) channelEndpoint {
+	return channelEndpoint{
+		ID:      id,
+		Version: version,
+	}
+}
+
+type Endpoint struct {
+	UUID string
+
+	ID  int32
+	Ver int32
+
+	version string
+}
+
+func (e *Endpoint) Version() string {
+	return e.version
 }

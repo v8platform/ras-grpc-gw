@@ -2,7 +2,12 @@ package client
 
 import (
 	"context"
+	"encoding/binary"
+	"github.com/spf13/cast"
 	clientv1 "github.com/v8platform/protos/gen/ras/client/v1"
+	messagesv1 "github.com/v8platform/protos/gen/ras/messages/v1"
+	protocolv1 "github.com/v8platform/protos/gen/ras/protocol/v1"
+	"google.golang.org/protobuf/types/known/emptypb"
 	"net"
 	"sync"
 	"sync/atomic"
@@ -19,7 +24,6 @@ type Client interface {
 	RemoveChannel(ctx context.Context, cn *Channel)
 	Stats() *Stats
 
-	NewEndpoint(opts ...EndpointOption) (*Channel, *Endpoint, error)
 	CloseChannel(channel *Channel) error
 
 	PutChannel(ctx context.Context, cn interface{})
@@ -71,7 +75,7 @@ type client struct {
 	poolSize           int
 	poolTimeout        time.Duration
 	idleTimeout        time.Duration
-	maxConnAge         time.Duration
+	maxChannelAge      time.Duration
 	idleCheckFrequency time.Duration
 	minIdleChannels    int
 
@@ -79,19 +83,19 @@ type client struct {
 	poolSizeLen     int
 	idleChannelsLen int
 	idleChannels    []*Channel
+	channels        []*Channel
 
 	dialErrorsNum   uint32 // atomic
 	lastDialErrorMu sync.RWMutex
 	lastDialError   error
 
-	_closed uint32 // atomic
-	queue   chan struct{}
+	queue chan struct{}
 
 	connectOptions  map[interface{}]ConnectOption
 	endpointOptions map[interface{}]EndpointOption
-	channels        []*Channel
 
-	mu sync.Mutex
+	mu      sync.Mutex
+	_closed uint32 // atomic
 
 	endpoints map[string]*Endpoint
 
@@ -110,13 +114,40 @@ type client struct {
 	clientv1.SessionsService
 }
 
-func (c *client) NewEndpoint(opts ...EndpointOption) (*Channel, *Endpoint, error) {
-	panic("implement me")
+func (c *client) AuthenticateCluster(ctx context.Context, req *messagesv1.ClusterAuthenticateRequest, opts ...interface{}) (*emptypb.Empty, error) {
+
+	reply, err := c.AuthService.AuthenticateCluster(ctx, req, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	return reply, nil
+}
+
+func (c *client) AuthenticateInfobase(ctx context.Context, req *messagesv1.AuthenticateInfobaseRequest, opts ...interface{}) (*emptypb.Empty, error) {
+
+	reply, err := c.AuthService.AuthenticateInfobase(ctx, req, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	return reply, nil
+}
+
+func (c *client) AuthenticateServer(ctx context.Context, req *messagesv1.ServerAuthenticateRequest, opts ...interface{}) (*emptypb.Empty, error) {
+
+	reply, err := c.AuthService.AuthenticateServer(ctx, req, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return reply, nil
 }
 
 func (c *client) CloseChannel(channel *Channel) error {
 
-	return nil
+	c.removeChannelWithLock(channel)
+	c.freeTurn()
+	return c.closeChannel(channel)
 }
 
 func (c *client) GetChannel(ctx context.Context, opts ...interface{}) (clientv1.Channel, error) {
@@ -127,7 +158,30 @@ func (c *client) GetChannel(ctx context.Context, opts ...interface{}) (clientv1.
 		return channel, nil
 	}
 
-	return c.initNewChannel(opts...)
+	var (
+		opt         Option
+		ok          bool
+		initChannel bool
+	)
+
+	for _, val := range opts {
+
+		if opt, ok = val.(Option); !ok {
+			continue
+		}
+
+		switch opt.Ident() {
+		case initChannelIdent{}:
+			initChannel = opt.Value().(bool)
+		}
+	}
+
+	if initChannel {
+		return c.getChannel(ctx)
+	}
+
+	return nil, ErrNoChannel
+
 }
 
 func (c *client) PutChannel(ctx context.Context, cn interface{}) {
@@ -162,6 +216,10 @@ func (c *client) GetEndpoint(ctx context.Context, opts ...interface{}) (clientv1
 	uuid := EndpointFromContext(ctx)
 	endpoint, ok := c.endpoints[uuid]
 
+	if ok {
+
+	}
+
 	channel := ChannelFromContext(ctx)
 
 	if channel != nil && !channel.Closed() {
@@ -170,96 +228,34 @@ func (c *client) GetEndpoint(ctx context.Context, opts ...interface{}) (clientv1
 		channel = nil
 	}
 
-	err := c.waitTurn(ctx)
+	channel, err := c.getChannel(ctx)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	for {
+	idxEndpoints := channel.Endpoints()
 
-		c.channelsMu.Lock()
-		channel := c.getIdleChannel()
-		c.channelsMu.Unlock()
-
-		if channel == nil {
-			break
+	if len(idxEndpoints) > 0 {
+		if id, ok := idxEndpoints[endpoint.UUID]; ok {
+			return channel, newChannelEndpoint(id, endpoint.Ver), err
 		}
-
-		if c.isStaleChannel(channel) {
-			_ = c.closeChannel(channel)
-			continue
-		}
-
-		// TODO открытие точки в данном канале
-		// endpoint, err := p.openEndpoint(ctx, newConn)
-
-		if !endpoint.Inited {
-			endpoint, err = p.openEndpoint(ctx, endpoint.conn)
-
-			if err != nil {
-				return nil, nil, err
-			}
-
-		}
-
-		atomic.AddUint32(&c.stats.Hits, 1)
-
-		return channel, endpoint, nil
 	}
 
-	atomic.AddUint32(&c.stats.Misses, 1)
-
-	channel, err = c.newChannel(true)
+	id, err := c.initEndpoint(ctx, channel, endpoint)
 
 	if err != nil {
-		c.freeTurn()
 		return nil, nil, err
 	}
 
-	// TODO открытие точки в данном канале
-	// endpoint, err := p.openEndpoint(ctx, newConn)
-
-	return channel, endpoint, err
-
-	// return c.NewEndpoint()
-
+	return channel, newChannelEndpoint(id, endpoint.Ver), err
 }
 
-func (p *client) RemoveChannel(ctx context.Context, cn *Channel) {
-	p.removeChannelWithLock(cn)
-	p.freeTurn()
-	_ = p.closeChannel(cn)
+func (c *client) RemoveChannel(ctx context.Context, cn *Channel) {
+	c.removeChannelWithLock(cn)
+	c.freeTurn()
+	_ = c.closeChannel(cn)
 }
 
-func (p *client) removeChannelWithLock(cn *Channel) {
-	p.channelsMu.Lock()
-	p.removeChannel(cn)
-	p.channelsMu.Unlock()
-}
-
-// Len returns total number of connections.
-func (p *client) channelsLen() int {
-	p.channelsMu.Lock()
-	n := len(p.channels)
-	p.channelsMu.Unlock()
-	return n
-}
-
-func (c *client) getIdleChannel() *Channel {
-
-	if len(c.idleChannels) == 0 {
-		return nil
-	}
-
-	idx := len(c.idleChannels) - 1
-	cn := c.idleChannels[idx]
-	c.idleChannels = c.idleChannels[:idx]
-
-	c.idleChannelsLen--
-	c.checkMinIdleChannels()
-
-	return cn
-}
 func (c *client) Host() string {
 	return c.addr
 }
@@ -288,24 +284,8 @@ func (c *client) Connect(opts ...ConnectOption) error {
 	return nil
 }
 
-func (c *client) Channels() []*Channel {
-	return c.channels
-}
-
 func (c *client) CloseAllChannels() error {
 	return nil
-}
-
-func (c *client) Endpoints() []*Endpoint {
-	c.mu.Lock()
-	defer c.mu.Unlock()
-
-	var endpoints []*Endpoint
-	for _, endpoint := range c.endpoints {
-		endpoints = append(endpoints, endpoint)
-	}
-
-	return endpoints
 }
 
 func (c *client) Stats() *Stats {
@@ -338,6 +318,116 @@ func (c *client) Close() error {
 	c.channelsMu.Unlock()
 
 	return firstErr
+}
+
+func (c *client) getChannel(ctx context.Context) (*Channel, error) {
+
+	if c.closed() {
+		return nil, ErrClosed
+	}
+
+	err := c.waitTurn(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	for {
+
+		c.channelsMu.Lock()
+		channel := c.getIdleChannel()
+		c.channelsMu.Unlock()
+
+		if channel == nil {
+			break
+		}
+
+		if c.isStaleChannel(channel) {
+			_ = c.closeChannel(channel)
+			continue
+		}
+
+		atomic.AddUint32(&c.stats.Hits, 1)
+
+		return channel, nil
+	}
+
+	atomic.AddUint32(&c.stats.Misses, 1)
+
+	channel, err := c.newChannel(true)
+
+	if err != nil {
+		c.freeTurn()
+		return nil, err
+	}
+
+	err = c.initChannel(ctx, channel)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return channel, err
+
+}
+
+func (c *client) initEndpoint(ctx context.Context, channel *Channel, endpoint *Endpoint) (int32, error) {
+
+	err := c.initChannel(ctx, channel)
+
+	if err != nil {
+		return 0, err
+	}
+
+	reply, err := clientv1.EndpointOpenHandler(ctx, channel, &protocolv1.EndpointOpen{
+		Version: endpoint.version,
+		Service: protocolv1.ServiceName,
+	})
+
+	if err != nil {
+		version := clientv1.DetectSupportedVersion(err)
+		if len(version) == 0 {
+			return 0, err
+		}
+
+		endpoint.version = version
+		endpoint.Ver = cast.ToInt32(version)
+	}
+
+	channel.SetEndpoint(endpoint.UUID, reply.EndpointId)
+
+	// TODO init auth
+
+	return reply.EndpointId, nil
+}
+
+func (c *client) removeChannelWithLock(cn *Channel) {
+	c.channelsMu.Lock()
+	c.removeChannel(cn)
+	c.channelsMu.Unlock()
+}
+
+// Len returns total number of connections.
+func (c *client) channelsLen() int {
+	c.channelsMu.Lock()
+	n := len(c.channels)
+	c.channelsMu.Unlock()
+	return n
+}
+
+func (c *client) getIdleChannel() *Channel {
+
+	if len(c.idleChannels) == 0 {
+		return nil
+	}
+
+	idx := len(c.idleChannels) - 1
+	cn := c.idleChannels[idx]
+	c.idleChannels = c.idleChannels[:idx]
+
+	c.idleChannelsLen--
+	c.checkMinIdleChannels()
+
+	return cn
 }
 
 func (c *client) checkMinIdleChannels() {
@@ -379,50 +469,9 @@ func (c *client) applyOptions(opts ...ClientOption) {
 	}
 }
 
-func (c *client) setConn(conn net.Conn, opts ...SetConnOption) error {
-
-	var (
-		restoreEndpoints bool
-		restoreConnect   bool
-	)
-
-	for _, opt := range opts {
-		switch opt.Ident() {
-		case restoreConnectIdent{}:
-			restoreEndpoints = opt.Value().(bool)
-		case restoreEndpointsIdent{}:
-			restoreEndpoints = opt.Value().(bool)
-		}
-	}
-
-	// c.cc = conn
-
-	if restoreConnect || restoreEndpoints {
-		// if err := c.initConnect(); err != nil {
-		// 	return err
-		// }
-	}
-
-	if restoreEndpoints {
-		if err := c.restoreEndpoints(); err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
 func (c *client) restoreEndpoints(opts ...Option) error {
 
 	return nil
-}
-
-func (c *client) initNewChannel(opts ...interface{}) (*Channel, error) {
-	return nil, nil
-}
-
-func (c *client) getFreeChannel(endpoint *Endpoint) (*Channel, error) {
-	return c.initNewChannel()
 }
 
 func (c *client) reaper(frequency time.Duration) {
@@ -441,6 +490,7 @@ func (c *client) reaper(frequency time.Duration) {
 		atomic.AddUint32(&c.stats.StaleChannels, uint32(n))
 	}
 }
+
 func (c *client) freeTurn() {
 	<-c.queue
 }
@@ -508,6 +558,43 @@ func (c *client) reapStaleChannels() (int, error) {
 
 func (c *client) closeChannel(cn *Channel) error {
 	return cn.Close()
+}
+
+func (c *client) initChannel(ctx context.Context, cn *Channel) error {
+
+	if cn.inited {
+		return nil
+	}
+
+	_, err := clientv1.NegotiateHandler(ctx, cn, protocolv1.NewNegotiateMessage())
+	if err != nil {
+		return err
+	}
+
+	var connectParam = map[string]*protocolv1.Param{}
+
+	for _, option := range c.connectOptions {
+		switch option.Ident() {
+		case timeoutIdent{}:
+			var b []byte
+			binary.BigEndian.PutUint32(b, option.Value().(uint32))
+			connectParam["connect.timeout"] = &protocolv1.Param{
+				Type:  protocolv1.ParamType_PARAM_INT,
+				Value: b,
+			}
+		}
+	}
+
+	_, err = clientv1.ConnectHandler(ctx, cn, &protocolv1.ConnectMessage{
+		Params: connectParam,
+	})
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+
 }
 
 func (c *client) newChannel(pooled bool) (*Channel, error) {
@@ -642,7 +729,7 @@ func (c *client) isStaleChannel(cn *Channel) bool {
 		return true
 	}
 
-	if c.idleTimeout == 0 && c.maxConnAge == 0 {
+	if c.idleTimeout == 0 && c.maxChannelAge == 0 {
 		return false
 	}
 
@@ -651,7 +738,7 @@ func (c *client) isStaleChannel(cn *Channel) bool {
 		return true
 	}
 
-	if c.maxConnAge > 0 && now.Sub(cn.CreatedAt()) >= c.maxConnAge {
+	if c.maxChannelAge > 0 && now.Sub(cn.CreatedAt()) >= c.maxChannelAge {
 		return true
 	}
 
@@ -660,14 +747,13 @@ func (c *client) isStaleChannel(cn *Channel) bool {
 
 func newClient(addr string, opts ...ClientOption) *client {
 	c := &client{
-		addr:             addr,
-		endpoints:        map[string]*Endpoint{},
-		endpointConfig:   map[string]*EndpointConfig{},
-		endpointOptions:  map[interface{}]EndpointOption{},
-		connectOptions:   map[interface{}]ConnectOption{},
-		channels:         []*Channel{},
-		endpointChannels: map[string][]int32{},
-		dial:             defaultDial,
+		addr:            addr,
+		endpoints:       map[string]*Endpoint{},
+		endpointConfig:  map[string]*EndpointConfig{},
+		endpointOptions: map[interface{}]EndpointOption{},
+		connectOptions:  map[interface{}]ConnectOption{},
+		channels:        []*Channel{},
+		dial:            defaultDial,
 	}
 
 	c.clientService = clientv1.NewClientService(c)

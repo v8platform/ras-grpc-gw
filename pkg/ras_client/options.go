@@ -102,7 +102,7 @@ type agentAuthIdent struct{}
 type infobaseAuthIdent struct{}
 type endpointConfigIdent struct{}
 type saveAuthIdent struct{}
-type initConnIdent struct{}
+type initChannelIdent struct{}
 
 type Auth struct {
 	user     string
@@ -116,7 +116,7 @@ func AutosaveAuth(save bool) EndpointOption {
 	return newEndpointOption(saveAuthIdent{}, save)
 }
 func NewConn(init bool) EndpointOption {
-	return newEndpointOption(initConnIdent{}, init)
+	return newEndpointOption(initChannelIdent{}, init)
 }
 
 func Config(config EndpointConfig) EndpointOption {
