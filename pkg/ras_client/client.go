@@ -22,6 +22,8 @@ type Client interface {
 	NewEndpoint(opts ...EndpointOption) (*Channel, *Endpoint, error)
 	CloseChannel(channel *Channel) error
 
+	PutChannel(ctx context.Context, cn interface{})
+
 	clientv1.Client
 	clientv1.ClustersService
 	clientv1.AdminService
