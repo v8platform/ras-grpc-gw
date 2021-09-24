@@ -49,7 +49,7 @@ func GetClustersHandler(ctx context.Context, cc Client, channel *Channel, endpoi
 		return endpointRequest(ctx, cn, endpoint, req, reply, o...)
 	}
 
-	requestInfo := RequestInfo{
+	requestInfo := &RequestInfo{
 		Method:     "GetClusters",
 		FullMethod: "/ras.api.v1.ClustersService/GetClusters",
 		Request:    req,
@@ -82,7 +82,7 @@ type Client interface {
 
 	PutChannel(ctx context.Context, cn interface{})
 
-	Invoke(ctx context.Context, info RequestInfo, channel *Channel, handler InvokeHandler, opts ...interface{}) error
+	Invoke(ctx context.Context, info *RequestInfo, channel *Channel, handler InvokeHandler, opts ...interface{}) error
 
 	clientv1.Client
 	clientv1.ClustersService
