@@ -21,13 +21,8 @@ type RequestInfo struct {
 	FullMethod string
 	Request    interface{}
 	Reply      interface{}
-	EndpointID int32
-	Version    int32
+	Endpoint   interface{}
 }
-
-type UnaryInterceptor func(ctx context.Context, req interface{}, info *RequestInfo, handler UnaryHandler) (resp interface{}, err error)
-
-type UnaryHandler func(ctx context.Context, req interface{}) (interface{}, error)
 
 type InvokeHandler func(ctx context.Context, channel *Channel, opts ...interface{}) error
 
@@ -54,8 +49,7 @@ func GetClustersHandler(ctx context.Context, cc Client, channel *Channel, endpoi
 		FullMethod: "/ras.api.v1.ClustersService/GetClusters",
 		Request:    req,
 		Reply:      reply,
-		EndpointID: 0,
-		Version:    endpoint.Ver,
+		Endpoint:   endpoint,
 	}
 
 	err := cc.Invoke(ctx, requestInfo, channel, handler, opts...)
