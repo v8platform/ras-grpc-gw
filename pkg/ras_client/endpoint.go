@@ -29,9 +29,7 @@ func newChannelEndpoint(id, version int32) channelEndpoint {
 type Endpoint struct {
 	UUID string
 
-	ID  int32
-	Ver int32
-
+	Ver     int32
 	version string
 }
 

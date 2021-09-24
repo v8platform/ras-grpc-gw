@@ -16,6 +16,61 @@ import (
 
 type DialFunc func(addr string) (net.Conn, error)
 
+type RequestInfo struct {
+	Method     string
+	FullMethod string
+	Request    interface{}
+	Reply      interface{}
+	EndpointID int32
+	Version    int32
+}
+
+type UnaryInterceptor func(ctx context.Context, req interface{}, info *RequestInfo, handler UnaryHandler) (resp interface{}, err error)
+
+type UnaryHandler func(ctx context.Context, req interface{}) (interface{}, error)
+
+type InvokeHandler func(ctx context.Context, channel *Channel, opts ...interface{}) error
+
+func GetClusters(ctx context.Context, req *messagesv1.GetClustersRequest, opts ...interface{}) (*messagesv1.GetClustersResponse, error) {
+	var cc Client
+	var channel *Channel
+	endpoint, err := cc.GetEndpoint(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return GetClustersHandler(ctx, cc, channel, endpoint, req, opts...)
+}
+
+func GetClustersHandler(ctx context.Context, cc Client, channel *Channel, endpoint Endpoint, req *messagesv1.GetClustersRequest, opts ...interface{}) (*messagesv1.GetClustersResponse, error) {
+
+	reply := new(messagesv1.GetClustersResponse)
+
+	handler := func(ctx context.Context, cn *Channel, o ...interface{}) error {
+		return endpointRequest(ctx, cn, endpoint, req, reply, o...)
+	}
+
+	requestInfo := RequestInfo{
+		Method:     "GetClusters",
+		FullMethod: "/ras.api.v1.ClustersService/GetClusters",
+		Request:    req,
+		Reply:      reply,
+		EndpointID: 0,
+		Version:    endpoint.Ver,
+	}
+
+	err := cc.Invoke(ctx, requestInfo, channel, handler, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	return reply, nil
+
+}
+
+func endpointRequest(ctx context.Context, channel *Channel, endpoint Endpoint, req *messagesv1.GetClustersRequest, reply *messagesv1.GetClustersResponse, opts ...interface{}) error {
+
+}
+
 type Client interface {
 	Host() string
 
@@ -26,6 +81,8 @@ type Client interface {
 	CloseChannel(channel *Channel) error
 
 	PutChannel(ctx context.Context, cn interface{})
+
+	Invoke(ctx context.Context, info RequestInfo, channel *Channel, handler InvokeHandler, opts ...interface{}) error
 
 	clientv1.Client
 	clientv1.ClustersService
