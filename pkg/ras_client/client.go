@@ -7,8 +7,10 @@ import (
 	clientv1 "github.com/v8platform/protos/gen/ras/client/v1"
 	messagesv1 "github.com/v8platform/protos/gen/ras/messages/v1"
 	protocolv1 "github.com/v8platform/protos/gen/ras/protocol/v1"
+	"google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"net"
+	"regexp"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -24,45 +26,159 @@ type RequestInfo struct {
 	Endpoint   interface{}
 }
 
-type InvokeHandler func(ctx context.Context, channel *Channel, opts ...interface{}) error
+func endpointRequest(ctx context.Context, channel *Channel, endpoint Endpoint, req, reply interface{}, opts ...interface{}) error {
+	var (
+		reqFormatter protocolv1.EndpointMessageFormatter
+		replyParser  protocolv1.EndpointMessageParser
+		ok           bool
+	)
+
+	if reqFormatter, ok = req.(protocolv1.EndpointMessageFormatter); ok {
+
+	}
+
+	if replyParser, ok = req.(protocolv1.EndpointMessageParser); ok {
+
+	}
+
+}
+
+type InvokeHandler func(ctx context.Context, channel *Channel, endpoint Endpoint, req interface{}, interceptor HandlerInterceptor) (interface{}, error)
 
 func GetClusters(ctx context.Context, req *messagesv1.GetClustersRequest, opts ...interface{}) (*messagesv1.GetClustersResponse, error) {
 	var cc Client
-	var channel *Channel
-	endpoint, err := cc.GetEndpoint(ctx)
+
+	reply, err := invoke(ctx, true, req, GetClustersHandler0, opts...)
 	if err != nil {
 		return nil, err
 	}
-	return GetClustersHandler(ctx, cc, channel, endpoint, req, opts...)
+
+	return reply.(*messagesv1.GetClustersResponse), err
 }
 
-func GetClustersHandler(ctx context.Context, cc Client, channel *Channel, endpoint Endpoint, req *messagesv1.GetClustersRequest, opts ...interface{}) (*messagesv1.GetClustersResponse, error) {
+type HandlerInterceptor func(ctx context.Context, channel *Channel, endpoint Endpoint, req interface{}, info *RequestInfo, handler HandlerInterceptorHandler) (interface{}, error)
 
-	reply := new(messagesv1.GetClustersResponse)
+type HandlerInterceptorHandler func(ctx context.Context, channel *Channel, endpoint Endpoint, req interface{}) (interface{}, error)
 
-	handler := func(ctx context.Context, cn *Channel, o ...interface{}) error {
-		return endpointRequest(ctx, cn, endpoint, req, reply, o...)
+func GetClustersHandler0(ctx context.Context, channel *Channel, endpoint Endpoint, req interface{}, interceptor HandlerInterceptor) (interface{}, error) {
+
+	if interceptor == nil {
+		reply := new(messagesv1.GetClustersResponse)
+		return reply, endpointRequest(ctx, channel, endpoint, req, reply)
 	}
-
-	requestInfo := &RequestInfo{
+	info := &RequestInfo{
 		Method:     "GetClusters",
 		FullMethod: "/ras.api.v1.ClustersService/GetClusters",
-		Request:    req,
-		Reply:      reply,
-		Endpoint:   endpoint,
+	}
+	handler := func(ctx context.Context, channel *Channel, endpoint Endpoint, req interface{}) (interface{}, error) {
+		reply := new(messagesv1.GetClustersResponse)
+		return reply, endpointRequest(ctx, channel, endpoint, req, reply)
 	}
 
-	err := cc.Invoke(ctx, requestInfo, channel, handler, opts...)
+	return interceptor(ctx, channel, endpoint, req, info, handler)
+
+}
+
+func GetClustersHandler(ctx context.Context, cc Client, req *messagesv1.GetClustersRequest, opts ...interface{}) (*messagesv1.GetClustersResponse, error) {
+
+	reply, err := invoke(ctx, true, req, GetClustersHandler0, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	Interceptor(InterceptorCond{Requests: []string{"GetClusters"}}, authInterceptor)
+
+	return reply.(*messagesv1.GetClustersResponse), nil
+
+}
+
+type InterceptorCond struct {
+	Regexp   string
+	Requests []string
+	Services []string
+}
+
+func (c InterceptorCond) Cond(info *RequestInfo) bool {
+	return false
+}
+
+func Interceptor(data InterceptorCond, h HandlerInterceptor) HandlerInterceptor {
+	return func(ctx context.Context, channel *Channel, endpoint Endpoint, req interface{}, info *RequestInfo, handler HandlerInterceptorHandler) (interface{}, error) {
+		if data.Cond(info) {
+			return h(ctx, channel, endpoint, req, info, handler)
+		}
+		return handler(ctx, channel, endpoint, req)
+	}
+}
+
+func authInterceptor(ctx context.Context, channel *Channel, endpoint Endpoint, req interface{}, info *RequestInfo, handler HandlerInterceptorHandler) (reply interface{}, err error) {
+
+	var (
+		hasAuth     bool
+		authService clientv1.AuthService
+		clusterId   string
+	)
+
+	type GetCluster interface {
+		GetCluster() string
+	}
+
+	switch req.(type) {
+	case GetCluster:
+		clusterId = req.(GetCluster).GetCluster()
+	default:
+		return handler(ctx, channel, endpoint, req)
+	}
+
+	if hasAuth {
+		_, err := authService.AuthenticateInfobase(ctx, &messagesv1.AuthenticateInfobaseRequest{
+			ClusterId: clusterId,
+			User:      "user",
+			Password:  "pwd",
+		})
+
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return handler(ctx, channel, endpoint, req)
+}
+
+func invoke(ctx context.Context, withEndpoint bool, req interface{}, handler InvokeHandler, opts ...interface{}) (interface{}, error) {
+
+	var ch *Channel
+	endpoint := Endpoint{}
+
+	reply, err := handler(ctx, ch, endpoint, req, ChainUnaryInterceptor(authInterceptor))
 	if err != nil {
 		return nil, err
 	}
 
 	return reply, nil
-
 }
 
 func endpointRequest(ctx context.Context, channel *Channel, endpoint Endpoint, req *messagesv1.GetClustersRequest, reply *messagesv1.GetClustersResponse, opts ...interface{}) error {
 
+}
+
+func ChainUnaryInterceptor(interceptors ...HandlerInterceptor) HandlerInterceptor {
+	n := len(interceptors)
+
+	return func(ctx context.Context, channel *Channel, endpoint Endpoint, req interface{}, info *RequestInfo, handler HandlerInterceptorHandler) (interface{}, error) {
+		chainer := func(currentInter HandlerInterceptor, currentHandler HandlerInterceptorHandler) HandlerInterceptorHandler {
+			return func(currentCtx context.Context, channel *Channel, endpoint Endpoint, currentReq interface{}) (interface{}, error) {
+				return currentInter(currentCtx, channel, endpoint, currentReq, info, currentHandler)
+			}
+		}
+
+		chainedHandler := handler
+		for i := n - 1; i >= 0; i-- {
+			chainedHandler = chainer(interceptors[i], chainedHandler)
+		}
+
+		return chainedHandler(ctx, channel, endpoint, req)
+	}
 }
 
 type Client interface {
@@ -494,9 +610,6 @@ func (c *client) applyOptions(opts ...GlobalOption) {
 		switch opt.Ident() {
 		case dialFuncIdent{}:
 			c.dial = opt.Value().(DialFunc)
-			continue
-		case reconnectIdent{}:
-			c.useAutoReconnect = opt.Value().(bool)
 			continue
 		}
 		switch opt.(type) {
