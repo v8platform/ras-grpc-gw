@@ -11,6 +11,7 @@ import (
 	appCtx "github.com/v8platform/ras-grpc-gw/internal/context"
 	"github.com/v8platform/ras-grpc-gw/internal/service"
 	client2 "github.com/v8platform/ras-grpc-gw/pkg/ras_client"
+	"github.com/v8platform/ras-grpc-gw/pkg/ras_client/interceptor"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
@@ -71,32 +72,44 @@ func SendEndpointID(ctx context.Context, channel clientv1.Channel, endpoint clie
 	return handler(ctx, channel, endpoint, req)
 }
 
-func SendClusterAuth(ctx context.Context, channel clientv1.Channel, endpoint clientv1.Endpoint, info *clientv1.RequestInfo, req interface{}, handler clientv1.InterceptorHandler) (interface{}, error) {
+func ClusterAuthInterceptor(user, password string) client2.Interceptor {
 
-	if endpoint == nil {
+	return interceptor.New(
+		interceptor.AND(
+			interceptor.GetClusterId,
+			interceptor.IsEndpoint,
+		),
+		setClusterAuthInterceptor(user, password),
+	)
+}
+
+func setClusterAuthInterceptor(user, password string) client2.Interceptor {
+
+	type getClusterId interface {
+		GetClusterID() string
+	}
+
+	return func(ctx context.Context, channel clientv1.Channel, endpoint clientv1.Endpoint, info *clientv1.RequestInfo, req interface{}, handler clientv1.InterceptorHandler) (interface{}, error) {
+
+		if endpoint == nil {
+			return handler(ctx, channel, endpoint, req)
+		}
+
+		tReq := req.(getClusterId)
+		clusterId := tReq.GetClusterID()
+
+		_, err := clientv1.AuthenticateClusterHandler(ctx, channel, endpoint, &messagesv1.ClusterAuthenticateRequest{
+			ClusterId: clusterId,
+			User:      user,
+			Password:  password,
+		}, nil)
+
+		if err != nil {
+			fmt.Println(err)
+		}
+
 		return handler(ctx, channel, endpoint, req)
 	}
-
-	var clusterId string
-
-	switch tReq := req.(type) {
-	case *messagesv1.GetInfobasesSummaryRequest:
-		clusterId = tReq.ClusterId
-	default:
-		return handler(ctx, channel, endpoint, req)
-	}
-
-	_, err := clientv1.AuthenticateClusterHandler(ctx, channel, endpoint, &messagesv1.ClusterAuthenticateRequest{
-		ClusterId: clusterId,
-		User:      "",
-		Password:  "",
-	}, nil)
-
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	return handler(ctx, channel, endpoint, req)
 }
 
 func setClusterIDToRequestInterceptor(clusterId uuid.UUID) client2.Interceptor {
@@ -138,11 +151,22 @@ func getRequestOpts(services *service.Services) grpc.UnaryServerInterceptor {
 							// Получить кластер по имени
 						}
 					}
+				case "cluster-auth":
+					for _, value := range values {
+						switch len(value) {
+						case 36:
+							clusterId := uuid.MustParse(value)
+							requestInterceptors = append(requestInterceptors, ClusterAuthInterceptor(clusterId))
+							break
+						default:
+							// Получить кластер по имени
+						}
+					}
 				}
 			}
 
 		}
-		requestInterceptors = append(requestInterceptors, SendClusterAuth)
+		requestInterceptors = append(requestInterceptors)
 
 		if len(requestInterceptors) > 0 {
 			opts = append(opts, client2.RequestInterceptor(requestInterceptors...))
