@@ -5,7 +5,6 @@ import (
 	"github.com/recoilme/pudge"
 	"path/filepath"
 	"sync"
-	"time"
 )
 
 type Table struct {
@@ -59,24 +58,6 @@ func (d *Db) Table(name string) (*Table, error) {
 
 	return table, nil
 
-}
-
-var defaultConfig = Config{
-	Path:         "./db",
-	SyncInterval: time.Minute,
-}
-
-type Config struct {
-	Path         string
-	FileMode     int
-	DirMode      int
-	SyncInterval time.Duration
-	StoreMode    int
-}
-
-func Unpack(cfg *ucfg.Config) (*Config, error) {
-	config := defaultConfig
-	return &config, cfg.Unpack(&config)
 }
 
 func newFromConfig(config *Config) *Db {

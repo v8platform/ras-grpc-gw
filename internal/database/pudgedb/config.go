@@ -2,6 +2,7 @@ package pudgedb
 
 import (
 	"github.com/elastic/go-ucfg"
+	"time"
 )
 
 var defaultConfig = Config{
@@ -12,11 +13,11 @@ var defaultConfig = Config{
 }
 
 type Config struct {
-	Path         string `config:"path, required"`
-	FileMode     int    `config:"file_mode"`     // 0666
-	DirMode      int    `config:"dir_mode"`      // 0777
-	SyncInterval int    `config:"sync_interval"` // in seconds
-	StoreMode    int    `config:"store_mode"`    // 0 - file first, 2 - memory first(with persist on close), 2 - with empty file - memory without persist
+	Path         string        `config:"path, required"`
+	FileMode     int           `config:"file_mode"`     // 0666
+	DirMode      int           `config:"dir_mode"`      // 0777
+	SyncInterval time.Duration `config:"sync_interval"` // in seconds
+	StoreMode    int           `config:"store_mode"`    // 0 - file first, 2 - memory first(with persist on close), 2 - with empty file - memory without persist
 
 }
 
