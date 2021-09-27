@@ -4,23 +4,29 @@ import "context"
 
 type endpointValue struct{}
 
-func EndpointFromContext(ctx context.Context) string {
-
-	return ctx.Value(endpointValue{}).(string)
+func EndpointFromContext(ctx context.Context) *ChannelEndpoint {
+	val := ctx.Value(endpointValue{})
+	if val == nil {
+		return nil
+	}
+	return val.(*ChannelEndpoint)
 
 }
 
-func EndpointToContext(ctx context.Context, uuid string) context.Context {
+func EndpointToContext(ctx context.Context, endpoint *ChannelEndpoint) context.Context {
 
-	return context.WithValue(ctx, endpointValue{}, uuid)
+	return context.WithValue(ctx, endpointValue{}, endpoint)
 
 }
 
 type channelValue struct{}
 
 func ChannelFromContext(ctx context.Context) *Channel {
-
-	return ctx.Value(channelValue{}).(*Channel)
+	val := ctx.Value(channelValue{})
+	if val == nil {
+		return nil
+	}
+	return val.(*Channel)
 
 }
 

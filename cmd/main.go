@@ -1,6 +1,8 @@
 package main
 
 import (
+	"context"
+	"github.com/google/uuid"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/urfave/cli/v2"
 	"github.com/v8platform/ras-grpc-gw/internal/config"
@@ -13,6 +15,7 @@ import (
 	"github.com/v8platform/ras-grpc-gw/pkg/cache"
 	"github.com/v8platform/ras-grpc-gw/pkg/docs/rapidoc"
 	"github.com/v8platform/ras-grpc-gw/pkg/hash"
+	client2 "github.com/v8platform/ras-grpc-gw/pkg/ras_client"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/encoding/protojson"
@@ -67,7 +70,7 @@ func main() {
 
 			if c, err := config.NewConfigFrom(config.DefaultConfig); err != nil {
 				return err
-			} else if err := c.Unpack(cfg); err != nil {
+			} else if err := c.Unpack(&cfg); err != nil {
 				return err
 			}
 
@@ -93,7 +96,19 @@ func main() {
 				return err
 			}
 
-			gRPCServiceRegisterFunc, reverseProxyRegisterFunc := grpc_v1.RegisterServerServices(services)
+			client := client2.NewClient(
+				os.Getenv("RAS_HOST"),
+				client2.EndpointUUID(func(ctx context.Context) (uuid.UUID, bool) {
+					uuidStr, ok := appCtx.EndpointFromContext(ctx)
+					if !ok {
+						return uuid.Nil, false
+					}
+					return uuid.MustParse(uuidStr), true
+				}),
+				client2.RequestInterceptor(grpc_v1.SendEndpointID),
+			)
+
+			gRPCServiceRegisterFunc, reverseProxyRegisterFunc := grpc_v1.RegisterServerServices(services, client)
 
 			interceptors := grpc_v1.NewInterceptors(services)
 
@@ -116,12 +131,12 @@ func main() {
 
 						if len(tokenInfo) > 0 {
 
-							user, err := services.Users.GetByUUID(ctx, tokenInfo)
-							if err != nil {
-								http.Error(w, status.Errorf(codes.Unauthenticated, "invalid auth token: %v", err).Error(), http.StatusUnauthorized)
-								return
-							}
-							ctx = appCtx.UserToContext(ctx, user)
+							// user, err := services.Users.GetByUUID(ctx, tokenInfo)
+							// if err != nil {
+							// 	http.Error(w, status.Errorf(codes.Unauthenticated, "invalid auth token: %v", err).Error(), http.StatusUnauthorized)
+							// 	return
+							// }
+							// ctx = appCtx.UserToContext(ctx, user)
 
 						}
 						mux.ServeHTTP(w, r.WithContext(ctx))
@@ -132,9 +147,7 @@ func main() {
 				server.ReverseProxyRegister(reverseProxyRegisterFunc),
 				server.MuxOption(runtime.WithIncomingHeaderMatcher(func(key string) (string, bool) {
 					switch key {
-					case "X-App":
-						return key, true
-					case "X-Endpoint2":
+					case "X-Endpoint":
 						return key, true
 					default:
 						return runtime.DefaultHeaderMatcher(key)
@@ -142,10 +155,8 @@ func main() {
 				})),
 				server.MuxOption(runtime.WithOutgoingHeaderMatcher(func(key string) (string, bool) {
 					switch key {
-					case "x-app":
-						return "X-App", true
 					case "x-endpoint":
-						return "X-Endpoint2", true
+						return "X-Endpoint", true
 					default:
 						return runtime.DefaultHeaderMatcher(key)
 					}

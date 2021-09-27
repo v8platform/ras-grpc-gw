@@ -1,33 +1,35 @@
 package client
 
 import (
+	"github.com/google/uuid"
 	protocolv1 "github.com/v8platform/protos/gen/ras/protocol/v1"
 )
 
-var _ protocolv1.Endpoint = (*channelEndpoint)(nil)
+var _ protocolv1.Endpoint = (*ChannelEndpoint)(nil)
 
-type channelEndpoint struct {
+type ChannelEndpoint struct {
+	UUID    uuid.UUID
 	ID      int32
 	Version int32
 }
 
-func (e channelEndpoint) GetVersion() int32 {
+func (e ChannelEndpoint) GetVersion() int32 {
 	return e.Version
 }
 
-func (e channelEndpoint) GetId() int32 {
+func (e ChannelEndpoint) GetId() int32 {
 	return e.ID
 }
 
-func newChannelEndpoint(id, version int32) channelEndpoint {
-	return channelEndpoint{
+func newChannelEndpoint(id, version int32) *ChannelEndpoint {
+	return &ChannelEndpoint{
 		ID:      id,
 		Version: version,
 	}
 }
 
 type Endpoint struct {
-	UUID string
+	UUID uuid.UUID
 
 	Ver     int32
 	version string

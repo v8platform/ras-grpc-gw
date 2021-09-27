@@ -2,41 +2,33 @@ package v1
 
 import (
 	"context"
-	clientv1 "github.com/v8platform/protos/gen/ras/client/v1"
 	messagesv1 "github.com/v8platform/protos/gen/ras/messages/v1"
+	appCtx "github.com/v8platform/ras-grpc-gw/internal/context"
 	"github.com/v8platform/ras-grpc-gw/internal/service"
 	apiv1 "github.com/v8platform/ras-grpc-gw/pkg/gen/service/api/v1"
+	client "github.com/v8platform/ras-grpc-gw/pkg/ras_client"
 )
 
 type rasClustersServiceServer struct {
-	apiv1.UnimplementedClustersServiceServer
+	apiv1.UnimplementedClustersServer
 	services *service.Services
-	clients  Client
+	client   client.Client
 }
 
-func NewClustersServiceServer(services *service.Services, clients Client) apiv1.ClustersServiceServer {
+func NewClustersServiceServer(services *service.Services, client client.Client) apiv1.ClustersServer {
 	return &rasClustersServiceServer{
 		services: services,
-		clients:  clients,
+		client:   client,
 	}
 }
 
 func (s *rasClustersServiceServer) GetClusters(ctx context.Context, request *messagesv1.GetClustersRequest) (*messagesv1.GetClustersResponse, error) {
-	endpoint, err := s.clients.GetEndpoint(ctx)
-	if err != nil {
-		return nil, err
-	}
-	clusters := clientv1.NewClustersService(endpoint)
-	return clusters.GetClusters(ctx, request)
+	opts, _ := appCtx.RequestOptsFromContext(ctx)
+	return s.client.GetClusters(ctx, request, opts...)
 }
 
 func (s *rasClustersServiceServer) GetClusterInfo(ctx context.Context, request *messagesv1.GetClusterInfoRequest) (*messagesv1.GetClusterInfoResponse, error) {
-	endpoint, err := s.clients.GetEndpoint(ctx)
-	if err != nil {
-		return nil, err
-	}
-	clusters := clientv1.NewClustersService(endpoint)
-	return clusters.GetClusterInfo(ctx, request)
+	return s.client.GetClusterInfo(ctx, request)
 }
 
 // func (s *rasClientServiceServer) GetSessions(ctx context.Context, request *messagesv1.GetSessionsRequest) (*messagesv1.GetSessionsResponse, error) {

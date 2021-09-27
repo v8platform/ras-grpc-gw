@@ -18,3 +18,16 @@ func EndpointFromContext(ctx context.Context) (string, bool) {
 	return u, ok
 
 }
+
+func RequestOptsToContext(ctx context.Context, value []interface{}) context.Context {
+
+	return context.WithValue(ctx, identEndpoint{}, value)
+
+}
+
+func RequestOptsFromContext(ctx context.Context) ([]interface{}, bool) {
+
+	u, ok := ctx.Value(identEndpoint{}).([]interface{})
+	return u, ok
+
+}

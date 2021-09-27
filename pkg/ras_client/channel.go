@@ -3,6 +3,7 @@ package client
 import (
 	"context"
 	"fmt"
+	"github.com/google/uuid"
 	clientv1 "github.com/v8platform/protos/gen/ras/client/v1"
 	"io"
 	"net"
@@ -21,7 +22,7 @@ func newChannel(conn net.Conn) *Channel {
 		_closed:     0,
 		_usedAt:     0,
 		createdAt:   time.Now(),
-		idxEndpoint: map[string]int32{},
+		idxEndpoint: map[uuid.UUID]int32{},
 	}
 }
 
@@ -36,7 +37,7 @@ type Channel struct {
 	pooled    bool
 	inited    bool
 
-	idxEndpoint map[string]int32
+	idxEndpoint map[uuid.UUID]int32
 }
 
 func (c *Channel) Close() error {
@@ -70,7 +71,7 @@ func (c *Channel) Closed() bool {
 	return false
 }
 
-func (c *Channel) SetEndpoint(endpoint string, id int32) {
+func (c *Channel) SetEndpoint(endpoint uuid.UUID, id int32) {
 
 	c.Lock()
 	defer c.Unlock()
@@ -79,12 +80,12 @@ func (c *Channel) SetEndpoint(endpoint string, id int32) {
 
 }
 
-func (c *Channel) Endpoints() map[string]int32 {
+func (c *Channel) Endpoints() map[uuid.UUID]int32 {
 
 	c.Lock()
 	defer c.Unlock()
 
-	endpoints := make(map[string]int32, len(c.idxEndpoint))
+	endpoints := make(map[uuid.UUID]int32, len(c.idxEndpoint))
 	for key, value := range c.idxEndpoint {
 		endpoints[key] = value
 	}

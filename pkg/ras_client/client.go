@@ -3,14 +3,11 @@ package client
 import (
 	"context"
 	"encoding/binary"
+	"github.com/google/uuid"
 	"github.com/spf13/cast"
 	clientv1 "github.com/v8platform/protos/gen/ras/client/v1"
-	messagesv1 "github.com/v8platform/protos/gen/ras/messages/v1"
 	protocolv1 "github.com/v8platform/protos/gen/ras/protocol/v1"
-	"google.golang.org/grpc"
-	"google.golang.org/protobuf/types/known/emptypb"
 	"net"
-	"regexp"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -18,181 +15,15 @@ import (
 
 type DialFunc func(addr string) (net.Conn, error)
 
-type RequestInfo struct {
-	Method     string
-	FullMethod string
-	Request    interface{}
-	Reply      interface{}
-	Endpoint   interface{}
-}
-
-func endpointRequest(ctx context.Context, channel *Channel, endpoint Endpoint, req, reply interface{}, opts ...interface{}) error {
-	var (
-		reqFormatter protocolv1.EndpointMessageFormatter
-		replyParser  protocolv1.EndpointMessageParser
-		ok           bool
-	)
-
-	if reqFormatter, ok = req.(protocolv1.EndpointMessageFormatter); ok {
-
-	}
-
-	if replyParser, ok = req.(protocolv1.EndpointMessageParser); ok {
-
-	}
-
-}
-
-type InvokeHandler func(ctx context.Context, channel *Channel, endpoint Endpoint, req interface{}, interceptor HandlerInterceptor) (interface{}, error)
-
-func GetClusters(ctx context.Context, req *messagesv1.GetClustersRequest, opts ...interface{}) (*messagesv1.GetClustersResponse, error) {
-	var cc Client
-
-	reply, err := invoke(ctx, true, req, GetClustersHandler0, opts...)
-	if err != nil {
-		return nil, err
-	}
-
-	return reply.(*messagesv1.GetClustersResponse), err
-}
-
-type HandlerInterceptor func(ctx context.Context, channel *Channel, endpoint Endpoint, req interface{}, info *RequestInfo, handler HandlerInterceptorHandler) (interface{}, error)
-
-type HandlerInterceptorHandler func(ctx context.Context, channel *Channel, endpoint Endpoint, req interface{}) (interface{}, error)
-
-func GetClustersHandler0(ctx context.Context, channel *Channel, endpoint Endpoint, req interface{}, interceptor HandlerInterceptor) (interface{}, error) {
-
-	if interceptor == nil {
-		reply := new(messagesv1.GetClustersResponse)
-		return reply, endpointRequest(ctx, channel, endpoint, req, reply)
-	}
-	info := &RequestInfo{
-		Method:     "GetClusters",
-		FullMethod: "/ras.api.v1.ClustersService/GetClusters",
-	}
-	handler := func(ctx context.Context, channel *Channel, endpoint Endpoint, req interface{}) (interface{}, error) {
-		reply := new(messagesv1.GetClustersResponse)
-		return reply, endpointRequest(ctx, channel, endpoint, req, reply)
-	}
-
-	return interceptor(ctx, channel, endpoint, req, info, handler)
-
-}
-
-func GetClustersHandler(ctx context.Context, cc Client, req *messagesv1.GetClustersRequest, opts ...interface{}) (*messagesv1.GetClustersResponse, error) {
-
-	reply, err := invoke(ctx, true, req, GetClustersHandler0, opts...)
-	if err != nil {
-		return nil, err
-	}
-
-	Interceptor(InterceptorCond{Requests: []string{"GetClusters"}}, authInterceptor)
-
-	return reply.(*messagesv1.GetClustersResponse), nil
-
-}
-
-type InterceptorCond struct {
-	Regexp   string
-	Requests []string
-	Services []string
-}
-
-func (c InterceptorCond) Cond(info *RequestInfo) bool {
-	return false
-}
-
-func Interceptor(data InterceptorCond, h HandlerInterceptor) HandlerInterceptor {
-	return func(ctx context.Context, channel *Channel, endpoint Endpoint, req interface{}, info *RequestInfo, handler HandlerInterceptorHandler) (interface{}, error) {
-		if data.Cond(info) {
-			return h(ctx, channel, endpoint, req, info, handler)
-		}
-		return handler(ctx, channel, endpoint, req)
-	}
-}
-
-func authInterceptor(ctx context.Context, channel *Channel, endpoint Endpoint, req interface{}, info *RequestInfo, handler HandlerInterceptorHandler) (reply interface{}, err error) {
-
-	var (
-		hasAuth     bool
-		authService clientv1.AuthService
-		clusterId   string
-	)
-
-	type GetCluster interface {
-		GetCluster() string
-	}
-
-	switch req.(type) {
-	case GetCluster:
-		clusterId = req.(GetCluster).GetCluster()
-	default:
-		return handler(ctx, channel, endpoint, req)
-	}
-
-	if hasAuth {
-		_, err := authService.AuthenticateInfobase(ctx, &messagesv1.AuthenticateInfobaseRequest{
-			ClusterId: clusterId,
-			User:      "user",
-			Password:  "pwd",
-		})
-
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	return handler(ctx, channel, endpoint, req)
-}
-
-func invoke(ctx context.Context, withEndpoint bool, req interface{}, handler InvokeHandler, opts ...interface{}) (interface{}, error) {
-
-	var ch *Channel
-	endpoint := Endpoint{}
-
-	reply, err := handler(ctx, ch, endpoint, req, ChainUnaryInterceptor(authInterceptor))
-	if err != nil {
-		return nil, err
-	}
-
-	return reply, nil
-}
-
-func endpointRequest(ctx context.Context, channel *Channel, endpoint Endpoint, req *messagesv1.GetClustersRequest, reply *messagesv1.GetClustersResponse, opts ...interface{}) error {
-
-}
-
-func ChainUnaryInterceptor(interceptors ...HandlerInterceptor) HandlerInterceptor {
-	n := len(interceptors)
-
-	return func(ctx context.Context, channel *Channel, endpoint Endpoint, req interface{}, info *RequestInfo, handler HandlerInterceptorHandler) (interface{}, error) {
-		chainer := func(currentInter HandlerInterceptor, currentHandler HandlerInterceptorHandler) HandlerInterceptorHandler {
-			return func(currentCtx context.Context, channel *Channel, endpoint Endpoint, currentReq interface{}) (interface{}, error) {
-				return currentInter(currentCtx, channel, endpoint, currentReq, info, currentHandler)
-			}
-		}
-
-		chainedHandler := handler
-		for i := n - 1; i >= 0; i-- {
-			chainedHandler = chainer(interceptors[i], chainedHandler)
-		}
-
-		return chainedHandler(ctx, channel, endpoint, req)
-	}
-}
-
 type Client interface {
 	Host() string
 
 	Close() error
-	RemoveChannel(ctx context.Context, cn *Channel)
 	Stats() *Stats
 
-	CloseChannel(channel *Channel) error
-
-	PutChannel(ctx context.Context, cn interface{})
-
-	Invoke(ctx context.Context, info *RequestInfo, channel *Channel, handler InvokeHandler, opts ...interface{}) error
+	// CloseChannel(channel *Channel) error
+	// RemoveChannel(ctx context.Context, cn *Channel)
+	// putChannel(ctx context.Context, cn interface{})
 
 	clientv1.Client
 	clientv1.ClustersService
@@ -232,11 +63,11 @@ type client struct {
 	idleTimeout        time.Duration
 	maxChannelAge      time.Duration
 	idleCheckFrequency time.Duration
-	minIdleChannels    int
+	minIdleChannels    uint32
 
 	channelsMu      sync.Mutex
 	poolSizeLen     int
-	idleChannelsLen int
+	idleChannelsLen uint32
 	idleChannels    []*Channel
 	channels        []*Channel
 
@@ -252,9 +83,9 @@ type client struct {
 	mu      sync.Mutex
 	_closed uint32 // atomic
 
-	endpoints map[string]*Endpoint
-
-	endpointConfig map[string]*EndpointConfig
+	endpoints      map[uuid.UUID]*Endpoint
+	Interceptors   []Interceptor
+	endpointConfig map[uuid.UUID]*EndpointConfig
 
 	clientService clientv1.ClientService
 
@@ -269,33 +100,86 @@ type client struct {
 	clientv1.SessionsService
 }
 
-func (c *client) AuthenticateCluster(ctx context.Context, req *messagesv1.ClusterAuthenticateRequest, opts ...interface{}) (*emptypb.Empty, error) {
+func (c *client) Invoke(ctx context.Context, needEndpoint bool, req interface{}, handler clientv1.InvokeHandler, opts ...interface{}) (reply interface{}, err error) {
 
-	reply, err := c.AuthService.AuthenticateCluster(ctx, req, opts...)
-	if err != nil {
-		return nil, err
+	var (
+		channel         *Channel
+		channelEndpoint *ChannelEndpoint
+		interceptor     Interceptor
+		endpointUUID    uuid.UUID
+	)
+
+	requestOptions := combine(c.endpointOptions, opts)
+
+	for _, option := range requestOptions {
+		switch option.Ident() {
+		case endpointIdent{}:
+			getEndpoint := option.Value().(func(context.Context) (uuid.UUID, bool))
+			endpointUUID, _ = getEndpoint(ctx)
+		case interceptorsIdent{}:
+			interceptor = option.Value().(Interceptor)
+		}
 	}
 
-	return reply, nil
-}
+	channel = ChannelFromContext(ctx)
 
-func (c *client) AuthenticateInfobase(ctx context.Context, req *messagesv1.AuthenticateInfobaseRequest, opts ...interface{}) (*emptypb.Empty, error) {
-
-	reply, err := c.AuthService.AuthenticateInfobase(ctx, req, opts...)
-	if err != nil {
-		return nil, err
+	if channel == nil {
+		channel, err = c.getChannel(ctx)
+		if err != nil {
+			return nil, err
+		}
+		defer c.putChannel(ctx, channel)
+		ctx = ChannelToContext(ctx, channel)
 	}
 
-	return reply, nil
-}
+	if needEndpoint {
+		idxEndpoints := channel.Endpoints()
 
-func (c *client) AuthenticateServer(ctx context.Context, req *messagesv1.ServerAuthenticateRequest, opts ...interface{}) (*emptypb.Empty, error) {
+		channelEndpoint = EndpointFromContext(ctx)
+		if channelEndpoint != nil {
+			if len(idxEndpoints) > 0 {
+				id, ok := idxEndpoints[channelEndpoint.UUID]
+				if !(ok || id == channelEndpoint.ID) {
+					return nil, ErrNotChannelEndpoint
+				}
+			}
+		} else {
 
-	reply, err := c.AuthService.AuthenticateServer(ctx, req, opts...)
-	if err != nil {
-		return nil, err
+			endpoint, ok := c.endpoints[endpointUUID]
+			if !ok {
+				if endpointUUID == uuid.Nil {
+					endpointUUID = uuid.New()
+				}
+
+				endpoint = &Endpoint{
+					UUID:    endpointUUID,
+					Ver:     10,
+					version: "10.0",
+				}
+
+				c.endpoints[endpointUUID] = endpoint
+				c.endpointConfig[endpointUUID] = &EndpointConfig{}
+
+			}
+
+			id, err := c.initEndpoint(ctx, channel, endpoint)
+			if err != nil {
+				return nil, err
+			}
+			channelEndpoint = &ChannelEndpoint{
+				UUID:    endpointUUID,
+				ID:      id,
+				Version: endpoint.Ver,
+			}
+			ctx = EndpointToContext(ctx, channelEndpoint)
+		}
 	}
-	return reply, nil
+
+	if len(c.Interceptors) > 0 {
+		interceptor = ChainInterceptor(ChainInterceptor(c.Interceptors...), interceptor)
+	}
+
+	return handler(ctx, channel, channelEndpoint, req, clientv1.Interceptor(interceptor))
 }
 
 func (c *client) CloseChannel(channel *Channel) error {
@@ -305,50 +189,7 @@ func (c *client) CloseChannel(channel *Channel) error {
 	return c.closeChannel(channel)
 }
 
-func (c *client) GetChannel(ctx context.Context, opts ...interface{}) (clientv1.Channel, error) {
-
-	channel := ChannelFromContext(ctx)
-
-	if channel != nil && !channel.Closed() {
-		return channel, nil
-	}
-
-	var (
-		opt         Option
-		ok          bool
-		initChannel bool
-	)
-
-	for _, val := range opts {
-
-		if opt, ok = val.(Option); !ok {
-			continue
-		}
-
-		switch opt.Ident() {
-		case initChannelIdent{}:
-			initChannel = opt.Value().(bool)
-		}
-	}
-
-	if initChannel {
-		return c.getChannel(ctx)
-	}
-
-	return nil, ErrNoChannel
-
-}
-
-func (c *client) PutChannel(ctx context.Context, cn interface{}) {
-
-	var (
-		channel *Channel
-		ok      bool
-	)
-
-	if channel, ok = cn.(*Channel); !ok {
-		return
-	}
+func (c *client) putChannel(ctx context.Context, channel *Channel) {
 
 	if !channel.pooled {
 		c.RemoveChannel(ctx, channel)
@@ -362,49 +203,6 @@ func (c *client) PutChannel(ctx context.Context, cn interface{}) {
 	c.freeTurn()
 }
 
-func (c *client) GetEndpoint(ctx context.Context, opts ...interface{}) (clientv1.Channel, clientv1.Endpoint, error) {
-
-	if c.closed() {
-		return nil, nil, ErrClosed
-	}
-
-	uuid := EndpointFromContext(ctx)
-	endpoint, ok := c.endpoints[uuid]
-
-	if ok {
-
-	}
-
-	channel := ChannelFromContext(ctx)
-
-	if channel != nil && !channel.Closed() {
-		c.removeChannel(channel)
-		// TODO Удалить отключенный канал
-		channel = nil
-	}
-
-	channel, err := c.getChannel(ctx)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	idxEndpoints := channel.Endpoints()
-
-	if len(idxEndpoints) > 0 {
-		if id, ok := idxEndpoints[endpoint.UUID]; ok {
-			return channel, newChannelEndpoint(id, endpoint.Ver), err
-		}
-	}
-
-	id, err := c.initEndpoint(ctx, channel, endpoint)
-
-	if err != nil {
-		return nil, nil, err
-	}
-
-	return channel, newChannelEndpoint(id, endpoint.Ver), err
-}
-
 func (c *client) RemoveChannel(ctx context.Context, cn *Channel) {
 	c.removeChannelWithLock(cn)
 	c.freeTurn()
@@ -413,30 +211,6 @@ func (c *client) RemoveChannel(ctx context.Context, cn *Channel) {
 
 func (c *client) Host() string {
 	return c.addr
-}
-
-func (c *client) Connect(opts ...ConnectOption) error {
-	c.mu.Lock()
-	defer c.mu.Unlock()
-
-	var options []Option
-	for _, opt := range opts {
-		options = append(options, opt)
-	}
-
-	c.queue = make(chan struct{}, c.poolSize)
-	c.idleChannels = make([]*Channel, c.poolSize)
-	c.channels = make([]*Channel, c.poolSize)
-
-	c.channelsMu.Lock()
-	c.checkMinIdleChannels()
-	c.channelsMu.Unlock()
-
-	if c.idleTimeout > 0 && c.idleCheckFrequency > 0 {
-		go c.reaper(c.idleCheckFrequency)
-	}
-
-	return nil
 }
 
 func (c *client) CloseAllChannels() error {
@@ -450,7 +224,7 @@ func (c *client) Stats() *Stats {
 		Timeouts: atomic.LoadUint32(&c.stats.Timeouts),
 
 		TotalChannels: uint32(c.channelsLen()),
-		IdleChannels:  uint32(c.idleChannelsLen),
+		IdleChannels:  c.idleChannelsLen,
 		StaleChannels: atomic.LoadUint32(&c.stats.StaleChannels),
 	}
 }
@@ -533,10 +307,12 @@ func (c *client) initEndpoint(ctx context.Context, channel *Channel, endpoint *E
 		return 0, err
 	}
 
-	reply, err := clientv1.EndpointOpenHandler(ctx, channel, &protocolv1.EndpointOpen{
+	reply, err := clientv1.EndpointOpenHandler(ctx, channel, nil, &protocolv1.EndpointOpen{
 		Version: endpoint.version,
 		Service: protocolv1.ServiceName,
-	})
+	}, nil)
+
+	open := reply.(*protocolv1.EndpointOpenAck)
 
 	if err != nil {
 		version := clientv1.DetectSupportedVersion(err)
@@ -548,11 +324,11 @@ func (c *client) initEndpoint(ctx context.Context, channel *Channel, endpoint *E
 		endpoint.Ver = cast.ToInt32(version)
 	}
 
-	channel.SetEndpoint(endpoint.UUID, reply.EndpointId)
+	channel.SetEndpoint(endpoint.UUID, open.EndpointId)
 
 	// TODO init auth
 
-	return reply.EndpointId, nil
+	return open.EndpointId, nil
 }
 
 func (c *client) removeChannelWithLock(cn *Channel) {
@@ -611,6 +387,9 @@ func (c *client) applyOptions(opts ...GlobalOption) {
 		case dialFuncIdent{}:
 			c.dial = opt.Value().(DialFunc)
 			continue
+			// case interceptorsIdent{}:
+			// 	c.Interceptors = append(c.Interceptors, opt.Value().(Interceptor))
+			// 	continue
 		}
 		switch opt.(type) {
 		case EndpointOption:
@@ -718,7 +497,7 @@ func (c *client) initChannel(ctx context.Context, cn *Channel) error {
 		return nil
 	}
 
-	_, err := clientv1.NegotiateHandler(ctx, cn, protocolv1.NewNegotiateMessage())
+	_, err := clientv1.NegotiateHandler(ctx, cn, nil, protocolv1.NewNegotiateMessage(), nil)
 	if err != nil {
 		return err
 	}
@@ -737,13 +516,15 @@ func (c *client) initChannel(ctx context.Context, cn *Channel) error {
 		}
 	}
 
-	_, err = clientv1.ConnectHandler(ctx, cn, &protocolv1.ConnectMessage{
+	_, err = clientv1.ConnectHandler(ctx, cn, nil, &protocolv1.ConnectMessage{
 		Params: connectParam,
-	})
+	}, nil)
 
 	if err != nil {
 		return err
 	}
+
+	cn.inited = true
 
 	return nil
 
@@ -760,10 +541,10 @@ func (c *client) newChannel(pooled bool) (*Channel, error) {
 	c.channels = append(c.channels, cn)
 	if pooled {
 		// If pool is full remove the cn on next Put.
-		if c.poolSize >= c.poolSize {
+		if c.poolSizeLen >= c.poolSize {
 			cn.pooled = false
 		} else {
-			c.poolSize++
+			c.poolSizeLen++
 		}
 	}
 
@@ -897,11 +678,15 @@ func (c *client) isStaleChannel(cn *Channel) bool {
 	return false
 }
 
+func (c *client) getEndpointUUIDFromContext(ctx context.Context) string {
+	return ""
+}
+
 func newClient(addr string, opts ...GlobalOption) *client {
 	c := &client{
 		addr:               addr,
-		endpoints:          map[string]*Endpoint{},
-		endpointConfig:     map[string]*EndpointConfig{},
+		endpoints:          map[uuid.UUID]*Endpoint{},
+		endpointConfig:     map[uuid.UUID]*EndpointConfig{},
 		endpointOptions:    map[interface{}]EndpointOption{},
 		connectOptions:     map[interface{}]ConnectOption{},
 		dial:               defaultDial,
@@ -911,6 +696,7 @@ func newClient(addr string, opts ...GlobalOption) *client {
 		idleCheckFrequency: 5 * time.Minute,
 		maxChannelAge:      time.Hour,
 		minIdleChannels:    0,
+		idleChannelsLen:    0,
 	}
 
 	c.clientService = clientv1.NewClientService(c)
@@ -926,8 +712,8 @@ func newClient(addr string, opts ...GlobalOption) *client {
 
 	c.queue = make(chan struct{}, c.poolSize)
 
-	c.idleChannels = make([]*Channel, c.poolSize)
-	c.channels = make([]*Channel, c.poolSize)
+	c.idleChannels = make([]*Channel, c.minIdleChannels)
+	c.channels = make([]*Channel, 0, c.poolSize)
 
 	c.channelsMu.Lock()
 	c.checkMinIdleChannels()

@@ -2,6 +2,8 @@ package client
 
 import (
 	"context"
+	"fmt"
+	uuid2 "github.com/google/uuid"
 	"github.com/lestrrat-go/option"
 )
 
@@ -20,16 +22,25 @@ func (*requestOption) endpointOption() {}
 func (*requestOption) globalOption()   {}
 
 type endpointIdent struct{}
-type getEndpointFromContextIdent struct{}
+type interceptorsIdent struct{}
 
 func newRequestOption(n interface{}, v interface{}) RequestOption {
 	return &requestOption{option.New(n, v)}
 }
 
-func EndpointUUID(uuid string) RequestOption {
+func EndpointUUID(uuid func(ctx context.Context) (uuid2.UUID, bool)) RequestOption {
 	return newRequestOption(endpointIdent{}, uuid)
 }
 
-func GetEndpoint(f func(ctx context.Context) string) RequestOption {
-	return newRequestOption(getEndpointFromContextIdent{}, f)
+func RequestInterceptor(interceptor ...Interceptor) RequestOption {
+
+	if len(interceptor) == 0 {
+		panic(fmt.Errorf("need 1 or more intercentors"))
+	}
+	if len(interceptor) > 1 {
+		return newRequestOption(interceptorsIdent{}, ChainInterceptor(interceptor...))
+	}
+
+	return newRequestOption(interceptorsIdent{}, interceptor[0])
+
 }
