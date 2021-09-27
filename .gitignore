@@ -5,6 +5,7 @@
 
 dist
 .idea
-pudgedb
+
 *.logs
 
+/pudgedb/
