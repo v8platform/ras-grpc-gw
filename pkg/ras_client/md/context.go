@@ -24,6 +24,17 @@ func annotateContext(ctx context.Context, metadataAnnotators []AnnotationHandler
 
 	var pairs []string
 
+	type getClusterId interface {
+		GetClusterID() string
+	}
+
+	if tReq, ok := req.(getClusterId); ok {
+		clusterId := tReq.GetClusterID()
+		if len(clusterId) > 0 {
+			pairs = append(pairs, "cluster-id", clusterId)
+		}
+	}
+
 	// timeout := DefaultContextTimeout
 	// if tm := req.Header.Get(metadataGrpcTimeout); tm != "" {
 	// 	var err error

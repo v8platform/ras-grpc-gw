@@ -250,8 +250,6 @@ func (c *client) initEndpoint(ctx context.Context, channel *Channel, endpoint *E
 
 	channel.SetEndpoint(endpoint.UUID, open.EndpointId)
 
-	// TODO init auth
-
 	return open.EndpointId, nil
 }
 

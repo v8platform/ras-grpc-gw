@@ -18,6 +18,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
+	"os"
 	"strings"
 )
 
@@ -99,6 +100,10 @@ func setClusterAuthInterceptor() client2.Interceptor {
 			clusterId = tReq.GetClusterID()
 		}
 
+		if !(reqMd.Has("cluster-user") && reqMd.Has("cluster-password")) {
+			return handler(ctx, channel, endpoint, req)
+		}
+
 		user := reqMd.Get("cluster-user")
 		password := reqMd.Get("cluster-password")
 
@@ -142,8 +147,16 @@ func setInfobaseAuthInterceptor() client2.Interceptor {
 			clusterId = tReq.GetClusterID()
 		}
 
-		user := reqMd.Get("infobase-user")
-		password := reqMd.Get("infobase-password")
+		if !(reqMd.Has("infobase-user") && reqMd.Has("infobase-password")) {
+			return handler(ctx, channel, endpoint, req)
+		}
+
+		// user := reqMd.Get("infobase-user")
+		// password := reqMd.Get("infobase-password")
+
+		// TODO Для тестов
+		user := os.Getenv("IB_USER")
+		password := os.Getenv("IB_PWD")
 
 		_, err := clientv1.AuthenticateInfobaseHandler(ctx, channel, endpoint, &messagesv1.AuthenticateInfobaseRequest{
 			ClusterId: clusterId,
@@ -175,6 +188,8 @@ func SetClusterIDToRequestInterceptor() client2.Interceptor {
 		case *messagesv1.GetSessionsRequest:
 			tReq.ClusterId = clusterId
 		case *messagesv1.GetInfobaseInfoRequest:
+			tReq.ClusterId = clusterId
+		case *messagesv1.GetWorkingServersRequest:
 			tReq.ClusterId = clusterId
 		}
 
@@ -231,10 +246,9 @@ func AnnotateRequestMetadata(_ *service.Services) md.AnnotationHandler {
 						}
 					}
 
-					if len(username) > 0 {
-						pairs = append(pairs, "cluster-user", username)
-						pairs = append(pairs, "cluster-password", password)
-					}
+					pairs = append(pairs, "cluster-user", username)
+					pairs = append(pairs, "cluster-password", password)
+
 				case "infobase-auth":
 					var username, password string
 
@@ -249,10 +263,9 @@ func AnnotateRequestMetadata(_ *service.Services) md.AnnotationHandler {
 						}
 					}
 
-					if len(username) > 0 {
-						pairs = append(pairs, "infobase-user", username)
-						pairs = append(pairs, "infobase-password", password)
-					}
+					pairs = append(pairs, "infobase-user", username)
+					pairs = append(pairs, "infobase-password", password)
+
 				}
 			}
 
@@ -279,7 +292,7 @@ func parseBasicAuth(auth string) (username, password string, ok bool) {
 	return cs[:s], cs[s+1:], true
 }
 
-func getEndpointFunc(services *service.Services) grpc.UnaryServerInterceptor {
+func getEndpointFunc(_ *service.Services) grpc.UnaryServerInterceptor {
 
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 
