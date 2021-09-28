@@ -5,6 +5,7 @@ import (
 	"fmt"
 	uuid2 "github.com/google/uuid"
 	"github.com/lestrrat-go/option"
+	"time"
 )
 
 type RequestOption interface {
@@ -23,6 +24,7 @@ func (*requestOption) globalOption()   {}
 
 type endpointIdent struct{}
 type interceptorsIdent struct{}
+type requestTimeoutIdent struct{}
 
 func newRequestOption(n interface{}, v interface{}) RequestOption {
 	return &requestOption{option.New(n, v)}
@@ -30,6 +32,12 @@ func newRequestOption(n interface{}, v interface{}) RequestOption {
 
 func EndpointUUID(uuid func(ctx context.Context) (uuid2.UUID, bool)) RequestOption {
 	return newRequestOption(endpointIdent{}, uuid)
+}
+
+func RequestTimeout(d time.Duration) RequestOption {
+
+	return newRequestOption(requestTimeoutIdent{}, d)
+
 }
 
 func RequestInterceptor(interceptor ...Interceptor) RequestOption {

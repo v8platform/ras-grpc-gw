@@ -22,6 +22,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 )
 
 // nolint: gochecknoglobals
@@ -105,7 +106,14 @@ func main() {
 					}
 					return uuid.MustParse(uuidStr), true
 				}),
-				client2.RequestInterceptor(grpc_v1.SendEndpointID),
+				client2.AnnotateContext(grpc_v1.AnnotateRequestMetadata(services)),
+				client2.RequestTimeout(60*time.Second),
+				client2.RequestInterceptor(
+					grpc_v1.SendEndpointID,
+					grpc_v1.ClusterAuthInterceptor(),
+					grpc_v1.InfobaseAuthInterceptor(),
+					grpc_v1.SetClusterIDToRequestInterceptor(),
+				),
 			)
 
 			gRPCServiceRegisterFunc, reverseProxyRegisterFunc := grpc_v1.RegisterServerServices(services, client)

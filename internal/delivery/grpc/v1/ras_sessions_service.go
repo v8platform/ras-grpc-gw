@@ -1,41 +1,35 @@
 package v1
 
-//
-// import (
-// 	"context"
-// 	clientv1 "github.com/v8platform/protos/gen/ras/client/v1"
-// 	v1 "github.com/v8platform/protos/gen/ras/messages/v1"
-// 	"github.com/v8platform/ras-grpc-gw/internal/service"
-// 	apiv1 "github.com/v8platform/ras-grpc-gw/pkg/gen/service/api/v1"
-// )
-//
-// type rasSessionsServiceServer struct {
-// 	apiv1.UnimplementedSessionsServiceServer
-// 	services *service.Services
-// 	clients  Client
-// }
-//
-// func (r rasSessionsServiceServer) GetSessions(ctx context.Context, request *v1.GetSessionsRequest) (*v1.GetSessionsResponse, error) {
-// 	endpoint, err := r.clients.GetEndpoint(ctx)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	s := clientv1.NewSessionsService(endpoint)
-// 	return s.GetSessions(ctx, request)
-// }
-//
-// func (r rasSessionsServiceServer) GetInfobaseSessions(ctx context.Context, request *v1.GetInfobaseSessionsRequest) (*v1.GetInfobaseSessionsResponse, error) {
-// 	endpoint, err := r.clients.GetEndpoint(ctx)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	s := clientv1.NewInfobasesService(endpoint)
-// 	return s.GetSessions(ctx, request)
-// }
-//
-// func NewSessionsServiceServer(services *service.Services, clients Client) apiv1.SessionsServiceServer {
-// 	return &rasSessionsServiceServer{
-// 		services: services,
-// 		clients:  clients,
-// 	}
-// }
+import (
+	"context"
+	v1 "github.com/v8platform/protos/gen/ras/messages/v1"
+	"github.com/v8platform/ras-grpc-gw/internal/service"
+	apiv1 "github.com/v8platform/ras-grpc-gw/pkg/gen/service/api/v1"
+	client "github.com/v8platform/ras-grpc-gw/pkg/ras_client"
+	"google.golang.org/protobuf/types/known/emptypb"
+)
+
+type rasSessionsServiceServer struct {
+	apiv1.UnimplementedSessionsServer
+	services *service.Services
+	cc       client.Client
+}
+
+func (r rasSessionsServiceServer) GetSessions(ctx context.Context, request *v1.GetSessionsRequest) (*v1.GetSessionsResponse, error) {
+	return r.cc.GetSessions(ctx, request)
+}
+
+func (r rasSessionsServiceServer) GetInfobaseSessions(ctx context.Context, request *v1.GetInfobaseSessionsRequest) (*v1.GetInfobaseSessionsResponse, error) {
+	return r.cc.GetInfobaseSessions(ctx, request)
+}
+
+func (r rasSessionsServiceServer) TerminateSession(ctx context.Context, request *v1.TerminateSessionRequest) (*emptypb.Empty, error) {
+	return r.cc.TerminateSession(ctx, request)
+}
+
+func NewSessionsServiceServer(services *service.Services, cc client.Client) apiv1.SessionsServer {
+	return &rasSessionsServiceServer{
+		services: services,
+		cc:       cc,
+	}
+}

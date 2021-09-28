@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/cast"
 	clientv1 "github.com/v8platform/protos/gen/ras/client/v1"
 	protocolv1 "github.com/v8platform/protos/gen/ras/protocol/v1"
+	"github.com/v8platform/ras-grpc-gw/pkg/ras_client/md"
 	"net"
 	"sync"
 	"sync/atomic"
@@ -83,11 +84,11 @@ type client struct {
 	mu      sync.Mutex
 	_closed uint32 // atomic
 
-	endpoints      map[uuid.UUID]*Endpoint
-	Interceptors   []Interceptor
-	endpointConfig map[uuid.UUID]*EndpointConfig
-
-	clientService clientv1.ClientService
+	endpoints          map[uuid.UUID]*Endpoint
+	Interceptors       []Interceptor
+	endpointConfig     map[uuid.UUID]*EndpointConfig
+	metadataAnnotators []md.AnnotationHandler
+	clientService      clientv1.ClientService
 
 	stats Stats
 
@@ -98,88 +99,6 @@ type client struct {
 	clientv1.InfobasesService
 	clientv1.LocksService
 	clientv1.SessionsService
-}
-
-func (c *client) Invoke(ctx context.Context, needEndpoint bool, req interface{}, handler clientv1.InvokeHandler, opts ...interface{}) (reply interface{}, err error) {
-
-	var (
-		channel         *Channel
-		channelEndpoint *ChannelEndpoint
-		interceptor     Interceptor
-		endpointUUID    uuid.UUID
-	)
-
-	requestOptions := combine(c.endpointOptions, opts)
-
-	for _, option := range requestOptions {
-		switch option.Ident() {
-		case endpointIdent{}:
-			getEndpoint := option.Value().(func(context.Context) (uuid.UUID, bool))
-			endpointUUID, _ = getEndpoint(ctx)
-		case interceptorsIdent{}:
-			interceptor = option.Value().(Interceptor)
-		}
-	}
-
-	channel = ChannelFromContext(ctx)
-
-	if channel == nil {
-		channel, err = c.getChannel(ctx)
-		if err != nil {
-			return nil, err
-		}
-		defer c.putChannel(ctx, channel)
-		ctx = ChannelToContext(ctx, channel)
-	}
-
-	if needEndpoint {
-		idxEndpoints := channel.Endpoints()
-
-		channelEndpoint = EndpointFromContext(ctx)
-		if channelEndpoint != nil {
-			if len(idxEndpoints) > 0 {
-				id, ok := idxEndpoints[channelEndpoint.UUID]
-				if !(ok || id == channelEndpoint.ID) {
-					return nil, ErrNotChannelEndpoint
-				}
-			}
-		} else {
-
-			endpoint, ok := c.endpoints[endpointUUID]
-			if !ok {
-				if endpointUUID == uuid.Nil {
-					endpointUUID = uuid.New()
-				}
-
-				endpoint = &Endpoint{
-					UUID:    endpointUUID,
-					Ver:     10,
-					version: "10.0",
-				}
-
-				c.endpoints[endpointUUID] = endpoint
-				c.endpointConfig[endpointUUID] = &EndpointConfig{}
-
-			}
-
-			id, err := c.initEndpoint(ctx, channel, endpoint)
-			if err != nil {
-				return nil, err
-			}
-			channelEndpoint = &ChannelEndpoint{
-				UUID:    endpointUUID,
-				ID:      id,
-				Version: endpoint.Ver,
-			}
-			ctx = EndpointToContext(ctx, channelEndpoint)
-		}
-	}
-
-	if len(c.Interceptors) > 0 {
-		interceptor = ChainInterceptor(ChainInterceptor(c.Interceptors...), interceptor)
-	}
-
-	return handler(ctx, channel, channelEndpoint, req, clientv1.Interceptor(interceptor))
 }
 
 func (c *client) CloseChannel(channel *Channel) error {
@@ -196,11 +115,16 @@ func (c *client) putChannel(ctx context.Context, channel *Channel) {
 		return
 	}
 
-	c.channelsMu.Lock()
-	c.idleChannels = append(c.idleChannels, channel)
-	c.idleChannelsLen++
-	c.channelsMu.Unlock()
-	c.freeTurn()
+	go func() {
+		channel.recvWg.Wait()
+
+		c.channelsMu.Lock()
+		c.idleChannels = append(c.idleChannels, channel)
+		c.idleChannelsLen++
+		c.channelsMu.Unlock()
+		c.freeTurn()
+	}()
+
 }
 
 func (c *client) RemoveChannel(ctx context.Context, cn *Channel) {
@@ -387,9 +311,9 @@ func (c *client) applyOptions(opts ...GlobalOption) {
 		case dialFuncIdent{}:
 			c.dial = opt.Value().(DialFunc)
 			continue
-			// case interceptorsIdent{}:
-			// 	c.Interceptors = append(c.Interceptors, opt.Value().(Interceptor))
-			// 	continue
+		case contextAnnotatorIdent{}:
+			c.metadataAnnotators = append(c.metadataAnnotators, opt.Value().(md.AnnotationHandler))
+			continue
 		}
 		switch opt.(type) {
 		case EndpointOption:

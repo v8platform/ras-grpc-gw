@@ -18,11 +18,13 @@ func RegisterServerServices(services *service.Services, client client.Client) (f
 	// Auth := NewAuthServiceServer(services, clientsStorage)
 	clusters := NewClustersServiceServer(services, client)
 	infobases := NewInfobasesServiceServer(services, client)
+	sessions := NewSessionsServiceServer(services, client)
 	return func(server *grpc.Server) {
 			// apiv1.RegisterUsersServiceServer(server, users)
 			// apiv1.RegisterApplicationsServiceServer(server, NewApplicationsServerService(services))
 			apiv1.RegisterClustersServer(server, clusters)
 			apiv1.RegisterInfobasesServer(server, infobases)
+			apiv1.RegisterSessionsServer(server, sessions)
 			// apiv1.RegisterAuthServiceServer(server, NewAuthServiceServer(services, clientsStorage))
 			// apiv1.RegisterSessionsServiceServer(server, NewSessionsServiceServer(services, clientsStorage))
 		},

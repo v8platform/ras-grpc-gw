@@ -5,6 +5,7 @@ import (
 	"github.com/elastic/go-ucfg"
 	"github.com/lestrrat-go/option"
 	protocolv1 "github.com/v8platform/protos/gen/ras/protocol/v1"
+	"github.com/v8platform/ras-grpc-gw/pkg/ras_client/md"
 	"reflect"
 	"time"
 )
@@ -67,6 +68,7 @@ func newGlobalOption(n interface{}, v interface{}) GlobalOption {
 type dialFuncIdent struct{}
 type configIdent struct{}
 type configFromIdent struct{}
+type contextAnnotatorIdent struct{}
 
 func Dial(dialFunc DialFunc) GlobalOption {
 	return newGlobalOption(dialFuncIdent{}, dialFunc)
@@ -77,6 +79,10 @@ func WithConfig(config Config) GlobalOption {
 }
 func ConfigFrom(cfg *ucfg.Config) GlobalOption {
 	return newGlobalOption(configFromIdent{}, cfg)
+}
+
+func AnnotateContext(handler md.AnnotationHandler) GlobalOption {
+	return newGlobalOption(contextAnnotatorIdent{}, handler)
 }
 
 func combine(opts1 interface{}, o2 []interface{}) []Option {

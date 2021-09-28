@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/google/uuid"
 	clientv1 "github.com/v8platform/protos/gen/ras/client/v1"
+	protocolv1 "github.com/v8platform/protos/gen/ras/protocol/v1"
 	"io"
 	"net"
 	"reflect"
@@ -38,6 +39,11 @@ type Channel struct {
 	inited    bool
 
 	idxEndpoint map[uuid.UUID]int32
+
+	recvLen int
+	recvMsg []interface{}
+
+	recvWg sync.WaitGroup
 }
 
 func (c *Channel) Close() error {
@@ -146,7 +152,8 @@ func (c *Channel) SendMsg(ctx context.Context, msg interface{}, opts ...interfac
 	return nil
 }
 
-func (c *Channel) RecvMsg(ctx context.Context, msg interface{}, opts ...interface{}) error {
+func (c *Channel) SendPacket(ctx context.Context, msg *protocolv1.Packet) error {
+	// TODO Прочитать опции канала?
 
 	select {
 	case <-ctx.Done():
@@ -158,32 +165,77 @@ func (c *Channel) RecvMsg(ctx context.Context, msg interface{}, opts ...interfac
 	defer func() { c.SetUsedAt(time.Now()) }()
 	defer c.Unlock()
 
-	timeout := 3 * time.Second
+	writeTimeout := 3 * time.Second
 
-	switch m := msg.(type) {
-	case io.ReaderFrom:
-
-		if err := c.conn.SetReadDeadline(time.Now().Add(timeout)); err != nil {
-			return err
-		}
-		_, err := m.ReadFrom(c.conn)
-		if err != nil {
-			return err
-		}
-
-	case []byte:
-		if err := c.conn.SetReadDeadline(time.Now().Add(timeout)); err != nil {
-			return err
-		}
-		_, err := c.conn.Read(m)
-		if err != nil {
-			return err
-		}
-	default:
-		return fmt.Errorf("unknown msg type %s", reflect.TypeOf(msg))
+	if err := c.conn.SetWriteDeadline(time.Now().Add(writeTimeout)); err != nil {
+		return err
+	}
+	_, err := msg.WriteTo(c.conn)
+	if err != nil {
+		return err
 	}
 
 	return nil
+}
+
+func (c *Channel) recv(msg *protocolv1.Packet, err error) chan struct{} {
+
+	done := make(chan struct{})
+	c.recvWg.Add(1)
+
+	go func() {
+
+		defer close(done)
+		defer c.recvWg.Done()
+
+		_, err = msg.ReadFrom(c.conn)
+
+	}()
+
+	return done
+}
+
+func (c *Channel) RecvPacket(ctx context.Context) (msg *protocolv1.Packet, err error) {
+
+	c.Lock()
+	defer func() { c.SetUsedAt(time.Now()) }()
+	defer c.Unlock()
+
+	msg = new(protocolv1.Packet)
+	done := c.recv(msg, err)
+
+	select {
+	case <-done:
+		if err != nil {
+			return nil, err
+		}
+		return msg, nil
+	case <-ctx.Done():
+		// TODO
+		return nil, ctx.Err()
+	}
+}
+
+func (c *Channel) RecvMsg(ctx context.Context, msg interface{}, opts ...interface{}) (err error) {
+
+	c.Lock()
+	defer func() { c.SetUsedAt(time.Now()) }()
+	defer c.Unlock()
+
+	packet := msg.(*protocolv1.Packet)
+
+	done := c.recv(packet, err)
+
+	select {
+	case <-done:
+		if err != nil {
+			return err
+		}
+		return nil
+	case <-ctx.Done():
+		// TODO
+		return ctx.Err()
+	}
 }
 
 func (c *Channel) CreatedAt() time.Time {
