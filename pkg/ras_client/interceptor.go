@@ -7,11 +7,24 @@ import (
 	messagesv1 "github.com/v8platform/protos/gen/ras/messages/v1"
 	"github.com/v8platform/ras-grpc-gw/pkg/ras_client/cond"
 	"github.com/v8platform/ras-grpc-gw/pkg/ras_client/md"
-	"os"
+	"log"
+	"reflect"
 )
 
 type Interceptor clientv1.Interceptor
 type InterceptorHandler clientv1.InterceptorHandler
+
+const (
+	InfobaseUserKeys = "infobase-user"
+	InfobasePwdKeys  = "infobase-password infobase-pwd"
+)
+
+const (
+	OverwriteClusterIdKey = "overwrite-cluster-id"
+	ClusterIdKeys         = OverwriteClusterIdKey + " cluster-id"
+	ClusterUserKeys       = "cluster-user"
+	ClusterPwdKeys        = "cluster-password cluster-pwd"
+)
 
 func ChainInterceptor(interceptors ...Interceptor) Interceptor {
 	n := len(interceptors)
@@ -31,47 +44,59 @@ func ChainInterceptor(interceptors ...Interceptor) Interceptor {
 		return chainedHandler(ctx, channel, endpoint, req)
 	}
 }
+func OverwriteClusterIdInterceptor() Interceptor {
+	return overwriteClusterIdInterceptor
+}
+func AddInfobaseAuthInterceptor() Interceptor {
+	return addInfobaseAuthInterceptor
+}
 
-func SetClusterIDToRequestInterceptor() Interceptor {
-	return func(ctx context.Context, channel clientv1.Channel, endpoint clientv1.Endpoint, info *clientv1.RequestInfo, req interface{}, handler clientv1.InterceptorHandler) (interface{}, error) {
-		reqMd := md.ExtractMetadata(ctx)
-		clusterId := reqMd.Get("cluster-id")
-		if len(clusterId) == 0 {
-			return handler(ctx, channel, endpoint, req)
-		}
+func AddClusterAuthInterceptor() Interceptor {
+	return addClusterAuthInterceptor
+}
 
-		switch tReq := req.(type) {
-		case *messagesv1.GetInfobasesSummaryRequest:
-			tReq.ClusterId = clusterId
-		case *messagesv1.GetInfobasesRequest:
-			tReq.ClusterId = clusterId
-		case *messagesv1.GetSessionsRequest:
-			tReq.ClusterId = clusterId
-		case *messagesv1.GetInfobaseInfoRequest:
-			tReq.ClusterId = clusterId
-		case *messagesv1.GetWorkingServersRequest:
-			tReq.ClusterId = clusterId
-		}
+func overwriteClusterIdInterceptor(ctx context.Context, channel clientv1.Channel,
+	endpoint clientv1.Endpoint, info *clientv1.RequestInfo,
+	req interface{}, handler clientv1.InterceptorHandler) (interface{}, error) {
 
+	condition := cond.And{
+		IsEndpointRequest,
+		HasMdValues(OverwriteClusterIdKey),
+		HasClusterId,
+	}
+
+	next := func() (interface{}, error) {
 		return handler(ctx, channel, endpoint, req)
 	}
+
+	if condition.IsFalse(ctx, endpoint, info, req) {
+		return next()
+	}
+
+	reqMd := md.ExtractMetadata(ctx)
+	clusterId := reqMd.Get(OverwriteClusterIdKey)
+
+	rValue := reflect.ValueOf(req)
+
+	rValue.FieldByName("ClusterId").SetString(clusterId)
+
+	return handler(ctx, channel, endpoint, req)
 }
 
-func InfobaseAuthInterceptor() Interceptor {
-	return cond.And{
-		cond.Cond(HasClusterId),
-		cond.Cond(IsEndpointRequest),
-	}.Handler(infobaseAuthInterceptor)
-}
+func addClusterAuthInterceptor(ctx context.Context, channel clientv1.Channel, endpoint clientv1.Endpoint, info *clientv1.RequestInfo, req interface{}, handler clientv1.InterceptorHandler) (interface{}, error) {
 
-func infobaseAuthInterceptor(ctx context.Context, channel clientv1.Channel, endpoint clientv1.Endpoint, info *clientv1.RequestInfo, req interface{}, handler clientv1.InterceptorHandler) (interface{}, error) {
+	condition := cond.And{
+		IsEndpointRequest,
+		HasMdValues(ClusterUserKeys, ClusterPwdKeys),
+		NeedClusterAuth,
+	}
 
-	if cond.Condition(
-		cond.And{
-			cond.Cond(HasClusterId),
-			cond.Cond(IsEndpointRequest),
-		}, endpoint, info, req) {
+	next := func() (interface{}, error) {
 		return handler(ctx, channel, endpoint, req)
+	}
+
+	if condition.IsFalse(ctx, endpoint, info, req) {
+		return next()
 	}
 
 	type getClusterId interface {
@@ -79,23 +104,72 @@ func infobaseAuthInterceptor(ctx context.Context, channel clientv1.Channel, endp
 	}
 
 	reqMd := md.ExtractMetadata(ctx)
-	clusterId := reqMd.Get("cluster-id")
+	clusterId := reqMd.Get(ClusterIdKeys)
 
 	if len(clusterId) == 0 {
 		tReq := req.(getClusterId)
 		clusterId = tReq.GetClusterID()
 	}
 
-	if !(reqMd.Has("infobase-user") && reqMd.Has("infobase-password")) {
+	if len(clusterId) == 0 {
+		log.Printf("can`t add cluster auth before request <%s> cluster is not set\n", reflect.TypeOf(req))
+		return next()
+	}
+
+	_, err := clientv1.AuthenticateClusterHandler(ctx, channel, endpoint, &messagesv1.ClusterAuthenticateRequest{
+		ClusterId: clusterId,
+		User:      reqMd.Get(ClusterUserKeys),
+		Password:  reqMd.Get(ClusterPwdKeys),
+	}, nil)
+
+	if err != nil {
+		log.Println(err)
+	}
+
+	return handler(ctx, channel, endpoint, req)
+
+}
+
+func addInfobaseAuthInterceptor(ctx context.Context, channel clientv1.Channel,
+	endpoint clientv1.Endpoint, info *clientv1.RequestInfo,
+	req interface{}, handler clientv1.InterceptorHandler) (interface{}, error) {
+
+	condition := cond.And{
+		IsEndpointRequest,
+		HasMdValues(InfobaseUserKeys, InfobasePwdKeys),
+		NeedInfobaseAuth,
+	}
+
+	next := func() (interface{}, error) {
 		return handler(ctx, channel, endpoint, req)
 	}
 
-	// user := reqMd.Get("infobase-user")
-	// password := reqMd.Get("infobase-password")
+	if condition.IsFalse(ctx, endpoint, info, req) {
+		return next()
+	}
+
+	type getClusterId interface {
+		GetClusterID() string
+	}
+
+	reqMd := md.ExtractMetadata(ctx)
+
+	clusterId := reqMd.Get(ClusterIdKeys)
+	if len(clusterId) == 0 {
+		tReq := req.(getClusterId)
+		clusterId = tReq.GetClusterID()
+	}
+	if len(clusterId) == 0 {
+		log.Printf("can`t add infobase auth before request <%s> cluster is not set\n", reflect.TypeOf(req))
+		return next()
+	}
+
+	user := reqMd.Get(InfobaseUserKeys)
+	password := reqMd.Get(InfobasePwdKeys)
 
 	// TODO Для тестов
-	user := os.Getenv("IB_USER")
-	password := os.Getenv("IB_PWD")
+	//user := os.Getenv("IB_USER")
+	//password := os.Getenv("IB_PWD")
 
 	_, err := clientv1.AuthenticateInfobaseHandler(ctx, channel, endpoint, &messagesv1.AuthenticateInfobaseRequest{
 		ClusterId: clusterId,
@@ -107,5 +181,5 @@ func infobaseAuthInterceptor(ctx context.Context, channel clientv1.Channel, endp
 		fmt.Println(err)
 	}
 
-	return handler(ctx, channel, endpoint, req)
+	return next()
 }

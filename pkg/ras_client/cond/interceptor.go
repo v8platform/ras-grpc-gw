@@ -6,25 +6,38 @@ import (
 	client "github.com/v8platform/ras-grpc-gw/pkg/ras_client"
 )
 
-type Cond func(endpoint clientv1.Endpoint, info *clientv1.RequestInfo, req interface{}) bool
+type Func func(ctx context.Context, endpoint clientv1.Endpoint, info *clientv1.RequestInfo, req interface{}) bool
 
-func (fn Cond) Condition(endpoint clientv1.Endpoint, info *clientv1.RequestInfo, req interface{}) bool {
-	return fn(endpoint, info, req)
+func (f Func) check(ctx context.Context, endpoint clientv1.Endpoint, info *clientv1.RequestInfo, req interface{}) bool {
+	return f(ctx, endpoint, info, req)
 }
-func (fn Cond) Handler(interceptor ...client.Interceptor) client.Interceptor {
-	return build(fn, interceptor...)
+func (f Func) Handler(interceptor ...client.Interceptor) client.Interceptor {
+	return build(f, interceptor...)
+}
+func (f Func) IsFalse(ctx context.Context, endpoint clientv1.Endpoint, info *clientv1.RequestInfo, req interface{}) bool {
+	return !f.check(ctx, endpoint, info, req)
+}
+
+func (f Func) IsTrue(ctx context.Context, endpoint clientv1.Endpoint, info *clientv1.RequestInfo, req interface{}) bool {
+	return f.check(ctx, endpoint, info, req)
+}
+
+type checkCond interface {
+	check(ctx context.Context, endpoint clientv1.Endpoint, info *clientv1.RequestInfo, req interface{}) bool
 }
 
 type cond interface {
+	checkCond
 	Handler(interceptor ...client.Interceptor) client.Interceptor
-	Condition(endpoint clientv1.Endpoint, info *clientv1.RequestInfo, req interface{}) bool
+	IsTrue(ctx context.Context, endpoint clientv1.Endpoint, info *clientv1.RequestInfo, req interface{}) bool
+	IsFalse(ctx context.Context, endpoint clientv1.Endpoint, info *clientv1.RequestInfo, req interface{}) bool
 }
 
 type Or []cond
 
-func (c Or) Condition(endpoint clientv1.Endpoint, info *clientv1.RequestInfo, req interface{}) bool {
+func (c Or) check(ctx context.Context, endpoint clientv1.Endpoint, info *clientv1.RequestInfo, req interface{}) bool {
 	for _, cond := range c {
-		if cond.Condition(endpoint, info, req) {
+		if cond.check(ctx, endpoint, info, req) {
 			return true
 		}
 	}
@@ -35,11 +48,19 @@ func (c Or) Handler(interceptor ...client.Interceptor) client.Interceptor {
 	return build(c, interceptor...)
 }
 
+func (c Or) IsFalse(ctx context.Context, endpoint clientv1.Endpoint, info *clientv1.RequestInfo, req interface{}) bool {
+	return !c.check(ctx, endpoint, info, req)
+}
+
+func (c Or) IsTrue(ctx context.Context, endpoint clientv1.Endpoint, info *clientv1.RequestInfo, req interface{}) bool {
+	return c.check(ctx, endpoint, info, req)
+}
+
 type Xor []cond
 
-func (c Xor) Condition(endpoint clientv1.Endpoint, info *clientv1.RequestInfo, req interface{}) bool {
+func (c Xor) check(ctx context.Context, endpoint clientv1.Endpoint, info *clientv1.RequestInfo, req interface{}) bool {
 	for _, cond := range c {
-		if cond.Condition(endpoint, info, req) {
+		if cond.check(ctx, endpoint, info, req) {
 			return false
 		}
 	}
@@ -49,25 +70,40 @@ func (c Xor) Handler(interceptor ...client.Interceptor) client.Interceptor {
 	return build(c, interceptor...)
 }
 
+func (c Xor) IsFalse(ctx context.Context, endpoint clientv1.Endpoint, info *clientv1.RequestInfo, req interface{}) bool {
+	return !c.check(ctx, endpoint, info, req)
+}
+func (c Xor) IsTrue(ctx context.Context, endpoint clientv1.Endpoint, info *clientv1.RequestInfo, req interface{}) bool {
+	return c.check(ctx, endpoint, info, req)
+}
+
 type Not [1]cond
 
-func (c Not) Condition(endpoint clientv1.Endpoint, info *clientv1.RequestInfo, req interface{}) bool {
+func (c Not) check(ctx context.Context, endpoint clientv1.Endpoint, info *clientv1.RequestInfo, req interface{}) bool {
 	for _, cond := range c {
-		if cond.Condition(endpoint, info, req) {
+		if cond.check(ctx, endpoint, info, req) {
 			return false
 		}
 	}
 	return true
 }
+
 func (c Not) Handler(interceptor ...client.Interceptor) client.Interceptor {
 	return build(c, interceptor...)
 }
 
+func (c Not) IsFalse(ctx context.Context, endpoint clientv1.Endpoint, info *clientv1.RequestInfo, req interface{}) bool {
+	return !c.check(ctx, endpoint, info, req)
+}
+func (c Not) IsTrue(ctx context.Context, endpoint clientv1.Endpoint, info *clientv1.RequestInfo, req interface{}) bool {
+	return c.check(ctx, endpoint, info, req)
+}
+
 type And []cond
 
-func (c And) Condition(endpoint clientv1.Endpoint, info *clientv1.RequestInfo, req interface{}) bool {
+func (c And) check(ctx context.Context, endpoint clientv1.Endpoint, info *clientv1.RequestInfo, req interface{}) bool {
 	for _, cond := range c {
-		if !cond.Condition(endpoint, info, req) {
+		if !cond.check(ctx, endpoint, info, req) {
 			return false
 		}
 	}
@@ -78,11 +114,18 @@ func (c And) Handler(interceptor ...client.Interceptor) client.Interceptor {
 	return build(c, interceptor...)
 }
 
+func (c And) IsFalse(ctx context.Context, endpoint clientv1.Endpoint, info *clientv1.RequestInfo, req interface{}) bool {
+	return !c.check(ctx, endpoint, info, req)
+}
+func (c And) IsTrue(ctx context.Context, endpoint clientv1.Endpoint, info *clientv1.RequestInfo, req interface{}) bool {
+	return c.check(ctx, endpoint, info, req)
+}
+
 func build(condition cond, interceptor ...client.Interceptor) client.Interceptor {
 	n := len(interceptor)
 
 	return func(ctx context.Context, channel clientv1.Channel, endpoint clientv1.Endpoint, info *clientv1.RequestInfo, req interface{}, handler clientv1.InterceptorHandler) (interface{}, error) {
-		if condition.Condition(endpoint, info, req) {
+		if condition.IsFalse(ctx, endpoint, info, req) {
 			return handler(ctx, channel, endpoint, req)
 		}
 		chainer := func(currentInter clientv1.Interceptor, currentHandler clientv1.InterceptorHandler) clientv1.InterceptorHandler {
@@ -98,14 +141,4 @@ func build(condition cond, interceptor ...client.Interceptor) client.Interceptor
 
 		return chainedHandler(ctx, channel, endpoint, req)
 	}
-}
-func Condition(condition cond, endpoint clientv1.Endpoint, info *clientv1.RequestInfo, req interface{}) bool {
-	return condition.Condition(endpoint, info, req)
-}
-
-func handler(condition cond, interceptor client.Interceptor, ctx context.Context, channel clientv1.Channel, endpoint clientv1.Endpoint, info *clientv1.RequestInfo, req interface{}, handler clientv1.InterceptorHandler) (interface{}, error) {
-	if condition.Condition(endpoint, info, req) {
-		return handler(ctx, channel, endpoint, req)
-	}
-	return interceptor(ctx, channel, endpoint, info, req, handler)
 }

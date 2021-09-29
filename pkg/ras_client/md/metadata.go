@@ -116,11 +116,30 @@ func (m RequestMetadata) RangeKey(key string, fn func(index int, val string) boo
 
 func (m RequestMetadata) Get(key string) string {
 	k := strings.ToLower(key)
+
+	if len(strings.Fields(key)) > 0 {
+		return m.getAny(key)
+	}
+
 	vv, ok := m[k]
 	if !ok {
 		return ""
 	}
 	return vv[0]
+}
+
+func (m RequestMetadata) getAny(key string) string {
+
+	ks := strings.Fields(key)
+	for _, k := range ks {
+		vv, ok := m[k]
+		if !ok {
+			continue
+		}
+		return vv[0]
+	}
+
+	return ""
 }
 
 func (m RequestMetadata) Has(key string) bool {

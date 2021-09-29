@@ -106,13 +106,14 @@ func main() {
 					}
 					return uuid.MustParse(uuidStr), true
 				}),
-				client2.AnnotateContext(grpc_v1.AnnotateRequestMetadata(services)),
+				client2.AnnotateContext(
+					client2.AnnotateRequestMetadataGrpc()),
 				client2.RequestTimeout(60*time.Second),
 				client2.RequestInterceptor(
+					client2.OverwriteClusterIdInterceptor(),
+					client2.AddClusterAuthInterceptor(),
+					client2.AddInfobaseAuthInterceptor(),
 					grpc_v1.SendEndpointID,
-					grpc_v1.ClusterAuthInterceptor(),
-					grpc_v1.InfobaseAuthInterceptor(),
-					grpc_v1.SetClusterIDToRequestInterceptor(),
 				),
 			)
 
