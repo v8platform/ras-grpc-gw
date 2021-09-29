@@ -2,31 +2,16 @@ package client
 
 import (
 	"context"
+	"fmt"
 	clientv1 "github.com/v8platform/protos/gen/ras/client/v1"
 	messagesv1 "github.com/v8platform/protos/gen/ras/messages/v1"
+	"github.com/v8platform/ras-grpc-gw/pkg/ras_client/cond"
+	"github.com/v8platform/ras-grpc-gw/pkg/ras_client/md"
+	"os"
 )
 
 type Interceptor clientv1.Interceptor
 type InterceptorHandler clientv1.InterceptorHandler
-
-type InterceptorCond struct {
-	Regexp   string
-	Requests []string
-	Services []string
-}
-
-func (c InterceptorCond) Cond(info *clientv1.RequestInfo) bool {
-	return false
-}
-
-func NewInterceptor(data InterceptorCond, h Interceptor) Interceptor {
-	return func(ctx context.Context, channel clientv1.Channel, endpoint clientv1.Endpoint, info *clientv1.RequestInfo, req interface{}, handler clientv1.InterceptorHandler) (interface{}, error) {
-		if data.Cond(info) {
-			return h(ctx, channel, endpoint, info, req, handler)
-		}
-		return handler(ctx, channel, endpoint, req)
-	}
-}
 
 func ChainInterceptor(interceptors ...Interceptor) Interceptor {
 	n := len(interceptors)
@@ -47,38 +32,80 @@ func ChainInterceptor(interceptors ...Interceptor) Interceptor {
 	}
 }
 
-func AuthInterceptor(service clientv1.AuthService) Interceptor {
-
-	return NewInterceptor(InterceptorCond{Requests: []string{"GetInfobase"}}, func(ctx context.Context, channel clientv1.Channel, endpoint clientv1.Endpoint, info *clientv1.RequestInfo, req interface{}, handler clientv1.InterceptorHandler) (interface{}, error) {
-
-		var (
-			hasAuth   bool
-			clusterId string
-		)
-
-		type GetCluster interface {
-			GetCluster() string
-		}
-
-		switch req.(type) {
-		case GetCluster:
-			clusterId = req.(GetCluster).GetCluster()
-		default:
+func SetClusterIDToRequestInterceptor() Interceptor {
+	return func(ctx context.Context, channel clientv1.Channel, endpoint clientv1.Endpoint, info *clientv1.RequestInfo, req interface{}, handler clientv1.InterceptorHandler) (interface{}, error) {
+		reqMd := md.ExtractMetadata(ctx)
+		clusterId := reqMd.Get("cluster-id")
+		if len(clusterId) == 0 {
 			return handler(ctx, channel, endpoint, req)
 		}
 
-		if hasAuth {
-			_, err := service.AuthenticateInfobase(ctx, &messagesv1.AuthenticateInfobaseRequest{
-				ClusterId: clusterId,
-				User:      "user",
-				Password:  "pwd",
-			})
-
-			if err != nil {
-				return nil, err
-			}
+		switch tReq := req.(type) {
+		case *messagesv1.GetInfobasesSummaryRequest:
+			tReq.ClusterId = clusterId
+		case *messagesv1.GetInfobasesRequest:
+			tReq.ClusterId = clusterId
+		case *messagesv1.GetSessionsRequest:
+			tReq.ClusterId = clusterId
+		case *messagesv1.GetInfobaseInfoRequest:
+			tReq.ClusterId = clusterId
+		case *messagesv1.GetWorkingServersRequest:
+			tReq.ClusterId = clusterId
 		}
 
 		return handler(ctx, channel, endpoint, req)
-	})
+	}
+}
+
+func InfobaseAuthInterceptor() Interceptor {
+	return cond.And{
+		cond.Cond(HasClusterId),
+		cond.Cond(IsEndpointRequest),
+	}.Handler(infobaseAuthInterceptor)
+}
+
+func infobaseAuthInterceptor(ctx context.Context, channel clientv1.Channel, endpoint clientv1.Endpoint, info *clientv1.RequestInfo, req interface{}, handler clientv1.InterceptorHandler) (interface{}, error) {
+
+	if cond.Condition(
+		cond.And{
+			cond.Cond(HasClusterId),
+			cond.Cond(IsEndpointRequest),
+		}, endpoint, info, req) {
+		return handler(ctx, channel, endpoint, req)
+	}
+
+	type getClusterId interface {
+		GetClusterID() string
+	}
+
+	reqMd := md.ExtractMetadata(ctx)
+	clusterId := reqMd.Get("cluster-id")
+
+	if len(clusterId) == 0 {
+		tReq := req.(getClusterId)
+		clusterId = tReq.GetClusterID()
+	}
+
+	if !(reqMd.Has("infobase-user") && reqMd.Has("infobase-password")) {
+		return handler(ctx, channel, endpoint, req)
+	}
+
+	// user := reqMd.Get("infobase-user")
+	// password := reqMd.Get("infobase-password")
+
+	// TODO Для тестов
+	user := os.Getenv("IB_USER")
+	password := os.Getenv("IB_PWD")
+
+	_, err := clientv1.AuthenticateInfobaseHandler(ctx, channel, endpoint, &messagesv1.AuthenticateInfobaseRequest{
+		ClusterId: clusterId,
+		User:      user,
+		Password:  password,
+	}, nil)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	return handler(ctx, channel, endpoint, req)
 }

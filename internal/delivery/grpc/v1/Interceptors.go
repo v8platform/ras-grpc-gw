@@ -12,7 +12,7 @@ import (
 	appCtx "github.com/v8platform/ras-grpc-gw/internal/context"
 	"github.com/v8platform/ras-grpc-gw/internal/service"
 	client2 "github.com/v8platform/ras-grpc-gw/pkg/ras_client"
-	"github.com/v8platform/ras-grpc-gw/pkg/ras_client/interceptor"
+	"github.com/v8platform/ras-grpc-gw/pkg/ras_client/cond"
 	"github.com/v8platform/ras-grpc-gw/pkg/ras_client/md"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -76,10 +76,10 @@ func SendEndpointID(ctx context.Context, channel clientv1.Channel, endpoint clie
 
 func ClusterAuthInterceptor() client2.Interceptor {
 
-	return interceptor.New(
-		interceptor.AND(
-			interceptor.GetClusterId,
-			interceptor.IsEndpoint,
+	return cond.New(
+		cond.AND(
+			cond.GetClusterId,
+			cond.IsEndpoint,
 		),
 		setClusterAuthInterceptor(),
 	)
@@ -123,10 +123,10 @@ func setClusterAuthInterceptor() client2.Interceptor {
 
 func InfobaseAuthInterceptor() client2.Interceptor {
 
-	return interceptor.New(
-		interceptor.AND(
-			interceptor.GetClusterId,
-			interceptor.IsEndpoint,
+	return cond.New(
+		cond.AND(
+			cond.GetClusterId,
+			cond.IsEndpoint,
 		),
 		setInfobaseAuthInterceptor(),
 	)

@@ -106,11 +106,11 @@ func defaultService() *Service {
 	s.streamInterceptors = []grpc.StreamServerInterceptor{}
 	s.unaryInterceptors = []grpc.UnaryServerInterceptor{}
 
-	// install validator interceptor
+	// install validator cond
 	s.streamInterceptors = append(s.streamInterceptors, grpc_validator.StreamServerInterceptor())
 	s.unaryInterceptors = append(s.unaryInterceptors, grpc_validator.UnaryServerInterceptor())
 
-	// install prometheus interceptor
+	// install prometheus cond
 	s.streamInterceptors = append(s.streamInterceptors, grpc_prometheus.StreamServerInterceptor)
 	s.unaryInterceptors = append(s.unaryInterceptors, grpc_prometheus.UnaryServerInterceptor)
 
