@@ -16,6 +16,8 @@ func (c *client) Invoke(ctx context.Context, needEndpoint bool, req interface{},
 		interceptor     Interceptor
 		endpointUUID    uuid.UUID
 		timeout         time.Duration
+		endpointConfig  EndpointConfig
+		interceptors    []Interceptor
 	)
 
 	requestOptions := combine(c.endpointOptions, opts)
@@ -27,6 +29,7 @@ func (c *client) Invoke(ctx context.Context, needEndpoint bool, req interface{},
 			endpointUUID, _ = getEndpoint(ctx)
 		case interceptorsIdent{}:
 			interceptor = option.Value().(Interceptor)
+			interceptors = append(interceptors, interceptor)
 		case requestTimeoutIdent{}:
 			timeout = option.Value().(time.Duration)
 		}
@@ -35,6 +38,11 @@ func (c *client) Invoke(ctx context.Context, needEndpoint bool, req interface{},
 		var cancel func()
 		ctx, cancel = context.WithTimeout(ctx, timeout)
 		defer cancel()
+	}
+
+	ctx, err = md.AnnotateContext(ctx, c.metadataAnnotators, req)
+	if err != nil {
+		return nil, err
 	}
 
 	channel = ChannelFromContext(ctx)
@@ -49,19 +57,13 @@ func (c *client) Invoke(ctx context.Context, needEndpoint bool, req interface{},
 	}
 
 	if needEndpoint {
-		idxEndpoints := channel.Endpoints()
 
 		channelEndpoint = EndpointFromContext(ctx)
-		if channelEndpoint != nil {
-			if len(idxEndpoints) > 0 {
-				id, ok := idxEndpoints[channelEndpoint.UUID]
-				if !(ok || id == channelEndpoint.ID) {
-					return nil, ErrNotChannelEndpoint
-				}
-			}
-		} else {
+
+		if !channel.IsChannelEndpoint(channelEndpoint) {
 
 			endpoint, ok := c.endpoints[endpointUUID]
+			// TODO Переписать
 			if !ok {
 				if endpointUUID == uuid.Nil {
 					endpointUUID = uuid.New()
@@ -78,28 +80,35 @@ func (c *client) Invoke(ctx context.Context, needEndpoint bool, req interface{},
 
 			}
 
-			id, err := c.initEndpoint(ctx, channel, endpoint)
+			channelEndpoint, err = c.initEndpoint(ctx, channel, endpoint)
+
 			if err != nil {
 				return nil, err
 			}
-			channelEndpoint = &ChannelEndpoint{
-				UUID:    endpointUUID,
-				ID:      id,
-				Version: endpoint.Ver,
-			}
+
 			ctx = EndpointToContext(ctx, channelEndpoint)
+
+			interceptors = append(interceptors, endpointSetupInterceptor(endpoint, endpointConfig))
 		}
 	}
 
-	ctx, err = md.AnnotateContext(ctx, c.metadataAnnotators, req)
-
-	if err != nil {
-		return nil, err
-	}
+	// TODO Добавление перехватчика для авторизации точки обмена если необходимо
 
 	if len(c.Interceptors) > 0 {
 		interceptor = ChainInterceptor(ChainInterceptor(c.Interceptors...), interceptor)
 	}
 
-	return handler(ctx, channel, channelEndpoint, req, clientv1.Interceptor(interceptor))
+	interceptors = append(interceptors, c.Interceptors...)
+
+	return handler(ctx, channel, channelEndpoint, req, clientv1.Interceptor(ChainInterceptor(interceptors...)))
+}
+
+func geClusterId(ctx context.Context) string {
+
+	reqMd := md.ExtractMetadata(ctx)
+	clusterId := reqMd.Get(ClusterIdKeys)
+	if len(clusterId) > 0 {
+		return clusterId
+	}
+	return ""
 }

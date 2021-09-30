@@ -44,6 +44,7 @@ func ChainInterceptor(interceptors ...Interceptor) Interceptor {
 		return chainedHandler(ctx, channel, endpoint, req)
 	}
 }
+
 func OverwriteClusterIdInterceptor() Interceptor {
 	return overwriteClusterIdInterceptor
 }
@@ -53,6 +54,61 @@ func AddInfobaseAuthInterceptor() Interceptor {
 
 func AddClusterAuthInterceptor() Interceptor {
 	return addClusterAuthInterceptor
+}
+
+func endpointSetupInterceptor(config EndpointConfig) Interceptor {
+	return func(ctx context.Context, channel clientv1.Channel,
+		endpoint clientv1.Endpoint, info *clientv1.RequestInfo,
+		req interface{}, handler clientv1.InterceptorHandler) (interface{}, error) {
+		condition := cond.And{
+			IsEndpointRequest,
+			HasMdValues(OverwriteClusterIdKey),
+			HasClusterId,
+		}
+
+		next := func() (interface{}, error) {
+			return handler(ctx, channel, endpoint, req)
+		}
+
+		if condition.IsFalse(ctx, endpoint, info, req) {
+			return next()
+		}
+
+		type getClusterId interface {
+			GetClusterID() string
+		}
+
+		reqMd := md.ExtractMetadata(ctx)
+		clusterId := reqMd.Get(ClusterIdKeys)
+
+		if len(clusterId) == 0 {
+			tReq := req.(getClusterId)
+			clusterId = tReq.GetClusterID()
+		}
+
+		if len(clusterId) == 0 {
+			log.Printf("can`t add cluster auth before request <%s> cluster is not set\n", reflect.TypeOf(req))
+			return next()
+		}
+		channelEndpoint := endpoint.(*ChannelEndpoint)
+
+		if channelEndpoint.CompareHash()
+
+		auth := config.DefaultClusterAuth
+
+
+		_, err := clientv1.AuthenticateClusterHandler(ctx, channel, endpoint, &messagesv1.ClusterAuthenticateRequest{
+			ClusterId: clusterId,
+			User:      auth.User,
+			Password:  auth.Password,
+		}, nil)
+
+		if err != nil {
+			log.Println(err)
+		}
+
+		return next()
+	}
 }
 
 func overwriteClusterIdInterceptor(ctx context.Context, channel clientv1.Channel,
@@ -77,13 +133,16 @@ func overwriteClusterIdInterceptor(ctx context.Context, channel clientv1.Channel
 	clusterId := reqMd.Get(OverwriteClusterIdKey)
 
 	rValue := reflect.ValueOf(req)
-
-	rValue.FieldByName("ClusterId").SetString(clusterId)
+	if rValue.Kind() == reflect.Ptr {
+		rValue.Elem().FieldByName("ClusterId").SetString(clusterId)
+	}
 
 	return handler(ctx, channel, endpoint, req)
 }
 
-func addClusterAuthInterceptor(ctx context.Context, channel clientv1.Channel, endpoint clientv1.Endpoint, info *clientv1.RequestInfo, req interface{}, handler clientv1.InterceptorHandler) (interface{}, error) {
+func addClusterAuthInterceptor(ctx context.Context, channel clientv1.Channel,
+	endpoint clientv1.Endpoint, info *clientv1.RequestInfo,
+	req interface{}, handler clientv1.InterceptorHandler) (interface{}, error) {
 
 	condition := cond.And{
 		IsEndpointRequest,
@@ -126,7 +185,7 @@ func addClusterAuthInterceptor(ctx context.Context, channel clientv1.Channel, en
 		log.Println(err)
 	}
 
-	return handler(ctx, channel, endpoint, req)
+	return next()
 
 }
 

@@ -68,7 +68,7 @@ func SendEndpointID(ctx context.Context, channel clientv1.Channel, endpoint clie
 
 func getEndpointFunc(_ *service.Services) grpc.UnaryServerInterceptor {
 
-	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
+	return func(ctx context.Context, req interface{}, _ *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 
 		endpoint := metautils.ExtractIncoming(ctx).Get("x-endpoint")
 

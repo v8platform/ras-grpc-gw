@@ -6,6 +6,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/spf13/cast"
 	clientv1 "github.com/v8platform/protos/gen/ras/client/v1"
+	messagesv1 "github.com/v8platform/protos/gen/ras/messages/v1"
 	protocolv1 "github.com/v8platform/protos/gen/ras/protocol/v1"
 	"github.com/v8platform/ras-grpc-gw/pkg/ras_client/md"
 	"net"
@@ -223,12 +224,12 @@ func (c *client) getChannel(ctx context.Context) (*Channel, error) {
 
 }
 
-func (c *client) initEndpoint(ctx context.Context, channel *Channel, endpoint *Endpoint) (int32, error) {
+func (c *client) initEndpoint(ctx context.Context, channel *Channel, endpoint *Endpoint) (*ChannelEndpoint, error) {
 
 	err := c.initChannel(ctx, channel)
 
 	if err != nil {
-		return 0, err
+		return nil, err
 	}
 
 	reply, err := clientv1.EndpointOpenHandler(ctx, channel, nil, &protocolv1.EndpointOpen{
@@ -241,16 +242,37 @@ func (c *client) initEndpoint(ctx context.Context, channel *Channel, endpoint *E
 	if err != nil {
 		version := clientv1.DetectSupportedVersion(err)
 		if len(version) == 0 {
-			return 0, err
+			return nil, err
 		}
 
 		endpoint.version = version
 		endpoint.Ver = cast.ToInt32(version)
 	}
 
-	channel.SetEndpoint(endpoint.UUID, open.EndpointId)
+	channelEndpoint := &ChannelEndpoint{
+		UUID:    endpoint.UUID,
+		ID:      open.EndpointId,
+		Version: endpoint.Ver,
+	}
 
-	return open.EndpointId, nil
+	channel.SetEndpoint(endpoint.UUID, channelEndpoint)
+
+	return channelEndpoint, nil
+}
+
+func (c *client) setupEndpointChannel(ctx context.Context, channel *Channel, channelEndpoint *ChannelEndpoint) error {
+
+	clusterId := geClusterId(ctx)
+
+	if channelEndpoint.CompareHash(ClusterAuth, clusterId, "", "") {
+		return nil
+	}
+
+	_, err := clientv1.AuthenticateClusterHandler(ctx, channel, channelEndpoint, &messagesv1.ClusterAuthenticateRequest{}, nil)
+	if err != nil {
+		return err
+	}
+	return err
 }
 
 func (c *client) removeChannelWithLock(cn *Channel) {

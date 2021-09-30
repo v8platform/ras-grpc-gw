@@ -1,7 +1,9 @@
 package client
 
 import (
+	"bytes"
 	"context"
+	"crypto/sha256"
 	"fmt"
 	"github.com/google/uuid"
 	clientv1 "github.com/v8platform/protos/gen/ras/client/v1"
@@ -18,17 +20,15 @@ var _ clientv1.Channel = (*Channel)(nil)
 
 func newChannel(conn net.Conn) *Channel {
 	return &Channel{
-		id:          0, // TODO Сделать увеличение номеров
 		conn:        conn,
 		_closed:     0,
 		_usedAt:     0,
 		createdAt:   time.Now(),
-		idxEndpoint: map[uuid.UUID]int32{},
+		idxEndpoint: map[uuid.UUID]*ChannelEndpoint{},
 	}
 }
 
 type Channel struct {
-	id   int32
 	conn net.Conn
 	sync.Mutex
 
@@ -38,10 +38,7 @@ type Channel struct {
 	pooled    bool
 	inited    bool
 
-	idxEndpoint map[uuid.UUID]int32
-
-	recvLen int
-	recvMsg []interface{}
+	idxEndpoint map[uuid.UUID]*ChannelEndpoint
 
 	recvWg sync.WaitGroup
 }
@@ -77,21 +74,21 @@ func (c *Channel) Closed() bool {
 	return false
 }
 
-func (c *Channel) SetEndpoint(endpoint uuid.UUID, id int32) {
+func (c *Channel) SetEndpoint(id uuid.UUID, endpoint *ChannelEndpoint) {
 
 	c.Lock()
 	defer c.Unlock()
 
-	c.idxEndpoint[endpoint] = id
+	c.idxEndpoint[id] = endpoint
 
 }
 
-func (c *Channel) Endpoints() map[uuid.UUID]int32 {
+func (c *Channel) Endpoints() map[uuid.UUID]*ChannelEndpoint {
 
 	c.Lock()
 	defer c.Unlock()
 
-	endpoints := make(map[uuid.UUID]int32, len(c.idxEndpoint))
+	endpoints := make(map[uuid.UUID]*ChannelEndpoint, len(c.idxEndpoint))
 	for key, value := range c.idxEndpoint {
 		endpoints[key] = value
 	}
@@ -105,10 +102,6 @@ func (c *Channel) UsedAt() time.Time {
 
 func (c *Channel) SetUsedAt(tm time.Time) {
 	atomic.StoreUint32(&c._usedAt, uint32(tm.Unix()))
-}
-
-func (c *Channel) ID() int32 {
-	return c.id
 }
 
 func (c *Channel) SendMsg(ctx context.Context, msg interface{}, opts ...interface{}) error {
@@ -238,6 +231,78 @@ func (c *Channel) RecvMsg(ctx context.Context, msg interface{}, opts ...interfac
 	}
 }
 
+func (c *Channel) IsChannelEndpoint(endpoint *ChannelEndpoint) bool {
+
+	if len(c.idxEndpoint) == 0 {
+		return false
+	}
+
+	cEndpoint, ok := c.idxEndpoint[endpoint.UUID]
+
+	if ok && cEndpoint == endpoint {
+		return true
+	}
+
+	return false
+}
+
 func (c *Channel) CreatedAt() time.Time {
 	return c.createdAt
+}
+
+var _ protocolv1.Endpoint = (*ChannelEndpoint)(nil)
+
+type AuthType int
+
+const (
+	ClusterAuth AuthType = iota
+	InfobaseAuth
+)
+
+type ChannelEndpoint struct {
+	UUID    uuid.UUID
+	ID      int32
+	Version int32
+	UsedAt  time.Time
+	hash    [2]map[string][32]byte // Хеши авторизации
+}
+
+func (c *ChannelEndpoint) GetUsedAt() time.Time {
+	return c.UsedAt
+}
+
+func (c *ChannelEndpoint) CompareHash(auth AuthType, clusterId, user, pwd string) bool {
+
+	if c.hash[auth] == nil {
+		c.hash[auth] = make(map[string][32]byte)
+		return false
+	}
+
+	hash, ok := c.hash[auth][clusterId]
+	if !ok {
+		return false
+	}
+	needHash := sha256.Sum256([]byte(user + pwd))
+	return bytes.EqualFold(hash[:], needHash[:])
+
+}
+
+func (c *ChannelEndpoint) AddHash(auth AuthType, clusterId, user, pwd string) {
+
+	if c.hash[auth] == nil {
+		c.hash[auth] = make(map[string][32]byte)
+	}
+	c.hash[auth][clusterId] = sha256.Sum256([]byte(user + pwd))
+}
+
+func (c *ChannelEndpoint) SetUsedAt(tm time.Time) {
+	c.UsedAt = tm
+}
+
+func (e *ChannelEndpoint) GetVersion() int32 {
+	return e.Version
+}
+
+func (e *ChannelEndpoint) GetId() int32 {
+	return e.ID
 }
