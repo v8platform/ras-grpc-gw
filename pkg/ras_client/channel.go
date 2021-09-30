@@ -2,9 +2,9 @@ package client
 
 import (
 	"context"
+	"crypto/sha256"
 	"fmt"
 	"github.com/google/uuid"
-	"github.com/ungerik/go-dry"
 	clientv1 "github.com/v8platform/protos/gen/ras/client/v1"
 	protocolv1 "github.com/v8platform/protos/gen/ras/protocol/v1"
 	"io"
@@ -263,33 +263,77 @@ type ChannelEndpoint struct {
 	ID      int32
 	Version int32
 	UsedAt  time.Time
-	hash    [2][]string // Хеши авторизации
+	hash    [2]hashMap // Хеши авторизации
+}
+type hashMap map[string][32]byte
+
+func (m hashMap) CompareAndSwap(key string, hash [32]byte) (old [32]byte, swap bool) {
+
+	old, swap = m[key]
+	if swap && compareHashes(old, hash) {
+		return old, false
+	}
+
+	m[key] = hash
+	return old, true
+
+}
+func (m hashMap) Compare(key string, hash [32]byte) (equal bool) {
+
+	value, ok := m[key]
+	if ok && compareHashes(value, hash) {
+		return true
+	}
+	return false
+}
+
+func (m hashMap) Swap(key string, hash [32]byte) (old [32]byte, swap bool) {
+
+	old, swap = m[key]
+	m[key] = hash
+
+	return
+}
+
+func hash(value string) [32]byte {
+	return sha256.Sum256([]byte(value))
+}
+
+func compareHashes(hash1, hash2 [32]byte) bool {
+
+	for i := 0; i < 32; i++ {
+		if hash1[i] != hash2[i] {
+			return false
+		}
+	}
+	return true
 }
 
 func (c *ChannelEndpoint) GetUsedAt() time.Time {
 	return c.UsedAt
 }
 
-func (c *ChannelEndpoint) CompareHash(auth AuthType, clusterId string) bool {
+func (c *ChannelEndpoint) CompareHash(auth AuthType, key, user, pwd string) bool {
 
 	if c.hash[auth] == nil {
-		c.hash[auth] = []string{}
 		return false
 	}
 
-	return dry.StringInSlice(clusterId, c.hash[auth])
+	return c.hash[auth].Compare(key, hash(user+pwd))
 
 }
 
-func (c *ChannelEndpoint) AddHash(auth AuthType, clusterId string) {
+func (c *ChannelEndpoint) ChangeAuth(req interface{}) {
+
+}
+
+func (c *ChannelEndpoint) SwapHash(auth AuthType, key, user, pwd string) {
 
 	if c.hash[auth] == nil {
-		c.hash[auth] = []string{
-			clusterId,
-		}
+		c.hash[auth] = make(hashMap)
 		return
 	}
-	c.hash[auth] = append(c.hash[auth], clusterId)
+	c.hash[auth].Swap(key, hash(user+pwd))
 }
 
 func (c *ChannelEndpoint) SetUsedAt(tm time.Time) {

@@ -60,9 +60,11 @@ func AddDefaultClusterAuthInterceptor(config EndpointConfig) Interceptor {
 	return func(ctx context.Context, channel clientv1.Channel,
 		endpoint clientv1.Endpoint, info *clientv1.RequestInfo,
 		req interface{}, handler clientv1.InterceptorHandler) (interface{}, error) {
+
 		condition := cond.And{
 			IsEndpointRequest,
 			NeedClusterAuth,
+			cond.Not{HasMdValues(ClusterUserKeys, ClusterPwdKeys)},
 			HasClusterId,
 		}
 

@@ -93,7 +93,6 @@ func (c *client) Invoke(ctx context.Context, needEndpoint bool, req interface{},
 			AddDefaultClusterAuthInterceptor(endpointConfig),
 		)
 	}
-	interceptors = append(interceptors, c.Interceptors...)
 
 	return handler(ctx, channel, channelEndpoint, req, clientv1.Interceptor(ChainInterceptor(interceptors...)))
 }
