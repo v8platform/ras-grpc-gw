@@ -69,7 +69,9 @@ var (
 			return endpoint != nil
 		})
 
-	NeedClusterAuth  = cond.Not{IsMethodName("GetClusters")}
+	NeedClusterAuth = cond.Not{IsMethodName("GetClusters", "AuthenticateCluster",
+		"AuthenticateInfobase",
+		"AuthenticateServer")}
 	NeedInfobaseAuth = IsMethodNames(methodsNeedInfobaseAuth)
 )
 

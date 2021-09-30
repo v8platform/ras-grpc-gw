@@ -56,13 +56,13 @@ func AddClusterAuthInterceptor() Interceptor {
 	return addClusterAuthInterceptor
 }
 
-func endpointSetupInterceptor(config EndpointConfig) Interceptor {
+func AddDefaultClusterAuthInterceptor(config EndpointConfig) Interceptor {
 	return func(ctx context.Context, channel clientv1.Channel,
 		endpoint clientv1.Endpoint, info *clientv1.RequestInfo,
 		req interface{}, handler clientv1.InterceptorHandler) (interface{}, error) {
 		condition := cond.And{
 			IsEndpointRequest,
-			HasMdValues(OverwriteClusterIdKey),
+			NeedClusterAuth,
 			HasClusterId,
 		}
 
@@ -92,12 +92,74 @@ func endpointSetupInterceptor(config EndpointConfig) Interceptor {
 		}
 		channelEndpoint := endpoint.(*ChannelEndpoint)
 
-		if channelEndpoint.CompareHash()
+		if channelEndpoint.CompareHash(ClusterAuth, clusterId) {
+			return next()
+		}
 
-		auth := config.DefaultClusterAuth
-
+		auth, ok := config.Auths[clusterId]
+		if !ok {
+			auth = config.DefaultClusterAuth
+		}
 
 		_, err := clientv1.AuthenticateClusterHandler(ctx, channel, endpoint, &messagesv1.ClusterAuthenticateRequest{
+			ClusterId: clusterId,
+			User:      auth.User,
+			Password:  auth.Password,
+		}, nil)
+
+		if err != nil {
+			log.Println(err)
+		}
+
+		return next()
+	}
+}
+func AddDefaultInfobaseAuthInterceptor(config EndpointConfig) Interceptor {
+	return func(ctx context.Context, channel clientv1.Channel,
+		endpoint clientv1.Endpoint, info *clientv1.RequestInfo,
+		req interface{}, handler clientv1.InterceptorHandler) (interface{}, error) {
+		condition := cond.And{
+			IsEndpointRequest,
+			NeedInfobaseAuth,
+			HasClusterId,
+		}
+
+		next := func() (interface{}, error) {
+			return handler(ctx, channel, endpoint, req)
+		}
+
+		if condition.IsFalse(ctx, endpoint, info, req) {
+			return next()
+		}
+
+		type getClusterId interface {
+			GetClusterID() string
+		}
+
+		reqMd := md.ExtractMetadata(ctx)
+		clusterId := reqMd.Get(ClusterIdKeys)
+
+		if len(clusterId) == 0 {
+			tReq := req.(getClusterId)
+			clusterId = tReq.GetClusterID()
+		}
+
+		if len(clusterId) == 0 {
+			log.Printf("can`t add cluster auth before request <%s> cluster is not set\n", reflect.TypeOf(req))
+			return next()
+		}
+		channelEndpoint := endpoint.(*ChannelEndpoint)
+
+		if channelEndpoint.CompareHash(InfobaseAuth, clusterId) {
+			return next()
+		}
+
+		auth, ok := config.Auths[clusterId]
+		if !ok {
+			auth = config.DefaultInfobaseAuth
+		}
+
+		_, err := clientv1.AuthenticateInfobaseHandler(ctx, channel, endpoint, &messagesv1.ClusterAuthenticateRequest{
 			ClusterId: clusterId,
 			User:      auth.User,
 			Password:  auth.Password,

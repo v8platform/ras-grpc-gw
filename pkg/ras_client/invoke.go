@@ -60,7 +60,7 @@ func (c *client) Invoke(ctx context.Context, needEndpoint bool, req interface{},
 
 		channelEndpoint = EndpointFromContext(ctx)
 
-		if !channel.IsChannelEndpoint(channelEndpoint) {
+		if channelEndpoint != nil && !channel.IsChannelEndpoint(channelEndpoint) {
 
 			endpoint, ok := c.endpoints[endpointUUID]
 			// TODO Переписать
@@ -87,17 +87,12 @@ func (c *client) Invoke(ctx context.Context, needEndpoint bool, req interface{},
 			}
 
 			ctx = EndpointToContext(ctx, channelEndpoint)
-
-			interceptors = append(interceptors, endpointSetupInterceptor(endpoint, endpointConfig))
 		}
+		interceptors = append(interceptors,
+			AddDefaultInfobaseAuthInterceptor(endpointConfig),
+			AddDefaultClusterAuthInterceptor(endpointConfig),
+		)
 	}
-
-	// TODO Добавление перехватчика для авторизации точки обмена если необходимо
-
-	if len(c.Interceptors) > 0 {
-		interceptor = ChainInterceptor(ChainInterceptor(c.Interceptors...), interceptor)
-	}
-
 	interceptors = append(interceptors, c.Interceptors...)
 
 	return handler(ctx, channel, channelEndpoint, req, clientv1.Interceptor(ChainInterceptor(interceptors...)))

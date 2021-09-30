@@ -6,7 +6,6 @@ import (
 	"github.com/google/uuid"
 	"github.com/spf13/cast"
 	clientv1 "github.com/v8platform/protos/gen/ras/client/v1"
-	messagesv1 "github.com/v8platform/protos/gen/ras/messages/v1"
 	protocolv1 "github.com/v8platform/protos/gen/ras/protocol/v1"
 	"github.com/v8platform/ras-grpc-gw/pkg/ras_client/md"
 	"net"
@@ -85,8 +84,8 @@ type client struct {
 	mu      sync.Mutex
 	_closed uint32 // atomic
 
-	endpoints          map[uuid.UUID]*Endpoint
-	Interceptors       []Interceptor
+	endpoints map[uuid.UUID]*Endpoint
+	// Interceptors       []Interceptor
 	endpointConfig     map[uuid.UUID]*EndpointConfig
 	metadataAnnotators []md.AnnotationHandler
 	clientService      clientv1.ClientService
@@ -258,21 +257,6 @@ func (c *client) initEndpoint(ctx context.Context, channel *Channel, endpoint *E
 	channel.SetEndpoint(endpoint.UUID, channelEndpoint)
 
 	return channelEndpoint, nil
-}
-
-func (c *client) setupEndpointChannel(ctx context.Context, channel *Channel, channelEndpoint *ChannelEndpoint) error {
-
-	clusterId := geClusterId(ctx)
-
-	if channelEndpoint.CompareHash(ClusterAuth, clusterId, "", "") {
-		return nil
-	}
-
-	_, err := clientv1.AuthenticateClusterHandler(ctx, channel, channelEndpoint, &messagesv1.ClusterAuthenticateRequest{}, nil)
-	if err != nil {
-		return err
-	}
-	return err
 }
 
 func (c *client) removeChannelWithLock(cn *Channel) {
@@ -633,6 +617,7 @@ func newClient(addr string, opts ...GlobalOption) *client {
 		endpointConfig:     map[uuid.UUID]*EndpointConfig{},
 		endpointOptions:    map[interface{}]EndpointOption{},
 		connectOptions:     map[interface{}]ConnectOption{},
+		Interceptors:       []Interceptor{},
 		dial:               defaultDial,
 		poolSize:           10,
 		poolTimeout:        30 * time.Second,

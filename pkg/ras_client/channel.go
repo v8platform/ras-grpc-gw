@@ -1,11 +1,10 @@
 package client
 
 import (
-	"bytes"
 	"context"
-	"crypto/sha256"
 	"fmt"
 	"github.com/google/uuid"
+	"github.com/ungerik/go-dry"
 	clientv1 "github.com/v8platform/protos/gen/ras/client/v1"
 	protocolv1 "github.com/v8platform/protos/gen/ras/protocol/v1"
 	"io"
@@ -264,35 +263,33 @@ type ChannelEndpoint struct {
 	ID      int32
 	Version int32
 	UsedAt  time.Time
-	hash    [2]map[string][32]byte // Хеши авторизации
+	hash    [2][]string // Хеши авторизации
 }
 
 func (c *ChannelEndpoint) GetUsedAt() time.Time {
 	return c.UsedAt
 }
 
-func (c *ChannelEndpoint) CompareHash(auth AuthType, clusterId, user, pwd string) bool {
+func (c *ChannelEndpoint) CompareHash(auth AuthType, clusterId string) bool {
 
 	if c.hash[auth] == nil {
-		c.hash[auth] = make(map[string][32]byte)
+		c.hash[auth] = []string{}
 		return false
 	}
 
-	hash, ok := c.hash[auth][clusterId]
-	if !ok {
-		return false
-	}
-	needHash := sha256.Sum256([]byte(user + pwd))
-	return bytes.EqualFold(hash[:], needHash[:])
+	return dry.StringInSlice(clusterId, c.hash[auth])
 
 }
 
-func (c *ChannelEndpoint) AddHash(auth AuthType, clusterId, user, pwd string) {
+func (c *ChannelEndpoint) AddHash(auth AuthType, clusterId string) {
 
 	if c.hash[auth] == nil {
-		c.hash[auth] = make(map[string][32]byte)
+		c.hash[auth] = []string{
+			clusterId,
+		}
+		return
 	}
-	c.hash[auth][clusterId] = sha256.Sum256([]byte(user + pwd))
+	c.hash[auth] = append(c.hash[auth], clusterId)
 }
 
 func (c *ChannelEndpoint) SetUsedAt(tm time.Time) {
