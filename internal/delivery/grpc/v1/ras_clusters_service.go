@@ -15,7 +15,7 @@ type rasClustersServiceServer struct {
 	client   client.Client
 }
 
-func NewClustersServiceServer(services *service.Services, client client.Client) apiv1.ClustersServer {
+func newClustersServiceServer(services *service.Services, client client.Client) apiv1.ClustersServer {
 	return &rasClustersServiceServer{
 		services: services,
 		client:   client,

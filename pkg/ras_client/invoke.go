@@ -76,7 +76,7 @@ func (c *client) Invoke(ctx context.Context, needEndpoint bool, req interface{},
 				}
 
 				c.endpoints[endpointUUID] = endpoint
-				c.endpointConfig[endpointUUID] = &EndpointConfig{}
+				c.endpointConfig[endpointUUID] = c.defaultEndpointConfig.copy()
 
 			}
 

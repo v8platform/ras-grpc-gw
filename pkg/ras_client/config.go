@@ -18,7 +18,7 @@ type Config struct {
 	ConnectConfig map[string][]*ucfg.Config `config:"connect_config"`
 
 	// Настройка точки обмена по умолчанию
-	DefaultEndpointConfig EndpointConfig `json:"default_endpoint_config" config:"default_endpoint_config" config:"default_endpoint_config" json:"default_endpoint_config"`
+	DefaultEndpointConfig *EndpointConfig `json:"default_endpoint_config" config:"default_endpoint_config" config:"default_endpoint_config" json:"default_endpoint_config"`
 }
 
 type ChannelPoolConfig struct {
@@ -54,4 +54,9 @@ type EndpointConfig struct {
 	SaveAuthRequests bool `config:"save_auth_requests" json:"save_auth_requests,omitempty"`
 	// Известная авторизация на информационных базах
 	Auths map[string]Auth `config:"auths" json:"auths,omitempty"`
+}
+
+func (e *EndpointConfig) copy() *EndpointConfig {
+	newConfig := *e
+	return &newConfig
 }

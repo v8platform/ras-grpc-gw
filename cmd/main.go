@@ -110,9 +110,9 @@ func main() {
 					client2.AnnotateRequestMetadataGrpc()),
 				client2.RequestTimeout(60*time.Second),
 				client2.RequestInterceptor(
-					client2.OverwriteClusterIdInterceptor(),
-					client2.AddClusterAuthInterceptor(),
-					client2.AddInfobaseAuthInterceptor(),
+					client2.OverwriteClusterIdFromContextMetadata(),
+					client2.AddClusterAuthFromContextMetadata(),
+					client2.AddInfobaseAuthFromContextMetadata(),
 					grpc_v1.SendEndpointID,
 				),
 			)

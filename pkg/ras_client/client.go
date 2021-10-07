@@ -85,10 +85,11 @@ type client struct {
 	_closed uint32 // atomic
 
 	endpoints map[uuid.UUID]*Endpoint
-	// Interceptors       []Interceptor
-	endpointConfig     map[uuid.UUID]*EndpointConfig
-	metadataAnnotators []md.AnnotationHandler
-	clientService      clientv1.ClientService
+
+	defaultEndpointConfig *EndpointConfig
+	endpointConfig        map[uuid.UUID]*EndpointConfig
+	metadataAnnotators    []md.AnnotationHandler
+	clientService         clientv1.ClientService
 
 	stats Stats
 
@@ -617,7 +618,6 @@ func newClient(addr string, opts ...GlobalOption) *client {
 		endpointConfig:     map[uuid.UUID]*EndpointConfig{},
 		endpointOptions:    map[interface{}]EndpointOption{},
 		connectOptions:     map[interface{}]ConnectOption{},
-		Interceptors:       []Interceptor{},
 		dial:               defaultDial,
 		poolSize:           10,
 		poolTimeout:        30 * time.Second,

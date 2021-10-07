@@ -27,7 +27,7 @@ func (r rasSessionsServiceServer) TerminateSession(ctx context.Context, request 
 	return r.cc.TerminateSession(ctx, request)
 }
 
-func NewSessionsServiceServer(services *service.Services, cc client.Client) apiv1.SessionsServer {
+func newSessionsServiceServer(services *service.Services, cc client.Client) apiv1.SessionsServer {
 	return &rasSessionsServiceServer{
 		services: services,
 		cc:       cc,

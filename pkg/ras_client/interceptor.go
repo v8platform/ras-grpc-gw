@@ -45,14 +45,14 @@ func ChainInterceptor(interceptors ...Interceptor) Interceptor {
 	}
 }
 
-func OverwriteClusterIdInterceptor() Interceptor {
+func OverwriteClusterIdFromContextMetadata() Interceptor {
 	return overwriteClusterIdInterceptor
 }
-func AddInfobaseAuthInterceptor() Interceptor {
+func AddInfobaseAuthFromContextMetadata() Interceptor {
 	return addInfobaseAuthInterceptor
 }
 
-func AddClusterAuthInterceptor() Interceptor {
+func AddClusterAuthFromContextMetadata() Interceptor {
 	return addClusterAuthInterceptor
 }
 
@@ -93,17 +93,25 @@ func AddDefaultClusterAuthInterceptor(config EndpointConfig) Interceptor {
 			return next()
 		}
 		channelEndpoint := endpoint.(*ChannelEndpoint)
-
-		if channelEndpoint.CompareHash(ClusterAuth, clusterId) {
-			return next()
-		}
-
 		auth, ok := config.Auths[clusterId]
+
 		if !ok {
 			auth = config.DefaultClusterAuth
 		}
 
-		_, err := clientv1.AuthenticateClusterHandler(ctx, channel, endpoint, &messagesv1.ClusterAuthenticateRequest{
+		if channelEndpoint.CompareHash(ClusterAuth, clusterId, auth.User, auth.Password) {
+			return next()
+		}
+
+		var err error
+
+		defer func() {
+			if err != nil {
+				return
+			}
+			channelEndpoint.SwapHash(ClusterAuth, clusterId, auth.User, auth.Password)
+		}()
+		_, err = clientv1.AuthenticateClusterHandler(ctx, channel, endpoint, &messagesv1.ClusterAuthenticateRequest{
 			ClusterId: clusterId,
 			User:      auth.User,
 			Password:  auth.Password,
@@ -151,17 +159,24 @@ func AddDefaultInfobaseAuthInterceptor(config EndpointConfig) Interceptor {
 			return next()
 		}
 		channelEndpoint := endpoint.(*ChannelEndpoint)
-
-		if channelEndpoint.CompareHash(InfobaseAuth, clusterId) {
-			return next()
-		}
-
 		auth, ok := config.Auths[clusterId]
 		if !ok {
 			auth = config.DefaultInfobaseAuth
 		}
 
-		_, err := clientv1.AuthenticateInfobaseHandler(ctx, channel, endpoint, &messagesv1.ClusterAuthenticateRequest{
+		if channelEndpoint.CompareHash(InfobaseAuth, clusterId, auth.User, auth.Password) {
+			return next()
+		}
+		var err error
+
+		defer func() {
+			if err != nil {
+				return
+			}
+			channelEndpoint.SwapHash(InfobaseAuth, clusterId, auth.User, auth.Password)
+		}()
+
+		_, err = clientv1.AuthenticateInfobaseHandler(ctx, channel, endpoint, &messagesv1.ClusterAuthenticateRequest{
 			ClusterId: clusterId,
 			User:      auth.User,
 			Password:  auth.Password,
@@ -170,7 +185,6 @@ func AddDefaultInfobaseAuthInterceptor(config EndpointConfig) Interceptor {
 		if err != nil {
 			log.Println(err)
 		}
-
 		return next()
 	}
 }
@@ -238,11 +252,25 @@ func addClusterAuthInterceptor(ctx context.Context, channel clientv1.Channel,
 		log.Printf("can`t add cluster auth before request <%s> cluster is not set\n", reflect.TypeOf(req))
 		return next()
 	}
+	channelEndpoint := endpoint.(*ChannelEndpoint)
+	user, password := reqMd.Get(ClusterUserKeys), reqMd.Get(ClusterPwdKeys)
+	if channelEndpoint.CompareHash(ClusterAuth, clusterId, user, password) {
+		return next()
+	}
 
-	_, err := clientv1.AuthenticateClusterHandler(ctx, channel, endpoint, &messagesv1.ClusterAuthenticateRequest{
+	var err error
+
+	defer func() {
+		if err != nil {
+			return
+		}
+		channelEndpoint.SwapHash(ClusterAuth, clusterId, user, password)
+	}()
+
+	_, err = clientv1.AuthenticateClusterHandler(ctx, channel, endpoint, &messagesv1.ClusterAuthenticateRequest{
 		ClusterId: clusterId,
-		User:      reqMd.Get(ClusterUserKeys),
-		Password:  reqMd.Get(ClusterPwdKeys),
+		User:      user,
+		Password:  password,
 	}, nil)
 
 	if err != nil {
@@ -287,14 +315,22 @@ func addInfobaseAuthInterceptor(ctx context.Context, channel clientv1.Channel,
 		return next()
 	}
 
-	user := reqMd.Get(InfobaseUserKeys)
-	password := reqMd.Get(InfobasePwdKeys)
+	channelEndpoint := endpoint.(*ChannelEndpoint)
+	user, password := reqMd.Get(InfobaseUserKeys), reqMd.Get(InfobasePwdKeys)
+	if channelEndpoint.CompareHash(InfobaseAuth, clusterId, user, password) {
+		return next()
+	}
 
-	// TODO Для тестов
-	//user := os.Getenv("IB_USER")
-	//password := os.Getenv("IB_PWD")
+	var err error
 
-	_, err := clientv1.AuthenticateInfobaseHandler(ctx, channel, endpoint, &messagesv1.AuthenticateInfobaseRequest{
+	defer func() {
+		if err != nil {
+			return
+		}
+		channelEndpoint.SwapHash(InfobaseAuth, clusterId, user, password)
+	}()
+
+	_, err = clientv1.AuthenticateInfobaseHandler(ctx, channel, endpoint, &messagesv1.AuthenticateInfobaseRequest{
 		ClusterId: clusterId,
 		User:      user,
 		Password:  password,

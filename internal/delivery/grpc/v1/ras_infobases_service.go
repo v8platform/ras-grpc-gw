@@ -44,7 +44,7 @@ func (s *rasInfobasesServiceServer) UpdateInfobaseSummary(ctx context.Context, r
 	return s.client.UpdateInfobaseSummary(ctx, request)
 }
 
-func NewInfobasesServiceServer(services *service.Services, client client.Client) apiv1.InfobasesServer {
+func newInfobasesServiceServer(services *service.Services, client client.Client) apiv1.InfobasesServer {
 	return &rasInfobasesServiceServer{
 		services: services,
 		client:   client,

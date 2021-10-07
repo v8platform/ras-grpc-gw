@@ -16,10 +16,10 @@ func RegisterServerServices(services *service.Services, client client.Client) (f
 
 	// accessServer := apiv1.NewAc
 	// Auth := NewAuthServiceServer(services, clientsStorage)
-	clusters := NewClustersServiceServer(services, client)
-	infobases := NewInfobasesServiceServer(services, client)
-	sessions := NewSessionsServiceServer(services, client)
-	workservers := NewWorkServersServiceServer(services, client)
+	clusters := newClustersServiceServer(services, client)
+	infobases := newInfobasesServiceServer(services, client)
+	sessions := newSessionsServiceServer(services, client)
+	workservers := newWorkingServerServiceServer(services, client)
 	return func(server *grpc.Server) {
 			// apiv1.RegisterUsersServiceServer(server, users)
 			// apiv1.RegisterApplicationsServiceServer(server, NewApplicationsServerService(services))
@@ -28,7 +28,7 @@ func RegisterServerServices(services *service.Services, client client.Client) (f
 			apiv1.RegisterSessionsServer(server, sessions)
 			apiv1.RegisterServersServer(server, workservers)
 			// apiv1.RegisterAuthServiceServer(server, NewAuthServiceServer(services, clientsStorage))
-			// apiv1.RegisterSessionsServiceServer(server, NewSessionsServiceServer(services, clientsStorage))
+			// apiv1.RegisterSessionsServiceServer(server, newSessionsServiceServer(services, clientsStorage))
 		},
 		func(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
 			// if err := apiv1.RegisterAccessHandlerServer(ctx, mux); err != nil {
