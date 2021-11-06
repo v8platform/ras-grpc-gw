@@ -334,7 +334,6 @@ func (x *GetConnectionsResponse) GetConnections() []*ConnectionInfo {
 	return nil
 }
 
-// Состояние клиента и его подключений
 type ClientStatus struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -419,7 +418,6 @@ func (x *ClientStatus) GetConnections() []*ConnectionInfo {
 	return nil
 }
 
-// Информация о подключении клиента
 type ConnectionInfo struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -690,7 +688,6 @@ func (x *Endpoint) GetPooled() bool {
 	return false
 }
 
-// Сообщение авторизации
 type EndpointServerAuth struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -748,10 +745,6 @@ func (x *EndpointServerAuth) GetPassword() string {
 	return ""
 }
 
-// Сообщение авторизации на точке обмена
-// Используется для установка
-// авторизации на локальном кластере
-// авторизации в информационной базе на локальном кластере
 type EndpointCommonAuth struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -818,7 +811,6 @@ func (x *EndpointCommonAuth) GetPassword() string {
 	return ""
 }
 
-// Конфигурация точки обмена
 type EndpointConfig struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

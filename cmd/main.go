@@ -25,6 +25,7 @@ import (
 	"time"
 )
 
+//go:generate buf generate --template ../buf.gen.yaml ../rasgrpcgwapis --output ../
 // nolint: gochecknoglobals
 var (
 	version = "dev"
