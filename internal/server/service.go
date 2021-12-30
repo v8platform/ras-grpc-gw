@@ -253,7 +253,12 @@ func (s *Service) startGRPCGateway(httpPort uint, grpcPort uint) error {
 
 	endpoint := fmt.Sprintf(":%d", grpcPort)
 
-	conn, err := grpc.Dial(endpoint, grpc.WithInsecure())
+	conn, err := grpc.Dial(endpoint,
+		grpc.WithInsecure(),
+		grpc.WithDisableRetry(),
+		grpc.WithDisableHealthCheck(),
+		grpc.WithBlock(),
+	)
 	if err != nil {
 		return err
 	}

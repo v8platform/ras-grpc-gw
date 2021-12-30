@@ -26,7 +26,7 @@ cache:
   memory:
 sha1_salt: salt_omm
 ras:
-  host: ras:1545
+  host: localhost:1545
   version: "10.0"
   conn_pool_size: "15"
   conn_idle_timeout: "30m"
@@ -85,7 +85,7 @@ type RASConfig struct {
 	DefaultAuthorizations map[string]UserAuth `json:"default_authorizations" config:"default_authorizations"`
 }
 
-// Настройка доступов к по умолчанию для точки обмена
+// EndpointConfig Настройка доступов по умолчанию для точки обмена
 type EndpointConfig struct {
 	// Доступ к серверу 1С
 	Agent UserAuth `json:"agent"`

@@ -15,7 +15,7 @@ X-Endpoint: tj3bnwFzGTWNtCsgdFy52c
 # -H "Accept: application/json"
 # -H "authorization: bearer eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzE4ODIxMDEsImlhdCI6MTYzMTc5NTcwMSwiaXNzIjoieW5oU0JBVlpIZ2FDYm9adnJiOFNzOSIsInN1YiI6ImFjY2VzcyJ9.OSqyaClTr6R6RN5X2nsKcgSxos-IrwEEo7o5Wl64cMBqF0r70oGEbJFGR78SFhpcT3mrX4uebfmEUD_ZNC6rCw"
 # -H "X-App: 2GqRfUCnmQj7GokzCRvYe9"
-GET http://localhost:3001/api/v1/clusters?pretty
+GET http://localhost:3001/api/v1/clusters
 Accept: application/json+pretty
 authorization: bearer eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MzE4ODIxMDEsImlhdCI6MTYzMTc5NTcwMSwiaXNzIjoieW5oU0JBVlpIZ2FDYm9adnJiOFNzOSIsInN1YiI6ImFjY2VzcyJ9.OSqyaClTr6R6RN5X2nsKcgSxos-IrwEEo7o5Wl64cMBqF0r70oGEbJFGR78SFhpcT3mrX4uebfmEUD_ZNC6rCw
 X-App: 2GqRfUCnmQj7GokzCRvYe9

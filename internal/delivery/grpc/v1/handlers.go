@@ -37,9 +37,9 @@ func RegisterServerServices(services *service.Services, client client.Client) (f
 			// if err := apiv1.RegisterApplicationsServiceHandler(ctx, mux, conn); err != nil {
 			// 	return err
 			// }
-			// if err := apiv1.RegisterClustersServiceHandler(ctx, mux, conn); err != nil {
-			// 	return err
-			// }
+			if err := apiv1.RegisterClustersHandler(ctx, mux, conn); err != nil {
+				return err
+			}
 			// if err := apiv1.RegisterAuthServiceHandler(ctx, mux, conn); err != nil {
 			// 	return err
 			// }

@@ -613,19 +613,20 @@ func (c *client) getEndpointUUIDFromContext(ctx context.Context) string {
 
 func newClient(addr string, opts ...GlobalOption) *client {
 	c := &client{
-		addr:               addr,
-		endpoints:          map[uuid.UUID]*Endpoint{},
-		endpointConfig:     map[uuid.UUID]*EndpointConfig{},
-		endpointOptions:    map[interface{}]EndpointOption{},
-		connectOptions:     map[interface{}]ConnectOption{},
-		dial:               defaultDial,
-		poolSize:           10,
-		poolTimeout:        30 * time.Second,
-		idleTimeout:        time.Hour,
-		idleCheckFrequency: 5 * time.Minute,
-		maxChannelAge:      time.Hour,
-		minIdleChannels:    0,
-		idleChannelsLen:    0,
+		addr:                  addr,
+		endpoints:             map[uuid.UUID]*Endpoint{},
+		endpointConfig:        map[uuid.UUID]*EndpointConfig{},
+		endpointOptions:       map[interface{}]EndpointOption{},
+		connectOptions:        map[interface{}]ConnectOption{},
+		defaultEndpointConfig: &EndpointConfig{},
+		dial:                  defaultDial,
+		poolSize:              10,
+		poolTimeout:           30 * time.Second,
+		idleTimeout:           time.Hour,
+		idleCheckFrequency:    5 * time.Minute,
+		maxChannelAge:         time.Hour,
+		minIdleChannels:       0,
+		idleChannelsLen:       0,
 	}
 
 	c.clientService = clientv1.NewClientService(c)

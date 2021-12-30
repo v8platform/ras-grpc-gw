@@ -74,10 +74,10 @@ func (c *client) Invoke(ctx context.Context, needEndpoint bool, req interface{},
 					Ver:     10,
 					version: "10.0",
 				}
-
+				c.mu.Lock()
 				c.endpoints[endpointUUID] = endpoint
 				c.endpointConfig[endpointUUID] = c.defaultEndpointConfig.copy()
-
+				c.mu.Unlock()
 			}
 
 			channelEndpoint, err = c.initEndpoint(ctx, channel, endpoint)
@@ -85,6 +85,22 @@ func (c *client) Invoke(ctx context.Context, needEndpoint bool, req interface{},
 			if err != nil {
 				return nil, err
 			}
+
+			ctx = EndpointToContext(ctx, channelEndpoint)
+		} else {
+
+			endpointUUID = uuid.New()
+
+			endpoint := &Endpoint{
+				UUID:    endpointUUID,
+				Ver:     10,
+				version: "10.0",
+			}
+			c.mu.Lock()
+			c.endpoints[endpointUUID] = endpoint
+			c.endpointConfig[endpointUUID] = c.defaultEndpointConfig.copy()
+			c.mu.Unlock()
+			channelEndpoint, err = c.initEndpoint(ctx, channel, endpoint)
 
 			ctx = EndpointToContext(ctx, channelEndpoint)
 		}
@@ -95,14 +111,4 @@ func (c *client) Invoke(ctx context.Context, needEndpoint bool, req interface{},
 	}
 
 	return handler(ctx, channel, channelEndpoint, req, clientv1.Interceptor(ChainInterceptor(interceptors...)))
-}
-
-func geClusterId(ctx context.Context) string {
-
-	reqMd := md.ExtractMetadata(ctx)
-	clusterId := reqMd.Get(ClusterIdKeys)
-	if len(clusterId) > 0 {
-		return clusterId
-	}
-	return ""
 }

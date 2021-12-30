@@ -187,21 +187,53 @@ func (c *Channel) recv(msg *protocolv1.Packet, err error) chan struct{} {
 	return done
 }
 
-func (c *Channel) RecvPacket(ctx context.Context) (msg *protocolv1.Packet, err error) {
+type frame struct {
+	err  error
+	done chan struct{}
+}
+
+func (f frame) Done() chan struct{} {
+	return f.done
+}
+
+func (f frame) Err() error {
+	return f.err
+}
+
+func (c *Channel) recvFrame(msg *protocolv1.Packet) frame {
+
+	f := frame{done: make(chan struct{})}
+	c.recvWg.Add(1)
+
+	go func() {
+
+		defer close(f.done)
+		defer c.recvWg.Done()
+
+		_, err := msg.ReadFrom(c.conn)
+		f.err = err
+
+	}()
+
+	return f
+}
+
+func (c *Channel) RecvPacket(ctx context.Context) (*protocolv1.Packet, error) {
 
 	c.Lock()
 	defer func() { c.SetUsedAt(time.Now()) }()
 	defer c.Unlock()
 
-	msg = new(protocolv1.Packet)
-	done := c.recv(msg, err)
+	packet := new(protocolv1.Packet)
+
+	frame := c.recvFrame(packet)
 
 	select {
-	case <-done:
-		if err != nil {
-			return nil, err
+	case <-frame.Done():
+		if frame.Err() != nil {
+			return nil, frame.err
 		}
-		return msg, nil
+		return packet, nil
 	case <-ctx.Done():
 		// TODO
 		return nil, ctx.Err()
